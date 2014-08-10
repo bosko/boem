@@ -820,7 +820,6 @@
      ;; Snippet directories
      boem-yas-snippets-dir (expand-file-name
                             "snippets" user-emacs-directory)
-     yas-snippet-dirs (list boem-yas-snippets-dir)
      ;; Disable yasnippet prompt by default
      ;; (using auto-complete to prompt)
      yas-prompt-functions '(yas-popup-isearch-prompt
@@ -835,40 +834,13 @@
                                          boem-yas-snippets-dir)) ".*\\'")
                   'snippet-mode))
 
-    (defalias 'yas/reload-all 'yas-reload-all)
-    (defalias 'yas/global-mode 'yas-global-mode)
-    (defalias 'yas/minor-mode 'yas-minor-mode)
-    (defalias 'yas/expand 'yas-expand)
-    (defalias 'yas/expand-snippet 'yas-expand-snippet)
     (bind-key "C-x i" 'yas-insert-snippet)
     (boem-hook-into-modes #'yas-minor-mode-on
                           '(org-mode-hook
                             git-commit-mode-hook))
 
     (boem-hook-into-modes #'yas-minor-mode-on boem-prog-mode-hooks)
-    (add-hook 'org-mode-hook 'yas-minor-mode-on)
-    (use-package autoinsert
-      :defer t
-      :init
-      (progn
-        (defun autoinsert-yas-expand ()
-          "Replace text in yasnippet template."
-          (save-excursion
-            (goto-char (point-min))
-            (when (re-search-forward "^# --.*$" nil t 1)
-              (delete-region (point-min) (+ (point) 1))))
-          (yas-expand-snippet (buffer-string) (point-min) (point-max)))
-        (setq
-         auto-insert-directory boem-yas-snippets-dir
-         auto-insert-alist
-         '((("\\.py\\'" . "Python script")
-            . ["python-mode/general/skeleton" autoinsert-yas-expand])
-           (snippet-mode . ["snippet-mode/skeleton" autoinsert-yas-expand])
-           (("\\.org\\'" . "Org mode")
-            . ["org-mode/skeleton" autoinsert-yas-expand]))
-         auto-insert 'other
-         auto-insert-query nil)
-        (auto-insert-mode))))
+    (add-hook 'org-mode-hook 'yas-minor-mode-on))
   :config
   (progn
     (bind-key "C-x i" 'yas-insert-snippet yas-minor-mode-map)
