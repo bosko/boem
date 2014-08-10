@@ -1,0 +1,6 @@
+*.elc
+packages/
+data/
+auto-save-list/
+eshell/
+tramp
