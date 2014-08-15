@@ -1453,7 +1453,7 @@
       :bind ("C-c C-l" . org-annotate-file))
 
     (use-package org-capture
-      :bind ("C-c C-c" . org-capture)
+      :bind ("C-c o c" . org-capture)
       :init
       (progn
         (setq org-capture-templates
