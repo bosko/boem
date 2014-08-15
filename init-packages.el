@@ -1449,9 +1449,6 @@
       (progn
         (org-crypt-use-before-save-magic)))
 
-    (use-package org-annotate-file
-      :bind ("C-c C-l" . org-annotate-file))
-
     (use-package org-capture
       :bind ("C-c o c" . org-capture)
       :init
