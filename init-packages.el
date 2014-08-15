@@ -1452,6 +1452,16 @@
     (use-package org-annotate-file
       :bind ("C-c C-l" . org-annotate-file))
 
+    (use-package org-capture
+      :bind ("C-c C-c" . org-capture)
+      :init
+      (progn
+        (setq org-capture-templates
+              '(("t" "Todo" entry (file+headline (expand-file-name "todos.org" boem-user-org-directory) "Tasks")
+                 "* TODO %?\n  %i\n  %a")
+                ("j" "Journal" entry (file+datetree (expand-file-name "journal.org" boem-user-org-directory))
+                 "* %?\Zapisano  %U\n  %i\n  %a")))))
+
     (use-package org-readme
       :disabled t ;; requires org-html package which is not in org anymore (?)
       :ensure t
@@ -1466,7 +1476,7 @@
       (progn
         (setq
          org-journal-dir
-         (expand-file-name "org/journal/" boem-user-org-directory)
+         (expand-file-name "journal/" boem-user-org-directory)
          org-journal-file-pattern "[0-9]\\{8\\}$")))
 
     (use-package org-manage
