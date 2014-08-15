@@ -1489,6 +1489,7 @@
      org-columns-default-format "%38ITEM(Details) %TAGS(Context) %7TODO(To Do) %5Effort(Time){:} %6CLOCKSUM{Total}"
      org-tag-alist '(("PROJECT" . 112) ("READING" . 114))
      org-agenda-files (directory-files boem-user-org-directory t "org.txt")
+     org-agenda-files (directory-files boem-user-org-directory t "org")
      org-agenda-include-diary nil
      org-ellipsis "…"
      org-clock-sound t)
