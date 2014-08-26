@@ -53,6 +53,7 @@
 (use-package ace-jump-mode
   :ensure t
   :commands (ace-jump-word-mode
+             ace-jump-char-mode
              ace-jump-mode)
   :bind ("C-c j" . ace-jump-mode)
   :init
