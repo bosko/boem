@@ -1433,9 +1433,7 @@
 
 ;;;; org
 (use-package org
-  :commands (org
-             org-capture
-             org-mode
+  :commands (org-mode
              org-store-link)
   :mode (("\\.org_archive\\'" . org-mode)
          ("\\.org\\'" . org-mode))
@@ -1443,6 +1441,9 @@
   (progn
     (setq
      org-directory boem-user-org-directory)
+
+    (use-package org-agenda
+      :bind ("C-c o a" . org-agenda))
 
     (use-package org-crypt
       :disabled t
