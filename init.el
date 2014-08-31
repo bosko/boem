@@ -35,7 +35,8 @@
  gc-cons-threshold 20000000
  use-package-idle-interval 1.5
  fill-column 80
- echo-keystrokes 0.1)
+ echo-keystrokes 0.1
+ bookmark-default-file (expand-file-name "bookmarks" boem-user-data-directory))
 
 (put 'dired-find-alternate-file 'disabled nil)
 (put 'downcase-region 'disabled nil)
