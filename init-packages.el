@@ -1446,10 +1446,13 @@
       :bind ("C-c o a" . org-agenda))
 
     (use-package org-crypt
-      :disabled t
       :init
       (progn
-        (org-crypt-use-before-save-magic)))
+        (org-crypt-use-before-save-magic)
+        (setq org-tags-exclude-from-inheritance (quote ("crypt")))
+        ;; GPG key to use for encryption
+        ;; Either the Key ID or set to nil to use symmetric encryption.
+        (setq org-crypt-key nil)))
 
     (use-package org-capture
       :bind ("C-c o c" . org-capture)
@@ -1489,7 +1492,7 @@
      org-log-done 'time
      org-global-properties '(("Effort_ALL". "0 0:30 1:00 2:00 3:00 4:00 8:00"))
      org-columns-default-format "%38ITEM(Details) %TAGS(Context) %7TODO(To Do) %5Effort(Time){:} %6CLOCKSUM{Total}"
-     org-tag-alist '(("PROJECT" . 112) ("READING" . 114))
+     org-tag-alist '(("Project" . ?p) ("Reading" . ?r) ("crypt". ?c))
      org-agenda-files (directory-files boem-user-org-directory t "org.txt")
      org-agenda-files (directory-files boem-user-org-directory t "org")
      org-agenda-include-diary nil
