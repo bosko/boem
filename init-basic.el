@@ -25,6 +25,7 @@
 (make-directory boem-user-package-directory t)
 (make-directory boem-user-data-directory t)
 (make-directory boem-user-themes-directory t)
+(make-directory boem-user-org-directory t)
 
 (defun boem-install-package-if-needed (package &optional min-version no-refresh)
   "Install required PACKAGE, optionally requiring MIN-VERSION.
