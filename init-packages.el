@@ -1586,6 +1586,15 @@
     (add-hook 'term-mode-hook #'(lambda ()
                                   (setq show-trailing-whitespace nil)))))
 
+(use-package exec-path-from-shell
+  :ensure t
+  :init
+  (progn
+    (when (memq window-system '(mac ns))
+      (exec-path-from-shell-initialize))
+    )
+)
+
 (use-package server
   :commands server-start-maybe
   :init
