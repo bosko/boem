@@ -81,6 +81,7 @@
 (global-set-key (kbd "S-<return>") 'boem-insert-line)
 (global-set-key (kbd "C-c d") 'boem-duplicate-line-or-region)
 (global-set-key (kbd "M-Z") 'zap-up-to-char)
+(global-set-key (kbd "C-c k a") 'boem-kill-user-buffers)
 
 ;; Keep syntax highlighting in current line.
 (set-face-foreground 'highlight nil)

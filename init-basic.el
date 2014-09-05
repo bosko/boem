@@ -134,6 +134,16 @@ is true refresh is skipped"
         (newline)))
     (insert string)))
 
+(defun boem-kill-user-buffers ()
+  "Kills all opened buffers except *scratch* and *Messages*"
+  (interactive)
+  (let ((not-to-kill-buffer-list '("*scratch*" "*Messages*")))
+    (dolist (buff (buffer-list))
+      (if (and
+           (not (s-starts-with? " " (buffer-name buff)))
+           (not (member (buffer-name buff) not-to-kill-buffer-list)))
+          (kill-buffer (buffer-name buff))))))
+
 ;; Add Imenu index to the menu bar in any mode that supports Imenu.
 (defun boem-try-to-add-imenu ()
   (condition-case nil (imenu-add-to-menubar "Methods") (error nil)))
