@@ -82,6 +82,7 @@
 (global-set-key (kbd "C-c d") 'boem-duplicate-line-or-region)
 (global-set-key (kbd "M-Z") 'zap-up-to-char)
 (global-set-key (kbd "C-c k a") 'boem-kill-user-buffers)
+(global-set-key (kbd "C-x /") 'boem-comment-uncomment)
 
 ;; Keep syntax highlighting in current line.
 (set-face-foreground 'highlight nil)

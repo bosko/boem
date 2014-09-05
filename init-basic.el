@@ -144,6 +144,16 @@ is true refresh is skipped"
            (not (member (buffer-name buff) not-to-kill-buffer-list)))
           (kill-buffer (buffer-name buff))))))
 
+(defun boem-comment-uncomment ()
+  (interactive)
+  (save-excursion
+    (if (not (region-active-p))
+        (progn
+          (beginning-of-line)
+          (push-mark)
+          (end-of-line)))
+    (call-interactively 'comment-or-uncomment-region)))
+
 ;; Add Imenu index to the menu bar in any mode that supports Imenu.
 (defun boem-try-to-add-imenu ()
   (condition-case nil (imenu-add-to-menubar "Methods") (error nil)))
