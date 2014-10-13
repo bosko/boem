@@ -122,6 +122,15 @@
              er/contract-region)
   :bind (("C-=" . er/expand-region)))
 
+;;;; change-inner
+(use-package change-inner
+  :ensure t
+  :commands (change-inner
+             change-outer)
+  :bind (
+         ("C-c C-i" . change-inner)
+         ("C-c C-o" . change-outer)))
+
 ;;;; flycheck
 (use-package flycheck
   :ensure t
