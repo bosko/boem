@@ -11,7 +11,7 @@
 
 (defvar boem-init-root (expand-file-name
                    (file-name-directory load-file-name)))
-(add-to-list 'load-path boem-init-root)
+(add-to-list 'load-path (expand-file-name "lisp" boem-init-root))
 
 (message "%s, starting up Emacs" boem-current-user)
 
