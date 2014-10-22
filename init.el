@@ -83,6 +83,7 @@
 (global-set-key (kbd "M-Z") 'zap-up-to-char)
 (global-set-key (kbd "C-c k a") 'boem-kill-user-buffers)
 (global-set-key (kbd "C-x /") 'boem-comment-uncomment)
+(global-set-key (kbd "C-c b") 'boem-switch-to-previous-buffer)
 
 ;; Keep syntax highlighting in current line.
 (set-face-foreground 'highlight nil)
