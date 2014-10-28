@@ -102,8 +102,7 @@
 
 (column-number-mode t)
 (global-hl-line-mode 1)
-;; Rectangular selections
-(cua-selection-mode t)
+(delete-selection-mode)
 
 (defalias 'yes-or-no-p 'y-or-n-p)
 
