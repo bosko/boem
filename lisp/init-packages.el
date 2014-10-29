@@ -613,6 +613,9 @@
      ruby-block-delay 0.8)
     (add-hook 'ruby-mode-hook 'ruby-electric-mode)))
 
+(use-package yari
+  :ensure t)
+
 ;;;; Lisp
 
 ;;;; rainbow-delimiters
