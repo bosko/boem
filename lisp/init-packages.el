@@ -575,18 +575,7 @@
     (setq
      ;; Avoid default, ugly, Ruby indentation
      ruby-deep-indent-paren nil))
-  :mode (("\\.rake\\'" . ruby-mode)
-         ("Rakefile\\'" . ruby-mode)
-         ("\\.gemspec\\'" . ruby-mode)
-         ("\\.ru\\'" . ruby-mode)
-         ("Gemfile\\'" . ruby-mode)
-         ("Guardfile\\'" . ruby-mode)
-         ("Capfile\\'" . ruby-mode)
-         ("\\.thor\\'" . ruby-mode)
-         ("\\.rabl\\'" . ruby-mode)
-         ("Thorfile\\'" . ruby-mode)
-         ("Vagrantfile\\'" . ruby-mode)
-         ("Puppetfile\\'" . ruby-mode)))
+  :mode (("\\.rabl\\'" . ruby-mode)))
 
 (use-package inf-ruby
   :ensure t
