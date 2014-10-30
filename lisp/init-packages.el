@@ -401,8 +401,8 @@
      recentf-max-menu-items 15
      recentf-save-file (expand-file-name "recentf" boem-user-data-directory)
      recentf-auto-cleanup 'never)
-    (add-to-list 'recentf-exclude "COMMIT_EDITMSG\\'")
-    (add-to-list 'recentf-exclude "ido.hist")
+    (setq recentf-exclude '("recentf" "/packages/" "\\.ido.last" "COMMIT_EDITMSG"
+                            "TAGS" "ido.hist" ".gz"))
     (recentf-mode 1))
   :config
   (progn
