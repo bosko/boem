@@ -4,3 +4,5 @@ data/
 auto-save-list/
 eshell/
 tramp
+var/
+url/
