@@ -1449,6 +1449,9 @@
     (use-package org-crypt
       :init
       (progn
+        (setq org-agenda-time-grid (quote ((daily today remove-match)
+                                       #("----------------" 0 16 (org-heading t))
+                                       (0900 1100 1300 1500 1700))))
         (org-crypt-use-before-save-magic)
         (setq org-tags-exclude-from-inheritance (quote ("crypt")))
         ;; GPG key to use for encryption
