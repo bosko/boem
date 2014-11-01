@@ -166,6 +166,33 @@ Code from: http://emacsredux.com/blog/2013/04/28/switch-to-previous-buffer/"
   (interactive)
   (switch-to-buffer (other-buffer (current-buffer) 1)))
 
+;; Taken from http://p.writequit.org/org/settings.html
+;; For OS X
+;; brew install ctags
+;; wget -c http://tamacom.com/global/global-6.3.1.tar.gz
+;; tar zxvf global-6.3.1.tar.gz
+;; cd global-6.3.1
+;; ./configure --prefix=/usr/local --with-exuberant-ctags=/usr/local/bin/ctags
+;; make install
+;;
+;; I also add this to my shell configuration:
+;;
+;; export GTAGSCONF=/usr/local/share/gtags/gtags.conf
+;; export GTAGSLABEL=ctags
+(defun boem-setup-ggtags ()
+  (interactive)
+  (ggtags-mode 1)
+  ;; turn on helm-mode for completion
+  ;; (helm-mode 1)
+  ;; turn on eldoc with ggtags
+  (setq-local eldoc-documentation-function #'ggtags-eldoc-function)
+  ;; add ggtags to the hippie completion
+  (setq-local hippie-expand-try-functions-list
+              (cons 'ggtags-try-complete-tag
+                    hippie-expand-try-functions-list))
+  ;; use helm for completion
+  (setq ggtags-completing-read-function nil))
+
 (provide 'init-basic)
 
 ;;; init-basic.el ends here
