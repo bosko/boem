@@ -565,25 +565,6 @@
   (progn
     (which-function-mode 1)))
 
-;;;; ggtags
-(use-package ggtags
-  :ensure t
-  :init
-  (progn
-    (add-hook 'c-mode-common-hook
-              (lambda ()
-                (when (derived-mode-p 'c-mode 'c++-mode 'java-mode 'asm-mode)
-                  ;; (my/setup-helm-gtags) ;; helm-gtags
-                  (boem-setup-ggtags) ;; regular gtags
-                  )))
-    (add-hook 'ruby-mode-hook
-              (lambda()
-                (boem-setup-ggtags)))
-    (add-hook 'js2-mode-hook
-              (lambda()
-                (message "Turning ggtags for js2")
-                (boem-setup-ggtags)))))
-
 ;;;; Ruby
 
 ;;;; ruby-mode
