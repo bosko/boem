@@ -119,6 +119,8 @@
 (load "init-packages")
 
 (boem-change-theme "tangotango")
+(custom-set-faces
+ '(ido-first-match ((t (:foreground "red2" :weight bold)))))
 
 (load custom-file 'no-error)
 
