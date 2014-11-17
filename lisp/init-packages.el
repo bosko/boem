@@ -1463,7 +1463,17 @@
       :init
       (progn
         (setq org-capture-templates
-              '(("t" "Todo" entry (file+headline (expand-file-name "todos.org" boem-user-org-directory) "Tasks")
+              '(("b" "BagIQ" entry (file+headline (expand-file-name "bagiq.org" boem-user-org-directory) "Tasks")
+                 "* TODO %?\n  %i\n  %a")
+                ("f" "FireField" entry (file+headline (expand-file-name "firefield.org" boem-user-org-directory) "Tasks")
+                 "* TODO %?\n  %i\n  %a")
+                ("c" "CameronTec" entry (file+headline (expand-file-name "camerontec.org" boem-user-org-directory) "Tasks")
+                 "* TODO %?\n  %i\n  %a")
+                ("r" "Robby" entry (file+headline (expand-file-name "robby.org" boem-user-org-directory) "Tasks")
+                 "* TODO %?\n  %i\n  %a")
+                ("q" "QIDMS" entry (file+headline (expand-file-name "qidms.org" boem-user-org-directory) "Tasks")
+                 "* TODO %?\n  %i\n  %a")
+                ("t" "Todo" entry (file+headline (expand-file-name "todos.org" boem-user-org-directory) "Tasks")
                  "* TODO %?\n  %i\n  %a")
                 ("j" "Journal" entry (file+datetree (expand-file-name "journal.org" boem-user-org-directory))
                  "* %?\Zapisano  %U\n  %i\n  %a")))))
@@ -1497,7 +1507,6 @@
      org-global-properties '(("Effort_ALL". "0 0:30 1:00 2:00 3:00 4:00 8:00"))
      org-columns-default-format "%38ITEM(Details) %TAGS(Context) %7TODO(To Do) %5Effort(Time){:} %6CLOCKSUM{Total}"
      org-tag-alist '(("Project" . ?p) ("Reading" . ?r) ("crypt". ?c))
-     org-agenda-files (directory-files boem-user-org-directory t "org.txt")
      org-agenda-files (directory-files boem-user-org-directory t "org")
      org-agenda-include-diary nil
      org-ellipsis "…"
