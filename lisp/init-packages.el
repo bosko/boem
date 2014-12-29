@@ -711,8 +711,7 @@
   (progn
     (boem-rename-modeline "js2-mode" js2-mode "js2")
     (setq js2-strict-missing-semi-warning nil
-          js2-basic-offset 2
-          js2-bounce-indent-p t))
+          js2-basic-offset 2))
   :config
   (progn
     (use-package js2-imenu-extras
