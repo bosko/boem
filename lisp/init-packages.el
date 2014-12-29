@@ -596,6 +596,7 @@
     (add-hook 'ruby-mode-hook 'ruby-block-mode)))
 
 (use-package ruby-electric
+  :disabled t
   :ensure t
   :commands ruby-electric-mode
   :diminish ruby-electric-mode
@@ -1499,7 +1500,18 @@
       :commands org-manage
       :init
       (progn
-        (setq org-manage-directory-org boem-user-org-directory))))
+        (setq org-manage-directory-org boem-user-org-directory)))
+
+    (use-package ob
+      :init
+      (progn
+        (org-babel-do-load-languages
+         'org-babel-load-languages
+         '((sh . t)
+           (ditaa . t)
+           (plantuml . t)
+           (dot . t)
+           (ruby . t))))))
   :config
   (progn
     (setq
