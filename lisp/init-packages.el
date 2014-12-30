@@ -784,6 +784,11 @@
   :ensure t
   :mode (("\\.haml\\'" . haml-mode)))
 
+;;;; impatient-mode
+;;;; Use it for live html editing preview
+(use-package impatient-mode
+  :ensure t)
+
 ;;;; GO
 
 ;;;; go-mode
