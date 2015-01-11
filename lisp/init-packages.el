@@ -1446,16 +1446,7 @@
   :init
   (progn
     (setq
-     org-directory boem-user-org-directory
-     org-todo-keyword-faces
-      '(("TODO" :foreground "blue" :weight bold)
-        ("BUG" :foreground "white" :weight bold)
-        ("DONE" :foreground "red" :weight bold)
-        ("DEFFERED" :foreground "orange" :weight bold)
-        ("FEATURE" :foreground "magenta" :weight normal)
-        ("CANCELLED" :foreground "red" :weight bold)
-        ("FIXED" :foreground "yellow" :weight bold)
-        ("REPORT" :foreground "yellow" :weight bold)))
+     org-directory boem-user-org-directory)
 
     (use-package org-agenda
       :bind ("C-c o a" . org-agenda))
@@ -1542,8 +1533,15 @@
      '((sequence "TODO(t)" "|" "DONE(d)")
        (sequence "REPORT(r)" "BUG(b)" "FEATURE(e)" "|" "FIXED(x)")
        (sequence "DEFFERED(f)" "|" "CANCELED(c)"))
-     )
-    ))
+     org-todo-keyword-faces
+      '(("TODO" :foreground "blue" :weight bold)
+        ("BUG" :foreground "white" :weight bold)
+        ("DONE" :foreground "red" :weight bold)
+        ("DEFFERED" :foreground "orange" :weight bold)
+        ("FEATURE" :foreground "magenta" :weight normal)
+        ("CANCELLED" :foreground "red" :weight bold)
+        ("FIXED" :foreground "yellow" :weight bold)
+        ("REPORT" :foreground "yellow" :weight bold)))))
 
 ;;;; imenu
 (use-package imenu
