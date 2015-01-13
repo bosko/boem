@@ -1526,7 +1526,9 @@
      org-agenda-files (directory-files boem-user-org-directory t "org")
      org-agenda-include-diary nil
      org-ellipsis "…"
-     org-clock-sound t)
+     org-clock-sound t
+     org-enforce-todo-dependencies t
+     org-enforce-todo-checkbox-dependencies t)
 
     (setq
      org-todo-keywords
