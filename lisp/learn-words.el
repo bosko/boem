@@ -60,6 +60,9 @@
   )
 
 (defun voc-main-loop ()
+  (setq voc-round-no 0)
+  (setq voc-correct-answers 0)
+  (setq voc-wrong-answers 0)
   (while voc-run
     (while (< voc-round-no voc-reapeat-cnt)
       (let ((cur-word-idx (random (- (length voc-chosen-words) 1))) (cur-word-pair nil) (line ""))
@@ -72,6 +75,9 @@
            (setq voc-round-no (1+ voc-round-no))
            )
       )
+    (if (y-or-n-p "Quit learning?")
+        (setq voc-run nil)
+      (setq voc-round-no 0))
     )
   )
 
