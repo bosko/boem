@@ -3,7 +3,7 @@
 
 (defvar voc-words-list () "All words from vocabulary")
 (defvar voc-chosen-words () "Words chosen to be learned in one chunk")
-(defvar voc-round-no 0 "Round number")
+(defvar voc-round-no 1 "Round number")
 (defvar voc-correct-answers 0 "Number of correct answers")
 (defvar voc-wrong-answers 0 "Number of wrong answers")
 (defvar voc-run t)
@@ -19,10 +19,18 @@
 
 (defun voc-report ()
   (erase-buffer)
-  (insert (concat (propertize (format "Krug broj: %s\n" voc-round-no) 'face '(:foreground "blue" :height 1.5 :weight bold))
-                  (propertize (format "Tačnih pogodaka: %s\n" voc-correct-answers) 'face '(:foreground "green" :height 1.5 :weight extra-bold))
-                  (propertize (format "Netačnih pogodaka: %s\n" voc-wrong-answers) 'face '(:foreground "red" :height 1.5 :weight ultra-bold))))
-  (insert "---------------------------------\n")
+  (let ((correct-prc 0) (wrong-prc 0))
+    (setq correct-prc (* (/ (float voc-correct-answers) voc-round-no) 100))
+    (setq wrong-prc (* (/ (float voc-wrong-answers) voc-round-no) 100))
+    (insert (concat
+             (propertize
+              (format "Krug broj        : %2d\n" voc-round-no) 'face '(:foreground "blue" :height 1.5 :weight bold))
+              (propertize
+               (format "Tačnih pogodaka  : %2d (%d%%)\n" voc-correct-answers correct-prc) 'face '(:foreground "green" :height 1.5 :weight extra-bold))
+              (propertize
+               (format "Netačnih pogodaka: %2d (%d%%)\n" voc-wrong-answers wrong-prc) 'face '(:foreground "red" :height 1.5 :weight ultra-bold)))
+    ))
+  (insert "-----------------------------------------\n")
   )
 
 (defun voc-print (string)
@@ -65,11 +73,11 @@
   (setq voc-chunk-size (read-number "Number of words per session: " 10))
   (setq voc-repeat-cnt (read-number "Number of sessions: " 20))
   (setq voc-run t)
-  (setq voc-round-no 0)
+  (setq voc-round-no 1)
   (setq voc-correct-answers 0)
   (setq voc-wrong-answers 0)
   (while voc-run
-    (while (< voc-round-no voc-repeat-cnt)
+    (while (<= voc-round-no voc-repeat-cnt)
       (let ((cur-word-idx (random (- (length voc-chosen-words) 1))) (cur-word-pair nil) (line ""))
            (setq cur-word-pair (nth cur-word-idx voc-chosen-words))
            (voc-report)
@@ -82,7 +90,7 @@
       )
     (if (y-or-n-p "Quit learning?")
         (setq voc-run nil)
-      (setq voc-round-no 0))
+      (setq voc-round-no 1))
     )
   )
 
