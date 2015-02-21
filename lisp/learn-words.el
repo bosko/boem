@@ -63,7 +63,7 @@
 
 (defun voc-main-loop ()
   (setq voc-chunk-size (read-number "Number of words per session: " 10))
-  (setq voc-repeat-cnt (read-number "Number of sessions: " 10))
+  (setq voc-repeat-cnt (read-number "Number of sessions: " 20))
   (setq voc-run t)
   (setq voc-round-no 0)
   (setq voc-correct-answers 0)
