@@ -90,7 +90,7 @@
       )
     (if (y-or-n-p "Quit learning?")
         (setq voc-run nil)
-      (setq voc-round-no 1))
+      (setq voc-repeat-cnt (+ voc-repeat-cnt voc-round-no)))
     )
   )
 
