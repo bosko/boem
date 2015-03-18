@@ -232,9 +232,8 @@
        projectile-root-top-down
        projectile-root-top-down-recurring
        projectile-root-child-of)))
-  :idle
   (projectile-global-mode)
-  :idle-priority 1)
+  )
 
 ;;;; magit
 (use-package magit
