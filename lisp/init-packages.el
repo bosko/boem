@@ -138,7 +138,7 @@
   :diminish ((global-flycheck-mode . "fc")
              (flycheck-mode . "fc"))
   :bind (("C-c e" . flycheck-list-errors))
-  :init
+  :config
   (progn
     (setq
      flycheck-highlighting-mode 'lines
@@ -155,9 +155,8 @@
     (add-hook 'coffee-mode-hook 'flycheck-turn-on-maybe)
     (add-hook 'php-mode-hook 'flycheck-turn-on-maybe)
     (add-hook 'scss-mode-hook 'flycheck-turn-on-maybe)
-    (add-hook 'haskell-mode-hook 'flycheck-turn-on-maybe))
-  :config
-  (progn
+    (add-hook 'haskell-mode-hook 'flycheck-turn-on-maybe)
+
     (when (fboundp 'define-fringe-bitmap)
       (require 'fringe-helper)
       (fringe-helper-define 'vertical-wave-bitmap '(center repeat)
@@ -683,11 +682,9 @@
 (use-package js
   :ensure t
   :defer t
-  :init
-  (progn
-    (boem-rename-modeline "js" js-mode "js"))
   :config
   (progn
+    (boem-rename-modeline "js" js-mode "js")
     (font-lock-add-keywords
      'js-mode `(("\\(function *\\)("
                  (0 (progn (compose-region
@@ -707,15 +704,16 @@
          ("\\.jsx\\'" . js2-mode))
   :init
   (progn
-    (boem-rename-modeline "js2-mode" js2-mode "js2")
     (setq js2-strict-missing-semi-warning nil
           js2-basic-offset 2))
   :config
   (progn
     (use-package js2-imenu-extras
-      :init
+      :config
       (progn
         (js2-imenu-extras-setup)))
+
+    (boem-rename-modeline "js2-mode" js2-mode "js2")
 
     (font-lock-add-keywords
      'js2-mode `(("\\(function *\\)("
