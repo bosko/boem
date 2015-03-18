@@ -114,7 +114,7 @@
 (boem-install-package-if-needed 'tangotango-theme)
 (boem-install-package-if-needed 'use-package)
 
-(require 'use-package)
+(eval-when-compile (require 'use-package))
 
 (load "init-packages")
 
