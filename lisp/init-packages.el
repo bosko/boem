@@ -24,7 +24,7 @@
 
 (use-package tramp
   :defer t
-  :init
+  :config
   (progn
     (setq vc-ignore-dir-regexp
           (format "\\(%s\\)\\|\\(%s\\)"
@@ -33,7 +33,7 @@
 
 ;;;; savehist
 (use-package savehist
-  :init
+  :config
   (progn
     (setq
      ;; save searh entries
@@ -56,10 +56,9 @@
              ace-jump-char-mode
              ace-jump-mode)
   :bind ("C-c j" . ace-jump-mode)
-  :init
+  :config
   (progn
-    (use-package conf-mode
-      :defer t)))
+    (use-package conf-mode)))
 
 ;;;; ace-jump-buffer
 (use-package ace-jump-buffer
