@@ -78,7 +78,7 @@
 ;;;; anzu-mode
 (use-package anzu
   :ensure t
-  :init (global-anzu-mode 1)
+  :config (global-anzu-mode 1)
   :diminish "")
 
 ;;;; browse-kill-ring
@@ -462,7 +462,7 @@
         (turn-on-ido-vertical)))
     (use-package flx-ido
       :ensure  t
-      :init
+      :config
       (progn
         (flx-ido-mode 1)))
 
@@ -547,7 +547,7 @@
 
 (use-package company
   :ensure t
-  :init
+  :config
   (progn
     (setq
      company-idle-delay 0.5
@@ -1451,7 +1451,7 @@
       :bind ("C-c o a" . org-agenda))
 
     (use-package org-crypt
-      :init
+      :config
       (progn
         (setq org-agenda-time-grid (quote ((daily today remove-match)
                                        #("----------------" 0 16 (org-heading t))
@@ -1580,7 +1580,7 @@
 
 (use-package exec-path-from-shell
   :ensure t
-  :init
+  :config
   (progn
     (when (memq window-system '(mac ns))
       (exec-path-from-shell-initialize))
