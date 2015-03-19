@@ -91,7 +91,7 @@
   :commands (diff-hl-mode
              turn-on-diff-hl-mode
              global-diff-hl-mode)
-  :init
+  :config
   (progn
     (use-package diff-hl-dired)
     (global-diff-hl-mode +1)
@@ -101,7 +101,7 @@
 (use-package easy-kill
   :ensure t
   :commands easy-kill
-  :init
+  :config
   (progn
     (global-set-key [remap kill-ring-save] 'easy-kill)))
 
@@ -110,7 +110,7 @@
   :ensure t
   :commands (elisp-slime-nav-mode)
   :diminish elisp-slime-nav-mode
-  :init
+  :config
   (progn
     (add-hook 'emacs-lisp-mode-hook (lambda () (elisp-slime-nav-mode t)))))
 
@@ -210,7 +210,7 @@
   :commands (projectile-mode
              projectile-global-mode)
   :diminish ""
-  :init
+  :config
   (progn
     (setq
      projectile-sort-order 'recently-active
@@ -335,9 +335,7 @@
     (require 'smartparens-config)
     (setq
      sp-show-pair-delay 0.125
-     sp-show-pair-from-inside nil)
-    (smartparens-global-mode t)
-    (show-smartparens-global-mode t))
+     sp-show-pair-from-inside nil))
   :config
   (progn
     (bind-key "C-x C-r" 'sp-rewrap-sexp smartparens-mode-map)
@@ -345,7 +343,9 @@
      sp-ignore-modes-list '(calc-mode dired-mode ibuffer-mode
                                       minibuffer-inactive-mode sr-mode)
      sp-autoescape-string-quote nil)
-    (sp-pair "'" nil :unless '(sp-point-after-word-p))))
+    (sp-pair "'" nil :unless '(sp-point-after-word-p))
+    (smartparens-global-mode t)
+    (show-smartparens-global-mode t)))
 
 ;;;; undo-tree
 (use-package undo-tree
