@@ -1005,6 +1005,7 @@
     (setq ibuffer-filter-group-name-face 'variable-pitch
           ibuffer-use-header-line nil
           ibuffer-old-time 12)
+    (require 'vc)
     (use-package ibuffer-vc
       :ensure t
       :commands
