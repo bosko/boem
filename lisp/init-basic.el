@@ -166,6 +166,11 @@ Code from: http://emacsredux.com/blog/2013/04/28/switch-to-previous-buffer/"
   (interactive)
   (switch-to-buffer (other-buffer (current-buffer) 1)))
 
+(defvar boem-org-tags '(("Project" . ?p) ("Reading" . ?r) ("crypt". ?c))
+  "Override this value by creating .boem-org-tags.el file in your home directory.")
+(if (file-exists-p "~/.boem-org-tags.el")
+    (load-file "~/.boem-org-tags.el"))
+
 (provide 'init-basic)
 
 ;;; init-basic.el ends here
