@@ -8,3 +8,5 @@ var/
 url/
 games/
 image-dired/
+helm-adaptive-history
+helm-doc.org
