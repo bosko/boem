@@ -494,6 +494,10 @@
           helm-wikipedia-summary-url
           "http://fr.wikipedia.org/w/api.php?action=parse&format=json&prop=text&section=0&page="
           helm-buffer-max-length                      50
+          helm-grep-default-command
+          "grep --color=always -d skip %e -n%cH -e %p %f"
+          helm-grep-default-recurse-command
+          "grep --color=always -d recurse %e -n%cH -e %p %f"
           )
     (define-key global-map [remap jump-to-register]      'helm-register)
     (define-key global-map [remap list-buffers]          'helm-buffers-list)
