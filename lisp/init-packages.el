@@ -1501,7 +1501,9 @@
            (ditaa . t)
            (plantuml . t)
            (dot . t)
-           (ruby . t))))))
+           (ruby . t)
+           (emacs-lisp . t)
+           (css . t))))))
   :config
   (progn
     (setq
