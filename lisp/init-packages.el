@@ -49,30 +49,18 @@
   (progn
     (add-hook 'before-save-hook 'whitespace-cleanup)))
 
-;;;; ace-jump-mode
-(use-package ace-jump-mode
+;;;; avy
+(use-package avy
   :ensure t
-  :commands (ace-jump-word-mode
-             ace-jump-char-mode
-             ace-jump-mode)
-  :bind ("C-c j" . ace-jump-mode)
+  :commands (avy-goto-char
+             avy-goto-char-2
+             avy-goto-line)
+  :bind (("C-c j" . avy-goto-char)
+         ("C-c J" . avy-goto-char-2)
+         ("C-c l" . avy-goto-line))
   :config
   (progn
-    (use-package conf-mode)))
-
-;;;; ace-jump-buffer
-(use-package ace-jump-buffer
-  :ensure t
-  :commands (ace-jump-buffer
-             ace-jump-buffer-other-window
-             ace-jump-buffer-in-one-window)
-  :bind ("C-c J" . ace-jump-buffer))
-
-;;;; ace-window
-(use-package ace-window
-  :ensure t
-  :commands (ace-window)
-  :bind ("C-x o" . ace-window))
+    (avy-setup-default)))
 
 ;;;; anzu-mode
 (use-package anzu
