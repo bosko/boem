@@ -1426,6 +1426,11 @@
     (setq org-refile-targets
           '((org-agenda-files :regexp . "Tasks")))
 
+    (use-package org-habit
+      :config
+      (progn
+        (setq org-habit-graph-column 90)))
+
     (use-package org-agenda
       :bind ("C-c o a" . org-agenda))
 
