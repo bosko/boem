@@ -7,6 +7,13 @@
 (require 'cl)
 ;;; Code:
 
+(use-package powerline
+  :ensure t
+  :config
+  (progn
+    (load "theming")
+    (powerline-spacemacs-imitation-theme)))
+
 (use-package dash
   :ensure t
   :defer nil
