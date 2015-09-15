@@ -31,7 +31,7 @@
  ;; Prevent Emacs from extending file when
  ;; pressing down arrow at end of buffer.
  next-line-add-newlines nil
- grep-command "grep -n -r --exclude=\\*{.git,TAGS,sqlite3,log,tmp/\\*,vendor/bundle/\\*} -e "
+ grep-command "grep -n -r --exclude=\\*{.git,TAGS,sqlite3,log,tmp/\\*,vendor/bundle/\\*,.bundle/\\*} -e "
  gc-cons-threshold 20000000
  use-package-idle-interval 1.5
  fill-column 80
