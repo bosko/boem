@@ -1505,7 +1505,7 @@
      org-global-properties '(("Effort_ALL". "0 0:30 1:00 2:00 3:00 4:00 8:00"))
      org-columns-default-format "%38ITEM(Details) %TAGS(Context) %7TODO(To Do) %5Effort(Time){:} %6CLOCKSUM{Total}"
      org-tag-alist boem-org-tags
-     org-agenda-files (directory-files boem-user-org-directory t "org")
+     org-agenda-files (directory-files boem-user-org-directory t "org$")
      org-agenda-include-diary nil
      org-ellipsis "…"
      org-clock-sound t
