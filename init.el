@@ -125,7 +125,7 @@
 
 (load "init-packages")
 
-(boem-change-theme "tangotango")
+(boem-change-theme "my-rails-casts")
 (custom-set-faces
  '(ido-first-match ((t (:foreground "orange2" :weight bold)))))
 
