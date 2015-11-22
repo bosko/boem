@@ -72,6 +72,13 @@
    ".vrs" ".sass-cache" ".min.js" "-min.js" ".min.css" "-min.css"
    ".hi" ".pyx" ".map"))
 
+(add-hook 'eshell-mode-hook
+          '(lambda () (setq show-trailing-whitespace nil)))
+(add-hook 'sql-mode-hook
+          '(lambda () (setq show-trailing-whitespace nil)))
+(add-hook 'term-mode-hook
+          '(lambda () (setq show-trailing-whitespace nil)))
+
 "Kill up to, but not including ARGth occurrence of CHAR. (fn arg char)"
 (autoload 'zap-up-to-char "misc" 'interactive)
 
