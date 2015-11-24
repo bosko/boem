@@ -126,8 +126,10 @@
 (load "init-packages")
 
 (boem-change-theme "my-rails-casts")
+
 (custom-set-faces
- '(ido-first-match ((t (:foreground "orange2" :weight bold)))))
+ '(ido-first-match ((t (:foreground "orange2" :weight bold))))
+ '(highlight ((t :background "gray19"))))
 
 (load custom-file 'no-error)
 
