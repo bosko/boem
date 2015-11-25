@@ -335,6 +335,8 @@
   :config
   (progn
     (bind-key "C-x C-r" 'sp-rewrap-sexp smartparens-mode-map)
+    (sp-pair "%" "%" :wrap "C-%")
+    (sp-pair "<" ">" :wrap "C->")
     (setq
      sp-ignore-modes-list '(calc-mode dired-mode ibuffer-mode
                                       minibuffer-inactive-mode sr-mode)
@@ -746,6 +748,7 @@
          )
   :init
   (progn
+    (setq web-mode-enable-auto-pairing nil)
     (setq
      web-mode-comment-style 2
      web-mode-indent-style 2
