@@ -74,8 +74,10 @@
 
 (add-hook 'eshell-mode-hook
           '(lambda () (setq show-trailing-whitespace nil)))
-(add-hook 'sql-mode-hook
-          '(lambda () (setq show-trailing-whitespace nil)))
+(add-hook 'sql-interactive-mode-hook
+          '(lambda ()
+             (setq show-trailing-whitespace nil)
+             (toggle-truncate-lines)))
 (add-hook 'term-mode-hook
           '(lambda () (setq show-trailing-whitespace nil)))
 
