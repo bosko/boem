@@ -335,8 +335,7 @@
   :config
   (progn
     (bind-key "C-x C-r" 'sp-rewrap-sexp smartparens-mode-map)
-    (sp-pair "%" "%" :wrap "C-%")
-    (sp-pair "<" ">" :wrap "C->")
+    (sp-pair "<%" "%>" :wrap "C-%")
     (setq
      sp-ignore-modes-list '(calc-mode dired-mode ibuffer-mode
                                       minibuffer-inactive-mode sr-mode)
