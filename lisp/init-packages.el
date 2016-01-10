@@ -404,7 +404,10 @@
   :init
   (progn
     (use-package counsel
-      :ensure t))
+      :ensure t)
+    (setq ivy-use-virtual-buffers t)
+    (setq ivy-height 10)
+    (setq ivy-count-format "(%d/%d) "))
   :config
   (progn
     (ivy-mode 1)
