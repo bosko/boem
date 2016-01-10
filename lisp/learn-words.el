@@ -94,6 +94,17 @@
     )
   )
 
+(defvar word-counts (make-hash-table :test 'equal))
+(defun find-duplicates-in-vocabulary ()
+  ;; (setq word-counts (make-hash-table))
+  (dolist (word-data voc-words-list)
+    (if (gethash (car word-data) word-counts)
+        (puthash (car word-data) (+ 1 (gethash (car word-data) word-counts)) word-counts)
+      (puthash (car word-data) 1 word-counts)))
+  (maphash (lambda (key value)
+             (if (> value 1)
+                 (print key))) word-counts))
+
 (defun vocabulary-mode ()
   (interactive)
   (if (not (org-at-table-p))
