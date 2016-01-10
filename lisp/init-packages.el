@@ -209,9 +209,8 @@
   (progn
     (setq
      projectile-sort-order 'recently-active
-     projectile-completion-system 'helm
+     projectile-completion-system 'ivy
      projectile-require-project-root t
-     projectile-switch-project-action 'helm-projectile
      projectile-enable-caching t
      projectile-known-projects-file (expand-file-name
                                      "projectile-bookmarks.eld"
@@ -240,7 +239,7 @@
      magit-repo-dirs-depth 4
      magit-status-buffer-switch-function 'switch-to-buffer
      magit-save-some-buffers t
-     magit-completing-read-function 'helm--completing-read-default
+     magit-completing-read-function 'ivy-completing-read
      ;; magit-diff-refine-hunk 'all
      magit-log-author-date-max-length 25
      magit-log-auto-more t
@@ -400,135 +399,30 @@
     (recentf-mode 1))
   )
 
-;;;; helm
-(use-package helm
+(use-package swiper
   :ensure t
-  :diminish helm-mode
   :init
   (progn
-    (require 'helm-config)
-    (helm-mode 1)
-    (helm-adaptive-mode 1)
-    (helm-autoresize-mode 1)
-
-    (use-package helm-projectile
-      :ensure t
-      :config
-      (progn
-        (helm-projectile-on)))
-
-    (use-package helm-descbinds
-      :ensure t
-      :defer t
-      :bind (("C-h b" . helm-descbinds)))
-
-    (setq helm-google-suggest-use-curl-p             t
-          ;; helm-kill-ring-threshold                   1
-          helm-raise-command                         "wmctrl -xa %s"
-          helm-scroll-amount                         4
-          ;; helm-quick-update                          t
-          helm-idle-delay                            0.01
-          helm-input-idle-delay                      0.01
-          ;; helm-completion-window-scroll-margin       0
-          ;; helm-display-source-at-screen-top          nil
-          helm-ff-search-library-in-sexp             t
-          ;; helm-kill-ring-max-lines-number            5
-          helm-default-external-file-browser         "thunar"
-          helm-pdfgrep-default-read-command          "evince --page-label=%p '%f'"
-          ;helm-ff-transformer-show-only-basename     t
-          helm-ff-auto-update-initial-value          t
-          helm-grep-default-command                  "ack-grep -Hn --smart-case --no-group %e %p %f"
-          helm-grep-default-recurse-command          "ack-grep -H --smart-case --no-group %e %p %f"
-          ;; Allow skipping unwanted files specified in ~/.gitignore_global
-          ;; Added in my .gitconfig with "git config --global core.excludesfile ~/.gitignore_global"
-          helm-ls-git-grep-command                   "git grep -n%cH --color=always --exclude-standard --no-index --full-name -e %p %f"
-          helm-default-zgrep-command                 "zgrep --color=always -a -n%cH -e %p %f"
-          ;; helm-pdfgrep-default-command               "pdfgrep --color always -niH %s %s"
-          helm-reuse-last-window-split-state         t
-          ;; helm-split-window-default-side             'other
-          helm-split-window-in-side-p                t
-          helm-always-two-windows                    t
-          ;; helm-persistent-action-use-special-display t
-          ;; helm-buffers-favorite-modes                (append helm-buffers-favorite-modes
-          ;;                                                    '(picture-mode artist-mode))
-          helm-ls-git-status-command                 'magit-status
-          ;; helm-never-delay-on-input                  nil
-          ;; helm-candidate-number-limit                200
-          helm-M-x-requires-pattern                  0
-          helm-dabbrev-cycle-threshold                5
-          helm-surfraw-duckduckgo-url                "https://duckduckgo.com/?q=%s&ke=-1&kf=fw&kl=fr-fr&kr=b&k1=-1&k4=-1"
-          ;; helm-surfraw-default-browser-function      'w3m-browse-url
-          helm-boring-file-regexp-list               '("\\.git$" "\\.hg$" "\\.svn$" "\\.CVS$" "\\._darcs$" "\\.la$" "\\.o$" "\\.i$")
-          ;; helm-mode-handle-completion-in-region      t
-          ;; helm-moccur-always-search-in-current        t
-          ;; helm-tramp-verbose                         6
-          helm-buffer-skip-remote-checking            t
-          ;; helm-ff-file-name-history-use-recentf      t
-          ;; helm-follow-mode-persistent                t
-          helm-apropos-fuzzy-match                    t
-          helm-M-x-fuzzy-match                        t
-          helm-lisp-fuzzy-completion                  t
-          helm-locate-fuzzy-match                     t
-          helm-completion-in-region-fuzzy-match       t
-          helm-move-to-line-cycle-in-source           t
-          ido-use-virtual-buffers                     t             ; Needed in helm-buffers-list
-          helm-tramp-verbose                          6
-          helm-buffers-fuzzy-matching                 t
-          helm-locate-command                         "locate %s -e -A --regex %s"
-          helm-org-headings-fontify                   t
-          helm-autoresize-max-height                  30 ; it is %.
-          helm-autoresize-min-height                  30 ; it is %.
-          helm-buffers-to-resize-on-pa                '("*helm apropos*" "*helm ack-grep*"
-                                                        "*helm grep*" "*helm occur*"
-                                                        "*helm multi occur*" "*helm lsgit*"
-                                                        "*helm git-grep*" "*helm hg files*")
-          fit-window-to-buffer-horizontally           1
-          helm-search-suggest-action-wikipedia-url
-          "https://fr.wikipedia.org/wiki/Special:Search?search=%s"
-          helm-wikipedia-suggest-url
-          "http://fr.wikipedia.org/w/api.php?action=opensearch&search="
-          helm-wikipedia-summary-url
-          "http://fr.wikipedia.org/w/api.php?action=parse&format=json&prop=text&section=0&page="
-          helm-buffer-max-length                      50
-          helm-grep-default-command
-          "grep --color=always -d skip %e -n%cH -e %p %f"
-          helm-grep-default-recurse-command
-          "grep --color=always -d recurse %e -n%cH -e %p %f"
-          )
-    (define-key global-map [remap jump-to-register]      'helm-register)
-    (define-key global-map [remap list-buffers]          'helm-buffers-list)
-    (define-key global-map [remap dabbrev-expand]        'helm-dabbrev)
-    (define-key global-map [remap find-tag]              'helm-etags-select)
-    (define-key global-map [remap xref-find-definitions] 'helm-etags-select)
-    (define-key shell-mode-map (kbd "M-p")               'helm-comint-input-ring) ; shell history.
-    (define-key helm-command-map (kbd "o")     'helm-occur)
-    (define-key helm-command-map (kbd "g")     'helm-do-grep)
-    (define-key helm-command-map (kbd "C-c w") 'helm-wikipedia-suggest)
-    (define-key helm-command-map (kbd "SPC")   'helm-all-mark-rings)
-    (global-unset-key (kbd "C-x c"))
-    (set-face-attribute 'helm-selection nil :background "gray9"
-                        :foreground "PeachPuff"
-                        :weight 'ultra-bold)
-    )
-  :bind (("C-c h" . helm-command-prefix)
-         ("M-x" . helm-M-x)
-         ("M-y" . helm-show-kill-ring)
-         ("C-c f" . helm-recentf)
-         ("C-x b" . helm-mini)
-         ("C-x C-f" . helm-find-files)
-         ("C-c <SPC>" . helm-all-mark-rings)
-         ("C-x r b" . helm-filtered-bookmarks)
-         ("C-h r" . helm-info-emacs)
-         ("C-:" . helm-eval-expression-with-eldoc)
-         ("C-," . helm-calcul-expression)
-         ("C-h d" . helm-info-at-point)
-         ("C-c g" . helm-google-suggest)
-         ("C-x C-d" . helm-browse-project)
-         ("<f1>" . helm-resume)
-         ("C-h C-f" . helm-apropos)
-         ("<f5> s" . helm-find)
-         ("<f2>" . helm-execute-kmacro)
-         ))
+    (use-package counsel
+      :ensure t))
+  :config
+  (progn
+    (ivy-mode 1)
+    (global-set-key "\C-s" 'swiper)
+    (global-set-key (kbd "C-c g") 'counsel-git)
+    (global-set-key (kbd "C-c j") 'counsel-git-grep)
+    (global-set-key (kbd "C-c k") 'counsel-ag)
+    (global-set-key (kbd "C-x l") 'counsel-locate)
+    (global-set-key (kbd "C-h f") 'counsel-describe-function)
+    (global-set-key (kbd "C-h v") 'counsel-describe-variable)
+    (global-set-key (kbd "C-c c l") 'counsel-load-library)
+    (global-set-key (kbd "C-c c i") 'counsel-info-lookup-symbol)
+    (global-set-key (kbd "C-c c u") 'counsel-unicode-char)
+    (global-set-key (kbd "C-x C-f") 'counsel-find-file)
+    (global-set-key (kbd "C-t") 'counsel-M-x)
+    (global-set-key (kbd "<f6>") 'ivy-resume))
+  :bind (("C-c f" . ivy-recentf)
+         ("C-c h i" . counsel-imenu)))
 
 (use-package company
   :ensure t
