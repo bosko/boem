@@ -407,7 +407,17 @@
       :ensure t)
     (setq ivy-use-virtual-buffers t)
     (setq ivy-height 10)
-    (setq ivy-count-format "(%d/%d) "))
+    (setq ivy-count-format "(%d/%d) ")
+    ;; Example how Ivy regex builders can be mixed
+    ;; (setq ivy-re-builders-alist
+    ;;       '((ivy-switch-buffer . ivy--regex-plus)
+    ;;         (t . ivy--regex-fuzzy)))
+    (setq ivy-re-builders-alist
+          '((t . ivy--regex-fuzzy)))
+    ;; Since fuzzy mathing is turned on we do not need
+    ;; for ^ character to be inserted into input area.
+    ;; It is only useful with default matcher.
+    (setq ivy-initial-inputs-alist nil))
   :config
   (progn
     (ivy-mode 1)
