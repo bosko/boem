@@ -540,6 +540,13 @@
     (add-hook 'emacs-lisp-mode-hook 'eldoc-mode)
     (add-hook 'emacs-lisp-mode-hook 'emacs-lisp-remove-elc-on-save)))
 
+;;;; Julia
+(use-package julia-mode
+  :ensure t)
+
+(use-package julia-shell
+  :ensure t)
+
 ;;;; litable
 (use-package litable
   :ensure t
