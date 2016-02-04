@@ -559,6 +559,7 @@
 
 ;;;; css-mode
 (use-package css-mode
+  :ensure t
   :commands css-mode
   :mode ("\\.css\\'" . css-mode)
   :init
@@ -1470,6 +1471,18 @@
       (unless (boem-current-buffer-remote-p)
         (auto-revert-mode)))
     (add-hook 'find-file-hook 'auto-revert-turn-on-maybe)))
+
+;;;; csv-mode
+(use-package csv-mode
+  :ensure t
+  :mode ("\\.[Cc][Ss][Vv]\\'" . csv-mode)
+  :init
+  (progn
+    (setq csv-separators '("," ";" "|" " "))))
+
+(use-package csv-nav
+  :ensure t)
+
 
 (use-package term
   :defer t
