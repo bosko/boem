@@ -47,6 +47,13 @@ is true refresh is skipped"
           (add-to-list 'custom-theme-load-path entry)
         (add-to-list 'load-path entry)))))
 
+(defun boem-set-solarized-theme-mode (frame)
+            (let ((mode (if (display-graphic-p frame) 'light 'dark)))
+              (message "Setting frame parameters to %s" mode)
+              (set-frame-parameter frame 'background-mode mode)
+              (set-terminal-parameter frame 'background-mode mode))
+            (enable-theme 'solarized))
+
 (boem-add-subdirs-to-load-path boem-user-package-directory)
 
 ;; My theme

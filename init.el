@@ -127,11 +127,16 @@
 
 (load "init-packages")
 
-(boem-change-theme "my-rails-casts")
+;; (boem-change-theme "my-rails-casts")
+(load-theme 'solarized t)
 
-(custom-set-faces
- '(ido-first-match ((t (:foreground "orange2" :weight bold))))
- '(highlight ((t :background "gray19"))))
+(add-hook 'after-make-frame-functions
+          (lambda (frame)
+            (boem-set-solarized-theme-mode (frame))))
+
+(add-hook 'after-init-hook
+          (lambda ()
+            (boem-set-solarized-theme-mode ())))
 
 (load custom-file 'no-error)
 

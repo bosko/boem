@@ -28,6 +28,7 @@
 (use-package smartrep :ensure t)
 (use-package ov :ensure t)
 (use-package restclient :ensure t)
+(use-package color-theme-solarized :ensure t)
 
 (use-package tramp
   :defer t
