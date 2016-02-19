@@ -676,7 +676,7 @@
   :config
   (progn
     (bind-key "C-c ;" 'web-mode-comment-or-uncomment web-mode-map)
-    (set-face-attribute 'web-mode-symbol-face nil :foreground "DarkRed")
+    (set-face-attribute 'web-mode-symbol-face nil :foreground "red")
     (unbind-key "C-c C-p" web-mode-map)
     (unbind-key "C-c C-n" web-mode-map)))
 
