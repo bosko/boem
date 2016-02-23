@@ -245,23 +245,12 @@
      magit-log-author-date-max-length 25
      magit-log-auto-more t
      magit-last-seen-setup-instructions "1.4.0")
-    ;; (use-package magit-stgit
-    ;;   :ensure t
-    ;;   :commands (magit-stgit-mode
-    ;;              turn-on-magit-stgit))
-    ;; (use-package magit-svn
-    ;;   :ensure t
-    ;;   :commands (magit-svn-mode
-    ;;              turn-on-magit-svn))
-    ;; (use-package magit-topgit
-    ;;   :ensure t
-    ;;   :commands (magit-topgit-mode
-    ;;              turn-on-magit-topgit))
     (use-package magit-blame
       :commands magit-blame-mode)
     (add-hook 'git-commit-mode-hook
               #'(lambda ()
-                  (auto-fill-mode))))
+                  (auto-fill-mode)
+                  (git-commit-turn-on-flyspell))))
   :config
   (progn
     (require 'json)
