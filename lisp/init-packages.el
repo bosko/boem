@@ -920,10 +920,9 @@
   :config
   (progn
     (unbind-key "M-o" ibuffer-mode-map)
-    (bind-key "r" 'helm-recentf ibuffer-mode-map)
+    (bind-key "r" 'ivy-recentf ibuffer-mode-map)
     (bind-key "s" 'isearch-forward-regexp ibuffer-mode-map)
     (bind-key "." 'ibuffer-invert-sorting ibuffer-mode-map)
-    (bind-key "j" 'helm-multi-swoop-all ibuffer-mode-map)
 
     (defun ibuffer-projectile-dired-known-projects-root (&optional arg)
       (interactive "P")
