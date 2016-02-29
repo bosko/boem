@@ -385,7 +385,7 @@
      recentf-save-file (expand-file-name "recentf" boem-user-data-directory)
      recentf-auto-cleanup 'never)
     (setq recentf-exclude '("recentf" "/packages/" "\\.ido.last" "COMMIT_EDITMSG"
-                            "TAGS" "ido.hist" ".gz"))
+                            "TAGS" "ido.hist" ".gz" "sql-out-*"))
     (recentf-mode 1))
   )
 
@@ -1407,7 +1407,8 @@
            (dot . t)
            (ruby . t)
            (emacs-lisp . t)
-           (css . t))))))
+           (css . t)
+           (sql . t))))))
   :config
   (progn
     (setq
