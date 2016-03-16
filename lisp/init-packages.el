@@ -1407,7 +1407,15 @@
            (ruby . t)
            (emacs-lisp . t)
            (css . t)
-           (sql . t))))))
+           (sql . t)))))
+
+    (use-package org-bullets
+      :ensure t
+      :init
+      (progn
+        (setq org-bullets-bullet-list '("✺" "✹" "✸" "✷" "✶" "✭" "✦" "■" "▲" "●" ))
+        (add-hook 'org-mode-hook 'org-bullets-mode))))
+
   :config
   (progn
     (setq
