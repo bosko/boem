@@ -1519,6 +1519,12 @@
   :ensure t
   :disabled t)
 
+(use-package which-key
+  :ensure t
+  :init
+  (progn
+    (add-hook 'after-init-hook 'which-key-mode)))
+
 (provide 'init-packages)
 
 ;;; init-packages.el ends here
