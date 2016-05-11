@@ -93,6 +93,10 @@
 (global-set-key (kbd "C-c k a") 'boem-kill-user-buffers)
 (global-set-key (kbd "C-x /") 'boem-comment-uncomment)
 (global-set-key (kbd "C-c b") 'boem-switch-to-previous-buffer)
+(global-set-key (kbd "C-c <left>") 'windmove-left)
+(global-set-key (kbd "C-c <up>") 'windmove-up)
+(global-set-key (kbd "C-c <right>") 'windmove-right)
+(global-set-key (kbd "C-c <down>") 'windmove-down)
 
 ;; Keep syntax highlighting in current line.
 (set-face-foreground 'highlight nil)
