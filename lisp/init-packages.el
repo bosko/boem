@@ -1382,6 +1382,7 @@
          (expand-file-name "journal/" boem-user-org-directory)
          org-journal-file-pattern "[0-9]\\{8\\}$")))
 
+    (use-package ob-restclient :ensure t)
 
     (use-package ob
       :init
@@ -1395,7 +1396,8 @@
            (ruby . t)
            (emacs-lisp . t)
            (css . t)
-           (sql . t)))))
+           (sql . t)
+           (restclient . t)))))
 
     (use-package org-bullets
       :ensure t
