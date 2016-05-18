@@ -1372,13 +1372,6 @@
                 ("j" "Journal" entry (file+datetree (expand-file-name "journal.org" boem-user-org-directory))
                  "* %?\Zapisano  %U\n  %i\n  %a")))))
 
-    (use-package org-readme
-      :disabled t ;; requires org-html package which is not in org anymore (?)
-      :ensure t
-      :commands (org-readme-edit
-                 org-readme-convert-to-markdown
-                 org-readme-git))
-
     (use-package org-journal
       :ensure t
       :commands (org-journal-new-entry)
@@ -1389,11 +1382,6 @@
          (expand-file-name "journal/" boem-user-org-directory)
          org-journal-file-pattern "[0-9]\\{8\\}$")))
 
-    (use-package org-manage
-      :commands org-manage
-      :init
-      (progn
-        (setq org-manage-directory-org boem-user-org-directory)))
 
     (use-package ob
       :init
