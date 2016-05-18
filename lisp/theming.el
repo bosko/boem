@@ -33,7 +33,7 @@
                           (face3 (if active 'powerline-custom1 mode-line))
                           (face4 (if active 'powerline-custom2 mode-line))
                           (separator-left (intern (format "powerline-%s-%s"
-                (powerline-current-separator)
+                                                          (powerline-current-separator)
                                                           (car powerline-default-separator-dir))))
                           (separator-right (intern (format "powerline-%s-%s"
                                                            (powerline-current-separator)
@@ -73,16 +73,16 @@
                                        (powerline-raw (list (nyan-create)) face2 'l))))
                           (rhs (list (powerline-raw global-mode-string face2 'r)
                                      (funcall separator-right face2 face1)
-             (unless window-system
-               (powerline-raw (char-to-string #xe0a1) face1 'l))
-             (when powerline-display-buffer-size
-               (powerline-buffer-size nil 'l))
-             (funcall separator-right face1 mode-line)
-             (powerline-raw " ")
-             (powerline-raw "%6p" nil 'r))))
-         (concat (powerline-render lhs)
-           (powerline-fill face2 (powerline-width rhs))
-           (powerline-render rhs)))))))
+                                     (unless window-system
+                                       (powerline-raw (char-to-string #xe0a1) face1 'l))
+                                     (when powerline-display-buffer-size
+                                       (powerline-buffer-size nil 'l))
+                                     (funcall separator-right face1 mode-line)
+                                     (powerline-raw " ")
+                                     (powerline-raw "%6p" nil 'r))))
+                     (concat (powerline-render lhs)
+                             (powerline-fill face2 (powerline-width rhs))
+                             (powerline-render rhs)))))))
 
 (provide 'theming)
 
