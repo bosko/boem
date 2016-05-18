@@ -146,10 +146,6 @@
 ;; (boem-change-theme "my-rails-casts")
 (load-theme 'solarized t)
 
-(add-hook 'after-make-frame-functions
-          (lambda (frame)
-            (boem-set-solarized-theme-mode (frame))))
-
 (add-hook 'after-init-hook
           (lambda ()
             (boem-set-solarized-theme-mode ())))
