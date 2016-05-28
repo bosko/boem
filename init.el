@@ -143,12 +143,16 @@
 
 (load "init-packages")
 
-;; (boem-change-theme "my-rails-casts")
-(load-theme 'solarized t)
+(if (display-graphic-p)
+    (load-theme 'solarized t)
+  (load-theme 'railscasts))
 
-(add-hook 'after-init-hook
-          (lambda ()
-            (boem-set-solarized-theme-mode ())))
+;; (boem-change-theme "my-rails-casts")
+;; (load-theme 'solarized t)
+
+;; (add-hook 'after-init-hook
+;;           (lambda ()
+;;             (boem-set-solarized-theme-mode ())))
 
 (load custom-file 'no-error)
 
