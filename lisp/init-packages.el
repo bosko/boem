@@ -234,6 +234,8 @@
   :commands (git-timemachine my-git-timemachine)
   :config
   (progn
+    ;;;; Methods taken from
+    ;;;; http://blog.binchen.org/posts/new-git-timemachine-ui-based-on-ivy-mode.html
     (defun my-git-timemachine-show-selected-revision ()
       "Show last (current) revision of file."
       (interactive)
