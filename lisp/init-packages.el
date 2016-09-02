@@ -434,12 +434,14 @@
     ;; (setq ivy-re-builders-alist
     ;;       '((ivy-switch-buffer . ivy--regex-plus)
     ;;         (t . ivy--regex-fuzzy)))
-    (setq ivy-re-builders-alist
-          '((t . ivy--regex-fuzzy)))
+    ;; (setq ivy-re-builders-alist
+    ;;       '((t . ivy--regex-fuzzy)))
     ;; Since fuzzy mathing is turned on we do not need
     ;; for ^ character to be inserted into input area.
     ;; It is only useful with default matcher.
-    (setq ivy-initial-inputs-alist nil))
+    (setq ivy-initial-inputs-alist nil)
+    (set-face-background 'ivy-minibuffer-match-face-1 nil)
+    )
   :config
   (progn
     (ivy-mode 1)
@@ -1443,7 +1445,7 @@
   (progn
     (setq
      org-log-done 'time
-     org-global-properties '(("Effort_ALL". "0 0:30 1:00 2:00 3:00 4:00 8:00"))
+     org-global-properties '(("Effort_ALL". "0 0:30 1:00 2:00 3:00 4:00 6:00 8:00"))
      org-columns-default-format "%38ITEM(Details) %TAGS(Context) %7TODO(To Do) %5Effort(Time){:} %6CLOCKSUM{Total}"
      org-tag-alist boem-org-tags
      org-agenda-files (directory-files boem-user-org-directory t "org$")
