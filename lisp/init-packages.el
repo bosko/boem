@@ -602,6 +602,12 @@
   (progn
     (unbind-key "C-c C-c" scss-mode-map)))
 
+;;;; sass-mode
+(use-package sass-mode
+  :ensure t
+  :commands sass-mode
+  :mode "\\.sass\\'")
+
 ;;;; JavaScript
 
 ;;;; js
