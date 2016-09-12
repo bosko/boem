@@ -7,12 +7,13 @@
 (require 'cl)
 ;;; Code:
 
-(use-package powerline
+(use-package smart-mode-line
   :ensure t
   :config
   (progn
-    (load "theming")
-    (powerline-spacemacs-imitation-theme)))
+    (setq sml/no-confirm-load-theme t)
+    (setq sml/theme 'dark)
+    (sml/setup)))
 
 (use-package dash
   :ensure t
