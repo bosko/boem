@@ -136,8 +136,8 @@
   (add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/") t)
   (package-initialize t))
 
-(boem-install-package-if-needed 'tangotango-theme)
 (boem-install-package-if-needed 'use-package)
+(boem-install-package-if-needed 'railscasts-theme)
 
 (eval-when-compile (require 'use-package))
 
@@ -148,11 +148,11 @@
   (load-theme 'railscasts))
 
 ;; (boem-change-theme "my-rails-casts")
-;; (load-theme 'solarized t)
 
-;; (add-hook 'after-init-hook
-;;           (lambda ()
-;;             (boem-set-solarized-theme-mode ())))
+(load-theme 'railscasts t)
+;; Make multi-cursor cursors number more visible
+;; in the mode line
+(set-face-foreground 'font-lock-warning-face "red")
 
 (load custom-file 'no-error)
 
