@@ -1439,8 +1439,7 @@
            (emacs-lisp . t)
            (css . t)
            (sql . t)
-           (restclient . t)
-           (http . t)))))
+           (restclient . t)))))
 
     (use-package org-bullets
       :ensure t
