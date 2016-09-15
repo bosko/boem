@@ -265,7 +265,7 @@
 ;;;; magit
 (use-package magit
   :ensure t
-  :commands (magit-log magit-run-gitk magit-run-git-gui
+  :commands (magit-log magit-run-gitk magit-run-git-gui magit-blame
                        magit-status magit-git-repo-p magit-list-repos)
   :bind (("C-x g" . magit-status))
   :init
