@@ -31,6 +31,7 @@
 (use-package restclient :ensure t)
 (use-package color-theme-solarized :ensure t)
 (use-package wgrep :ensure t)
+(use-package smex :ensure t)
 
 (use-package tramp
   :defer t
