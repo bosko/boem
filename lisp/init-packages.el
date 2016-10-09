@@ -448,7 +448,7 @@
   :config
   (progn
     (ivy-mode 1)
-    (global-set-key "\C-s" 'swiper)
+    (global-set-key "\C-s" 'counsel-grep-or-swiper)
     (global-set-key (kbd "C-c c g") 'counsel-git)
     (global-set-key (kbd "C-c c j") 'counsel-git-grep)
     (global-set-key (kbd "C-c c k") 'counsel-ag)
