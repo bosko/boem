@@ -76,6 +76,7 @@
           '(lambda () (setq show-trailing-whitespace nil)))
 (add-hook 'sql-interactive-mode-hook
           '(lambda ()
+             (boem-set-proper-sql-prompt-regex)
              (setq show-trailing-whitespace nil)
              (toggle-truncate-lines)))
 (add-hook 'term-mode-hook
