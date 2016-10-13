@@ -176,7 +176,7 @@ Code from: http://emacsredux.com/blog/2013/04/28/switch-to-previous-buffer/"
 
 (defun boem-set-proper-sql-prompt-regex ()
   (if (string= sql-product "postgres")
-      (setq sql-prompt-regexp "^[_[:alpha:]]*[=][#]")))
+      (setq sql-prompt-regexp "[_[:alpha:]]*[=][#]")))
 
 (defvar boem-org-tags '(("Project" . ?p) ("Reading" . ?r) ("crypt". ?c))
   "Override this value by creating .boem-org-tags.el file in your home directory.")
