@@ -464,6 +464,15 @@
   :bind (("C-c f" . counsel-recentf)
          ("C-c h i" . counsel-imenu)))
 
+(use-package helm-dash
+  :ensure t
+  :config
+  (progn
+    (setq helm-dash-browser-func 'eww)
+    (setq helm-dash-common-docsets '("Ruby" "Ruby on Rails" "NodeJS" "jQuery" "jQuery_UI" "Nginx" "MySQL" "Bootstrap_3" "JavaScript")))
+  :bind (("C-h M-d" . helm-dash)
+         ("C-h M-p" . helm-dash-at-point)))
+
 (use-package company
   :ensure t
   :config
