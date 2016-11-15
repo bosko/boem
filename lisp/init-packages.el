@@ -1471,7 +1471,8 @@
      org-clock-sound t
      org-enforce-todo-dependencies t
      org-enforce-todo-checkbox-dependencies t
-     org-archive-location (concat (expand-file-name "archive.org" boem-user-org-directory) "::* From %s"))
+     org-archive-location (concat (expand-file-name "archive.org" boem-user-org-directory) "::* From %s")
+     org-imenu-depth 3)
 
     (setq
      org-todo-keywords
