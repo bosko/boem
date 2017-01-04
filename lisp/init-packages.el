@@ -1420,7 +1420,7 @@
       (progn
         (setq org-capture-templates
               '(("t" "Todo" entry (file+headline (expand-file-name "todos.org" boem-user-org-directory) "Tasks")
-                 "* TODO %?\n  %i\n  %a")
+                 "* TODO %?")
                 ("j" "Journal" entry (file+datetree (expand-file-name "journal.org" boem-user-org-directory))
                  "* %?\Zapisano  %U\n  %i\n  %a")))))
 
@@ -1463,7 +1463,7 @@
     (setq
      org-log-done 'time
      org-global-properties '(("Effort_ALL". "0 0:30 1:00 2:00 3:00 4:00 6:00 8:00"))
-     org-columns-default-format "%38ITEM(Details) %TAGS(Context) %7TODO(To Do) %5Effort(Time){:} %6CLOCKSUM{Total}"
+     org-columns-default-format "%50ITEM(Task) %6Effort{:} %10CLOCKSUM %SCHEDULED"
      org-tag-alist boem-org-tags
      org-agenda-files (directory-files boem-user-org-directory t "org$")
      org-agenda-include-diary nil
