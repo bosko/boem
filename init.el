@@ -36,7 +36,8 @@
  use-package-idle-interval 1.5
  fill-column 80
  echo-keystrokes 0.1
- bookmark-default-file (expand-file-name "bookmarks" boem-user-data-directory))
+ bookmark-default-file (expand-file-name "bookmarks" boem-user-data-directory)
+ epa-pinentry-mode 'loopback)
 
 (put 'dired-find-alternate-file 'disabled nil)
 (put 'downcase-region 'disabled nil)
