@@ -155,6 +155,7 @@
     (add-hook 'php-mode-hook 'flycheck-turn-on-maybe)
     (add-hook 'scss-mode-hook 'flycheck-turn-on-maybe)
     (add-hook 'haskell-mode-hook 'flycheck-turn-on-maybe)
+    (add-hook 'elixir-mode-hook 'flycheck-turn-on-maybe)
 
     (when (fboundp 'define-fringe-bitmap)
       (require 'fringe-helper)
@@ -752,6 +753,15 @@
   :ensure t
   :commands yaml-mode
   :mode ("\\.y[a]?ml\\'" . yaml-mode))
+
+;;; Elixir
+
+(use-package elixir-mode
+  :ensure t
+  :mode (("\\.exs\\'" . elixir-mode)))
+
+(use-package alchemist
+  :ensure t)
 
 ;;;; yasnippet
 (use-package yasnippet
@@ -1450,6 +1460,7 @@
            (emacs-lisp . t)
            (css . t)
            (sql . t)
+           (js . t)
            (restclient . t)))))
 
     (use-package org-bullets
