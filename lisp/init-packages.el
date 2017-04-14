@@ -452,7 +452,7 @@
     (global-set-key "\C-s" 'counsel-grep-or-swiper)
     (global-set-key (kbd "C-c c g") 'counsel-git)
     (global-set-key (kbd "C-c c j") 'counsel-git-grep)
-    (global-set-key (kbd "C-c c k") 'counsel-ag)
+    (global-set-key (kbd "C-c c k") 'counsel-rg)
     (global-set-key (kbd "C-x c l") 'counsel-locate)
     (global-set-key (kbd "C-h f") 'counsel-describe-function)
     (global-set-key (kbd "C-h v") 'counsel-describe-variable)
