@@ -1399,7 +1399,8 @@
   :init
   (progn
     (setq
-     org-directory boem-user-org-directory)
+     org-directory boem-user-org-directory
+     org-src-fontify-natively t)
     (setq org-refile-targets
           '((org-agenda-files :regexp . "Tasks")))
 
