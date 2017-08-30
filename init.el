@@ -102,6 +102,8 @@
 (global-set-key (kbd "C-c <up>") 'windmove-up)
 (global-set-key (kbd "C-c <right>") 'windmove-right)
 (global-set-key (kbd "C-c <down>") 'windmove-down)
+(global-set-key (kbd "M-l") 'scroll-down-line)
+(global-set-key (kbd "M-k") 'scroll-up-line)
 
 ;; Keep syntax highlighting in current line.
 (set-face-foreground 'highlight nil)
