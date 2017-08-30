@@ -1401,8 +1401,10 @@
     (setq
      org-directory boem-user-org-directory
      org-src-fontify-natively t)
+    ;; (setq org-refile-targets
+    ;;       '((org-agenda-files :regexp . "Tasks")))
     (setq org-refile-targets
-          '((org-agenda-files :regexp . "Tasks")))
+          '((org-agenda-files :level . 1)))
 
     (use-package org-habit
       :config
