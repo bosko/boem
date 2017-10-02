@@ -130,6 +130,14 @@
          ("C-c C-i" . change-inner)
          ("C-c C-o" . change-outer)))
 
+;;;; view large files
+(use-package vlf
+  :ensure t
+  :config
+  (progn
+    (require 'json))
+  )
+
 ;;;; flycheck
 (use-package flycheck
   :ensure t
