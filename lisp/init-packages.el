@@ -453,6 +453,8 @@
     ;; for ^ character to be inserted into input area.
     ;; It is only useful with default matcher.
     (setq ivy-initial-inputs-alist nil)
+    (setq counsel-grep-base-command
+          "rg -i --no-heading --line-number --color never '%s' %s")
     (set-face-background 'ivy-minibuffer-match-face-1 nil)
     )
   :config
