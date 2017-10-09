@@ -1432,7 +1432,6 @@
     (use-package org-crypt
       :config
       (progn
-        (custom-set-variables '(epg-gpg-program "/usr/local/Cellar/gnupg@2.1/2.1.19/bin/gpg2"))
         (org-crypt-use-before-save-magic)
         (setq org-tags-exclude-from-inheritance (quote ("crypt")))
         ;; GPG key to use for encryption
