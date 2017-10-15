@@ -92,7 +92,8 @@ is true refresh is skipped"
     ruby-mode-hook
     haskell-mode-hook
     clojure-mode-hook
-    go-mode-hook))
+    go-mode-hook
+    sass-mode-hook))
 
 (defun boem-current-buffer-remote-p ()
   (--any? (and it (file-remote-p it))

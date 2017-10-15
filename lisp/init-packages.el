@@ -513,7 +513,15 @@
   (progn
     (setq
      ;; Avoid default, ugly, Ruby indentation
-     ruby-deep-indent-paren nil))
+     ruby-deep-indent-paren nil)
+    (eval-after-load "hideshow"
+      '(add-to-list 'hs-special-modes-alist
+                    `(ruby-mode
+                      ,(rx (or "def" "class" "module" "do" "{" "[" "if" "else" "unless")) ; Block start
+                      ,(rx (or "}" "]" "end"))                       ; Block end
+                      ,(rx (or "#" "=begin"))                        ; Comment start
+                      ruby-forward-sexp nil)))
+    (add-hook 'ruby-mode-hook (lambda() (hs-minor-mode))))
   :mode (("\\.rabl\\'" . ruby-mode)))
 
 (use-package inf-ruby
