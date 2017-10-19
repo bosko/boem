@@ -38,7 +38,21 @@
  echo-keystrokes 0.1
  bookmark-default-file (expand-file-name "bookmarks" boem-user-data-directory)
  calendar-week-start-day 1
+ eshell-hist-ignoredups t
+ eshell-destroy-buffer-when-process-dies t
+ dired-dwim-target t
  epa-pinentry-mode 'loopback)
+
+(setq eshell-prompt-function
+      (lambda nil
+        (let ((path (abbreviate-file-name (eshell/pwd))))
+          (concat
+           (format
+            (propertize "(%s@%s)[%s]\n>" 'face '(:weight bold))
+            (propertize (user-login-name) 'face '(:foreground "cyan"))
+            (propertize (system-name) 'face '(:foreground "cyan"))
+            (propertize path 'face `(:foreground ,(if (= (user-uid) 0) "red" "green") :weight bold)))
+           " "))))
 
 (put 'dired-find-alternate-file 'disabled nil)
 (put 'downcase-region 'disabled nil)
@@ -59,6 +73,7 @@
  ;; scroll-preserve-screen-position t
  scroll-preserve-screen-position 1
  delete-by-moving-to-trash t
+ eshell-prompt-regexp "^> "
  completion-ignored-extensions
  '(".rbc" ".o" "~" ".bin" ".lbin" ".so" ".a" ".ln" ".blg"
    ".bbl" ".elc" ".lof" ".glo" ".idx" ".lot" ".svn/" ".hg/"
@@ -155,6 +170,9 @@
   (load-theme 'railscasts))
 
 ;; (boem-change-theme "my-rails-casts")
+
+(when (memq window-system '(mac ns x))
+  (exec-path-from-shell-initialize))
 
 (load-theme 'railscasts t)
 ;; Make multi-cursor cursors number more visible

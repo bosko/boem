@@ -7,6 +7,8 @@
 (require 'cl)
 ;;; Code:
 
+(require 'em-term)
+
 (use-package smart-mode-line
   :ensure t
   :config
