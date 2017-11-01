@@ -168,6 +168,14 @@
 (if (display-graphic-p)
     (load-theme 'solarized t)
   (load-theme 'railscasts))
+(with-eval-after-load 'em-term
+  (nconc eshell-visual-commands
+         '("htop" "pinentry-curses" "watch"))
+  (setq eshell-visual-subcommands
+        '(("git" "log" "l" "lol" "diff" "d" "dc" "show")
+          ("rails" "c")
+          ("sudo" "vi"))))
+
 
 ;; (boem-change-theme "my-rails-casts")
 
