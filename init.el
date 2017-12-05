@@ -41,7 +41,9 @@
  eshell-hist-ignoredups t
  eshell-destroy-buffer-when-process-dies t
  dired-dwim-target t
- epa-pinentry-mode 'loopback)
+ epa-pinentry-mode 'loopback
+ dired-listing-switches "-alh"
+ dired-dwim-target t)
 
 (setq eshell-prompt-function
       (lambda nil
