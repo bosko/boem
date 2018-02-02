@@ -167,9 +167,6 @@
 
 (load "init-packages")
 
-(if (display-graphic-p)
-    (load-theme 'solarized t)
-  (load-theme 'railscasts))
 (with-eval-after-load 'em-term
   (nconc eshell-visual-commands
          '("htop" "pinentry-curses" "watch"))
@@ -178,19 +175,26 @@
           ("rails" "c")
           ("sudo" "vi"))))
 
-
-;; (boem-change-theme "my-rails-casts")
-
 (when (memq window-system '(mac ns x))
   (exec-path-from-shell-initialize))
 
-(load-theme 'railscasts t)
 ;; Make multi-cursor cursors number more visible
 ;; in the mode line
 (set-face-foreground 'font-lock-warning-face "red")
 (set-face-attribute 'mode-line nil :box '(:line-width 2 :color "#009bff"))
 
 (load custom-file 'no-error)
+
+(if (window-system)
+    (progn
+      (load-theme 'solarized t)
+      (add-hook 'after-init-hook
+          (lambda ()
+            (boem-set-solarized-theme-mode ()))))
+  (load-theme 'railscasts t))
+
+;; (boem-change-theme "my-rails-casts")
+;; (load-theme 'railscasts t)
 
 (fringe-mode 5)
 (message "%s, Emacs started in %s" boem-current-user (format "%.1f seconds"
