@@ -30,6 +30,7 @@
 (use-package docker :ensure t
   :init
   (progn
+    (docker-global-mode)
     (setq
      docker-keymap-prefix "C-c C-d")))
 (use-package docker-compose-mode :ensure t)
