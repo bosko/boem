@@ -27,6 +27,13 @@
 (use-package f :ensure t)
 (use-package diminish :ensure t)
 (use-package discover-my-major :ensure t)
+(use-package docker :ensure t
+  :init
+  (progn
+    (setq
+     docker-keymap-prefix "C-c C-d")))
+(use-package docker-compose-mode :ensure t)
+(use-package dockerfile-mode :ensure t)
 (use-package fringe-helper :ensure t :defer t)
 (use-package smartrep :ensure t)
 (use-package ov :ensure t)
