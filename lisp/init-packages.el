@@ -27,12 +27,11 @@
 (use-package f :ensure t)
 (use-package diminish :ensure t)
 (use-package discover-my-major :ensure t)
-(use-package docker :ensure t
-  :config
-  (progn
-    (docker-global-mode)
-    (setq
-     docker-keymap-prefix "C-c C-d")))
+;; (use-package docker :ensure t
+;;   :config
+;;   (progn
+;;     (setq docker-keymap-prefix "C-c C-d")
+;;     (docker-global-mode)))
 (use-package docker-compose-mode :ensure t)
 (use-package dockerfile-mode :ensure t)
 (use-package fringe-helper :ensure t :defer t)
