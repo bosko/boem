@@ -52,8 +52,8 @@ is true refresh is skipped"
             (let ((mode (if (display-graphic-p frame) 'dark 'dark)))
               (message "Setting frame parameters to %s" mode)
               (set-frame-parameter frame 'background-mode mode)
-              (set-terminal-parameter frame 'background-mode mode))
-            (enable-theme 'solarized))
+              (set-terminal-parameter frame 'background-mode mode)))
+            ;; (enable-theme 'solarized))
 
 (boem-add-subdirs-to-load-path boem-user-package-directory)
 

@@ -20,15 +20,15 @@
 (use-package dash
   :ensure t
   :defer nil
-  :config
+  :init
   (progn
-    (dash-enable-font-lock)))
+    (eval-after-load 'dash '(dash-enable-font-lock))))
 (use-package s :ensure t)
 (use-package f :ensure t)
 (use-package diminish :ensure t)
 (use-package discover-my-major :ensure t)
 (use-package docker :ensure t
-  :init
+  :config
   (progn
     (docker-global-mode)
     (setq
@@ -39,7 +39,6 @@
 (use-package smartrep :ensure t)
 (use-package ov :ensure t)
 (use-package restclient :ensure t)
-(use-package color-theme-solarized :ensure t)
 (use-package wgrep :ensure t)
 (use-package smex :ensure t)
 

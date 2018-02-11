@@ -185,16 +185,7 @@
 
 (load custom-file 'no-error)
 
-(if (window-system)
-    (progn
-      (load-theme 'solarized t)
-      (add-hook 'after-init-hook
-          (lambda ()
-            (boem-set-solarized-theme-mode ()))))
-  (load-theme 'railscasts t))
-
-;; (boem-change-theme "my-rails-casts")
-;; (load-theme 'railscasts t)
+(load-theme 'railscasts t)
 
 (fringe-mode 5)
 (message "%s, Emacs started in %s" boem-current-user (format "%.1f seconds"
