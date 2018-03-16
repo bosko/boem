@@ -791,6 +791,9 @@
   :ensure t)
 
 ;;;; yasnippet
+(use-package yasnippet-snippets
+  :ensure t)
+
 (use-package yasnippet
   :ensure t
   :commands (yas-reload-all yas-global-mode yas-minor-mode snippet-mode
@@ -1579,6 +1582,7 @@
   :ensure t
   :config
   (progn
+    (setq exec-path-from-shell-variables '("PATH" "GOPATH"))
     (when (memq window-system '(mac ns))
       (exec-path-from-shell-initialize))
     )

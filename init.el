@@ -43,7 +43,8 @@
  dired-dwim-target t
  epa-pinentry-mode 'loopback
  dired-listing-switches "-alh"
- dired-dwim-target t)
+ dired-dwim-target t
+ visible-bell t)
 
 (setq eshell-prompt-function
       (lambda nil
