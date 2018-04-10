@@ -540,16 +540,6 @@
     (inf-ruby-minor-mode +1)
     (subword-mode +1)))
 
-(use-package ruby-block
-  :ensure t
-  :commands ruby-block-mode
-  :diminish ruby-block-mode
-  :init
-  (progn
-    (setq
-     ruby-block-highlight-toggle t)
-    (add-hook 'ruby-mode-hook 'ruby-block-mode)))
-
 (use-package ruby-electric
   :disabled t
   :ensure t
@@ -1565,10 +1555,6 @@
   :init
   (progn
     (setq csv-separators '("," ";" "|" " "))))
-
-(use-package csv-nav
-  :ensure t)
-
 
 (use-package term
   :defer t
