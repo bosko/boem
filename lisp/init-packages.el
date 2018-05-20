@@ -970,7 +970,10 @@
 (use-package rbenv
   :ensure t
   :commands (rbenv-use rbenv-use-global global-rbenv-mode)
-  :init (global-rbenv-mode))
+  :init
+  (progn
+    (setq rbenv-installation-dir "/usr/local/")
+    (global-rbenv-mode)))
 
 ;;;; ibuffer
 (use-package ibuffer
@@ -1568,8 +1571,7 @@
   :ensure t
   :config
   (progn
-    (setq exec-path-from-shell-variables '("PATH" "GOPATH"))
-    (when (memq window-system '(mac ns))
+    (when (memq window-system '(mac ns x))
       (exec-path-from-shell-initialize))
     )
 )
