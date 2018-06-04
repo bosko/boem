@@ -1437,9 +1437,10 @@
       :bind ("C-c o a" . org-agenda)
       :config
       (progn
-        (setq org-agenda-time-grid (quote ((daily today remove-match)
-                                       #("----------------" 0 16 (org-heading t))
-                                       (0900 1100 1300 1500 1700))))))
+        (setq org-agenda-time-grid (quote
+                             ((daily today remove-match)
+                              (0900 1100 1300 1500 1700)
+                              "......" "----------------")))))
 
     (use-package org-crypt
       :config
