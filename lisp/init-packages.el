@@ -1477,7 +1477,7 @@
       (progn
         (org-babel-do-load-languages
          'org-babel-load-languages
-         '((sh . t)
+         '((shell . t)
            (ditaa . t)
            (plantuml . t)
            (dot . t)
