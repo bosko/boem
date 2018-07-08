@@ -489,7 +489,7 @@
   :config
   (progn
     (setq helm-dash-browser-func 'eww)
-    (setq helm-dash-common-docsets '("Ruby" "Ruby on Rails" "NodeJS" "jQuery" "jQuery_UI" "Nginx" "MySQL" "Bootstrap_3" "JavaScript")))
+    (setq helm-dash-common-docsets '("Ruby_2" "Ruby_on_Rails_5" "NodeJS" "jQuery" "jQuery_UI" "Nginx" "MySQL" "JavaScript" "Elixir" "ElasticSearch" "Emacs_Lisp" "Jekyll" "Julia" "MongoDB" "PostgreSQL")))
   :bind (("C-h M-d" . helm-dash)
          ("C-h M-p" . helm-dash-at-point)))
 
