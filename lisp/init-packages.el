@@ -1430,6 +1430,8 @@
     (setq org-refile-targets
           '((org-agenda-files :level . 1)))
 
+    (require 'ox-md nil t)
+
     (use-package org-habit
       :config
       (progn
