@@ -47,28 +47,10 @@ is true refresh is skipped"
           (add-to-list 'custom-theme-load-path entry)
         (add-to-list 'load-path entry)))))
 
-(defun boem-set-solarized-theme-mode (frame)
-            ;; (let ((mode (if (display-graphic-p frame) 'light 'dark)))
-            (let ((mode (if (display-graphic-p frame) 'dark 'dark)))
-              (message "Setting frame parameters to %s" mode)
-              (set-frame-parameter frame 'background-mode mode)
-              (set-terminal-parameter frame 'background-mode mode)))
-            ;; (enable-theme 'solarized))
-
 (boem-add-subdirs-to-load-path boem-user-package-directory)
 
-;; My theme
+;; My themes
 (add-to-list 'custom-theme-load-path boem-user-themes-directory)
-
-(defun boem-change-theme (theme)
-  "Activate THEME from the list of themes I use."
-  (interactive "sTheme name: ")
-  (if (string-equal theme "my-rails-casts")
-      (load-theme (intern theme) t))
-  (if (string-equal theme "tangotango")
-      (progn
-        (load-theme (intern theme) t)
-        (custom-set-faces '(highlight ((t :background "gray9")))))))
 
 ;;;; rename-modeline
 (defmacro boem-rename-modeline (package-name mode new-name)
