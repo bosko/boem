@@ -20,15 +20,15 @@
 (deftheme MyCoolBlue
   "")
 
-(let ((class '((class color) (min-colors 89)))) 
+(let ((class '((class color) (min-colors 89))))
   (custom-theme-set-faces
    'MyCoolBlue
    `(default ((,class (:background "#14212e" :foreground "#d4d4d4"))))
-   `(cursor ((,class (:background "#ffff00" :foreground "#000000"))))
-   `(mode-line ((,class (:background "#000000" :foreground "#0498da"))))
+   `(cursor ((,class (:background "#4682b4"))))
+   `(mode-line ((,class (:background "#4682b4" :foreground "#ffffe0"))))
    `(mode-line-inactive ((,class (:background "#000000" :foreground "#0498da"))))
-   `(fringe ((,class (:background "#000000")))) 
-   `(highlight ((,class (:background "#333333" :foreground "#ffffff"))))
+   `(fringe ((,class (:background "#ffffff"))))
+   `(highlight ((,class (:background "#4682b4"))))
    `(minibuffer-prompt ((,class (:foreground "#ffcc33"))))
    `(font-lock-builtin-face ((,class (:foreground "#ffff00"))))
    `(font-lock-comment-face ((,class (:foreground "#7eb0c9"))))
