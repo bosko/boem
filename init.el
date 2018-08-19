@@ -186,7 +186,9 @@
 
 (load custom-file 'no-error)
 
-(load-theme 'railscasts t)
+(if (display-graphic-p)
+    (load-theme 'railscasts t)
+  (load-theme 'leuven t))
 
 (fringe-mode 5)
 (message "%s, Emacs started in %s" boem-current-user (format "%.1f seconds"
