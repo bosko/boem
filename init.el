@@ -190,7 +190,9 @@
     (load-theme 'railscasts t)
   (load-theme 'leuven t))
 
-(fringe-mode 5)
+(if (fboundp 'fringe-mode)
+    (fringe-mode 9))
+
 (message "%s, Emacs started in %s" boem-current-user (format "%.1f seconds"
                                                         (float-time
                                                          (time-subtract (current-time) before-init-time))))
