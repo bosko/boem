@@ -188,7 +188,7 @@
 
 (if (display-graphic-p)
     (load-theme 'railscasts t)
-  (load-theme 'leuven t))
+  (load-theme 'manoj-dark t))
 
 (if (fboundp 'fringe-mode)
     (fringe-mode 9))
