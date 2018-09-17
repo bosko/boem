@@ -107,6 +107,9 @@
 "Kill up to, but not including ARGth occurrence of CHAR. (fn arg char)"
 (autoload 'zap-up-to-char "misc" 'interactive)
 
+(autoload 'inf-ruby-minor-mode "inf-ruby" "Run an inferior Ruby process" t)
+(add-hook 'ruby-mode-hook 'inf-ruby-minor-mode)
+
 (global-set-key (kbd "C-x /") 'comment-or-uncomment-region)
 (global-set-key (kbd "C-x C-b") 'ibuffer)
 (global-set-key (kbd "C-S-<return>") 'boem-insert-line-above)
@@ -122,6 +125,7 @@
 (global-set-key (kbd "C-c <down>") 'windmove-down)
 (global-set-key (kbd "M-l") 'scroll-down-line)
 (global-set-key (kbd "M-k") 'scroll-up-line)
+(global-set-key (kbd "C-c r a") 'inf-ruby-console-auto)
 
 ;; Keep syntax highlighting in current line.
 (set-face-foreground 'highlight nil)
@@ -176,7 +180,7 @@
           ("rails" "c")
           ("sudo" "vi"))))
 
-(when (memq window-system '(mac ns x))
+(when (memq window-system '(mac ns))
   (exec-path-from-shell-initialize))
 
 ;; Make multi-cursor cursors number more visible
