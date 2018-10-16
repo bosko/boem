@@ -42,6 +42,7 @@
  eshell-destroy-buffer-when-process-dies t
  dired-dwim-target t
  epa-pinentry-mode 'loopback
+ epa-armor t
  dired-listing-switches "-alh"
  dired-dwim-target t
  visible-bell t)
