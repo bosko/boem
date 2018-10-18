@@ -192,7 +192,11 @@
 (load custom-file 'no-error)
 
 (if (display-graphic-p)
-    (load-theme 'railscasts t)
+    (progn
+      (load-theme 'railscasts t)
+      (custom-theme-set-faces
+       'railscasts
+       '(hl-line ((t (:foreground nil :background "#505050"))))))
   (load-theme 'manoj-dark t))
 
 (if (fboundp 'fringe-mode)
