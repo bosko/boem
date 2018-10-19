@@ -4,6 +4,7 @@
 ;;; Commentary:
 ;;
 
+(require 'dired-x)
 (require 'cl)
 ;;; Code:
 
