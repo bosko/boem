@@ -196,7 +196,8 @@
       (load-theme 'railscasts t)
       (custom-theme-set-faces
        'railscasts
-       '(hl-line ((t (:foreground nil :background "#505050"))))))
+       '(hl-line ((t (:foreground nil :background "#505050"))))
+       '(region ((t (:background "#708238"))))))
   (load-theme 'manoj-dark t))
 
 (if (fboundp 'fringe-mode)
