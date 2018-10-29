@@ -44,8 +44,15 @@
  epa-pinentry-mode 'loopback
  epa-armor t
  dired-listing-switches "-alh"
- dired-dwim-target t
- visible-bell t)
+ dired-dwim-target t)
+
+(setq ring-bell-function
+      (lambda ()
+        (let ((orig-bg (face-background 'mode-line)))
+          (set-face-background 'mode-line "#F2804F")
+          (run-with-idle-timer 0.1 nil
+                               (lambda (fg) (set-face-background 'mode-line fg))
+                               orig-bg))))
 
 (setq eshell-prompt-function
       (lambda nil
