@@ -161,6 +161,13 @@ Code from: http://emacsredux.com/blog/2013/04/28/switch-to-previous-buffer/"
   (if (string= sql-product "postgres")
       (setq sql-prompt-regexp "[_[:alpha:]]*[=][#]")))
 
+(defun boem-reopen-file-as-sudo ()
+  (interactive)
+  (when-let ((p (point)))
+    (when-let ((file-name (buffer-file-name)))
+      (find-alternate-file (concat "/sudo::" file-name)))
+    (goto-char p)))
+
 (defvar boem-org-tags '(("Project" . ?p) ("Reading" . ?r) ("crypt". ?c))
   "Override this value by creating .boem-org-tags.el file in your home directory.")
 (if (file-exists-p "~/.boem-org-tags.el")
