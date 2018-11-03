@@ -63,7 +63,6 @@ is true refresh is skipped"
         (eshell/clear-scrollback)
         (eshell-emit-prompt)))))
 
-(setq what (get-buffer "*bottom-eshell*"))
 (defun boem-add-subdirs-to-load-path (root-dir)
   "Add all first lever sub directories of ROOT-DIR to load path."
   (dolist (entry (directory-files root-dir t "\\w+"))
