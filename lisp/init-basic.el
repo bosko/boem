@@ -39,6 +39,31 @@ is true refresh is skipped"
         (package-refresh-contents)
         (boem-install-package-if-needed package min-version t)))))
 
+(defun boem-get-buffer-project-folder (buffer)
+  "Returns folder for Git project"
+  (let ((proj-folder (locate-dominating-file (buffer-file-name buffer) ".git")))
+    (if proj-folder
+        proj-folder)))
+
+(defun boem-pop-eshell-bottom ()
+  "Opens eshell buffer on the bottom of the window"
+  (interactive)
+  (with-current-buffer (current-buffer)
+    (let ((cur-buff (current-buffer))
+          (esh-buf (get-buffer "*bottom-eshell*")))
+      (unless esh-buf
+        (setq esh-buf (eshell 919))
+        (rename-buffer "*bottom-eshell*")
+        (switch-to-buffer cur-buff))
+      (display-buffer-in-side-window esh-buf '((side . bottom)))
+      (select-window (get-buffer-window esh-buf))
+      (with-current-buffer "*bottom-eshell*"
+        (cd (or (boem-get-buffer-project-folder cur-buff) "."))
+        (eshell-emit-prompt)
+        (eshell/clear-scrollback)
+        (eshell-emit-prompt)))))
+
+(setq what (get-buffer "*bottom-eshell*"))
 (defun boem-add-subdirs-to-load-path (root-dir)
   "Add all first lever sub directories of ROOT-DIR to load path."
   (dolist (entry (directory-files root-dir t "\\w+"))

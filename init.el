@@ -134,6 +134,7 @@
 (global-set-key (kbd "M-l") 'scroll-down-line)
 (global-set-key (kbd "M-k") 'scroll-up-line)
 (global-set-key (kbd "C-c r a") 'inf-ruby-console-auto)
+(global-set-key (kbd "C-c C-p b") 'boem-pop-eshell-bottom)
 
 ;; Keep syntax highlighting in current line.
 (set-face-foreground 'highlight nil)
