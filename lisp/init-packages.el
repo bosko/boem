@@ -593,7 +593,6 @@
                          buffer-file-name
                          (file-exists-p (concat buffer-file-name "c")))
                     (delete-file (concat buffer-file-name "c"))))))
-    (add-hook 'emacs-lisp-mode-hook 'eldoc-mode)
     (add-hook 'emacs-lisp-mode-hook 'emacs-lisp-remove-elc-on-save)))
 
 ;;;; Julia
@@ -724,7 +723,6 @@
       (tide-setup)
       (flycheck-mode +1)
       (setq flycheck-check-syntax-automatically '(save mode-enabled))
-      (eldoc-mode +1)
       (tide-hl-identifier-mode +1)
       ;; company is an optional dependency. You have to
       ;; install it separately via package-install
