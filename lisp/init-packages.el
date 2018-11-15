@@ -540,7 +540,10 @@
   :config
   (progn
     (inf-ruby-minor-mode +1)
-    (subword-mode +1)))
+    (subword-mode +1))
+  :init
+  (progn
+    (add-hook 'inf-ruby-mode-hook (lambda() (setq show-trailing-whitespace nil)))))
 
 (use-package ruby-electric
   :disabled t
