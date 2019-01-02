@@ -803,6 +803,26 @@
   :commands yaml-mode
   :mode ("\\.y[a]?ml\\'" . yaml-mode))
 
+;;; Erlang
+;;; Currently I am not automatically deceting installed version
+;;; so on new installation it might happen that directory tools-3.0
+;;; does not exist (different version) so code must be adjusted.
+;;; It would be better to either do that through configuration variable
+;;; or by searching for folder existance
+(cond
+ ((string-equal system-type "darwin")
+  (progn
+    (add-to-list 'load-path "/usr/local/lib/erlang/lib/tools-3.0/emacs")
+    (setq erlang-root-dir "/usr/local/lib/erlang")
+    (setq exec-path (cons "/usr/local/lib/erlang/bin" exec-path))
+    (require 'erlang-start))
+  (string-equal system-type "gnu/linux")
+  (progn
+    (add-to-list 'load-path "/usr/local/otp/lib/tools-<ToolsVer>/emacs")
+    (setq erlang-root-dir "/usr/local/otp")
+    (setq exec-path (cons "/usr/local/otp/bin" exec-path))
+    (require 'erlang-start))))
+
 ;;; Elixir
 
 (use-package elixir-mode
