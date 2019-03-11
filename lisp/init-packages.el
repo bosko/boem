@@ -471,7 +471,7 @@
   (("C-s"     . counsel-grep-or-swiper)
    ("C-c g"   . counsel-git)      ; search for files in git repo
    ("C-c j"   . counsel-git-grep) ; search for regexp in git repo
-   ("C-c /"   . counsel-ag)       ; Use ag for regexp
+   ("C-c c k" . counsel-rg)       ; Use rg for regexp
    ("C-x l"   . counsel-locate)
    ("C-h f"   . counsel-describe-function)
    ("C-h v"   . counsel-describe-variable)
@@ -479,7 +479,7 @@
    ("C-c c i" . counsel-info-lookup-symbol)
    ("C-c c u" . counsel-unicode-char)
    ("C-x C-f" . counsel-find-file)
-   ("C-c f l" . counsel-find-library)
+   ("C-c c f" . counsel-find-library)
    ("C-x C-m" . counsel-M-x)
    ("C-c c r" . ivy-resume)
    ("C-c f"   . counsel-recentf)  ; search for recently edited
