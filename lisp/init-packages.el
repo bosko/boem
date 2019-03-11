@@ -444,15 +444,13 @@
     (recentf-mode 1))
   )
 
-(use-package swiper
-  :ensure t
-  :init
+(use-package ivy
+  :config
   (progn
-    (use-package counsel
-      :ensure t)
+    (ivy-mode 1) ; globally at startup
     (setq ivy-use-virtual-buffers t)
-    (setq ivy-height 10)
-    (setq ivy-count-format "(%d/%d) ")
+    (setq ivy-height 20)
+    (setq ivy-count-format "%d/%d ")
     ;; Example how Ivy regex builders can be mixed
     ;; (setq ivy-re-builders-alist
     ;;       '((ivy-switch-buffer . ivy--regex-plus)
@@ -465,26 +463,27 @@
     (setq ivy-initial-inputs-alist nil)
     (setq counsel-grep-base-command
           "rg -i --no-heading --line-number --color never '%s' %s")
-    (set-face-background 'ivy-minibuffer-match-face-1 nil)
-    )
-  :config
-  (progn
-    (ivy-mode 1)
-    (global-set-key "\C-s" 'counsel-grep-or-swiper)
-    (global-set-key (kbd "C-c c g") 'counsel-git)
-    (global-set-key (kbd "C-c c j") 'counsel-git-grep)
-    (global-set-key (kbd "C-c c k") 'counsel-rg)
-    (global-set-key (kbd "C-x c l") 'counsel-locate)
-    (global-set-key (kbd "C-h f") 'counsel-describe-function)
-    (global-set-key (kbd "C-h v") 'counsel-describe-variable)
-    (global-set-key (kbd "C-c c l") 'counsel-load-library)
-    (global-set-key (kbd "C-c c i") 'counsel-info-lookup-symbol)
-    (global-set-key (kbd "C-c c u") 'counsel-unicode-char)
-    (global-set-key (kbd "C-x C-f") 'counsel-find-file)
-    (global-set-key (kbd "C-x C-m") 'counsel-M-x)
-    (global-set-key (kbd "C-c c r") 'ivy-resume))
-  :bind (("C-c f" . counsel-recentf)
-         ("C-c h i" . counsel-imenu)))
+    (set-face-background 'ivy-minibuffer-match-face-1 nil))
+  )
+
+(use-package counsel
+  :bind* ; load when pressed
+  (("C-s"     . counsel-grep-or-swiper)
+   ("C-c g"   . counsel-git)      ; search for files in git repo
+   ("C-c j"   . counsel-git-grep) ; search for regexp in git repo
+   ("C-c /"   . counsel-ag)       ; Use ag for regexp
+   ("C-x l"   . counsel-locate)
+   ("C-h f"   . counsel-describe-function)
+   ("C-h v"   . counsel-describe-variable)
+   ("C-c c l" . counsel-load-library)
+   ("C-c c i" . counsel-info-lookup-symbol)
+   ("C-c c u" . counsel-unicode-char)
+   ("C-x C-f" . counsel-find-file)
+   ("C-c f l" . counsel-find-library)
+   ("C-x C-m" . counsel-M-x)
+   ("C-c c r" . ivy-resume)
+   ("C-c f"   . counsel-recentf)  ; search for recently edited
+   ("C-c h i" . counsel-imenu)))
 
 (use-package helm-dash
   :ensure t
