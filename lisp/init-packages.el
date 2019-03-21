@@ -470,7 +470,7 @@
   :bind* ; load when pressed
   (("C-s"     . counsel-grep-or-swiper)
    ("C-c g"   . counsel-git)      ; search for files in git repo
-   ("C-c j"   . counsel-git-grep) ; search for regexp in git repo
+   ("C-c c j" . counsel-git-grep) ; search for regexp in git repo
    ("C-c c k" . counsel-rg)       ; Use rg for regexp
    ("C-x l"   . counsel-locate)
    ("C-h f"   . counsel-describe-function)
@@ -811,7 +811,7 @@
 (cond
  ((string-equal system-type "darwin")
   (progn
-    (add-to-list 'load-path "/usr/local/lib/erlang/lib/tools-3.0/emacs")
+    (add-to-list 'load-path "/usr/local/lib/erlang/lib/tools-3.0.2/emacs")
     (setq erlang-root-dir "/usr/local/lib/erlang")
     (setq exec-path (cons "/usr/local/lib/erlang/bin" exec-path))
     (require 'erlang-start))
