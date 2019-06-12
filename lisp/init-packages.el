@@ -6,6 +6,7 @@
 
 (require 'dired-x)
 (require 'cl)
+(require 'docker-cli)
 ;;; Code:
 
 (require 'em-term)
@@ -1040,7 +1041,10 @@
       :ensure t
       :commands
       (ibuffer-vc-set-filter-groups-by-vc-root
-       ibuffer-vc-generate-filter-groups-by-vc-root))
+       ibuffer-vc-generate-filter-groups-by-vc-root)
+      :config
+      (progn
+        (ibuffer-vc-set-filter-groups-by-vc-root)))
     (use-package ibuffer-tramp
       :ensure t
       :commands (ibuffer-tramp-generate-filter-groups-by-tramp-connection
@@ -1289,6 +1293,7 @@
                        (mode . emacs-lisp-mode)
                        (mode . python-mode)
                        (mode . ruby-mode)
+                       (mode . elixir-mode)
                        (mode . coffee-mode)
                        (mode . js-mode)
                        (mode . js2-mode)
