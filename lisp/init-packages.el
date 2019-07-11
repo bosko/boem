@@ -6,10 +6,12 @@
 
 (require 'dired-x)
 (require 'cl)
-(require 'docker-cli)
 ;;; Code:
 
 (require 'em-term)
+
+(use-package docker-cli
+  :ensure t)
 
 (use-package smart-mode-line
   :ensure t
@@ -812,7 +814,7 @@
 (cond
  ((string-equal system-type "darwin")
   (progn
-    (add-to-list 'load-path "/usr/local/lib/erlang/lib/tools-3.0.2/emacs")
+    (add-to-list 'load-path "/usr/local/lib/erlang/lib/tools-3.2.1/emacs")
     (setq erlang-root-dir "/usr/local/lib/erlang")
     (setq exec-path (cons "/usr/local/lib/erlang/bin" exec-path))
     (require 'erlang-start))
