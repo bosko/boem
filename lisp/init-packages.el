@@ -10,6 +10,16 @@
 
 (require 'em-term)
 
+(use-package exec-path-from-shell
+  :ensure t
+  :commands (exec-path-from-shell-initialize)
+  :init
+  (progn
+    (when (memq window-system '(mac ns x))
+      (exec-path-from-shell-initialize))
+    )
+)
+
 (use-package docker-cli
   :ensure t)
 
@@ -829,7 +839,7 @@
 
 (use-package elixir-mode
   :ensure t
-  :mode (("\\.exs\\'" . elixir-mode)))
+  :mode (("\\.exs\\'" . elixir-mode)) ("\\.ex\\'" . elixir-mode))
 
 (use-package alchemist
   :ensure t)
@@ -1627,15 +1637,6 @@
   (progn
     (add-hook 'term-mode-hook #'(lambda ()
                                   (setq show-trailing-whitespace nil)))))
-
-(use-package exec-path-from-shell
-  :ensure t
-  :config
-  (progn
-    (when (memq window-system '(mac ns x))
-      (exec-path-from-shell-initialize))
-    )
-)
 
 (use-package server
   :commands server-start-maybe

@@ -4,7 +4,8 @@
 ;;
 
 ;;; Code:
-
+;;; Temporary problem with 26.2 version on OS x
+(setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
 (defvar boem-current-user
   (getenv
    (if (equal system-type 'windows-nt) "USERNAME" "USER")))
@@ -188,9 +189,6 @@
         '(("git" "log" "l" "lol" "diff" "d" "dc" "show")
           ("rails" "c")
           ("sudo" "vi"))))
-
-(when (memq window-system '(mac ns))
-  (exec-path-from-shell-initialize))
 
 ;; Make multi-cursor cursors number more visible
 ;; in the mode line
