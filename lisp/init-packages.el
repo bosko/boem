@@ -725,6 +725,9 @@
     ))
 
 ;;;; typescript
+(use-package typescript-mode
+  :ensure t)
+
 (use-package tide
   :ensure t
   :config
@@ -763,7 +766,7 @@
          ("\\.rhtml\\'" . web-mode) ("\\.mustache\\'" . web-mode)
          ("\\.hbs\\'" . web-mode)
          ("/\\(views\\|html\\|theme\\|templates\\)/.*\\.php\\'" . web-mode)
-         )
+         ("\\.tsx" . web-mode))
   :init
   (progn
     (setq web-mode-enable-auto-pairing nil)
