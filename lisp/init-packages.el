@@ -835,14 +835,43 @@
     (setq exec-path (cons "/usr/local/otp/bin" exec-path))
     (require 'erlang-start))))
 
+;;; LSP
+
+(use-package lsp-mode
+  :bind ("C-c C-h" . lsp-describe-thing-at-point)
+  :commands (lsp lsp-deferred)
+  :ensure t
+  :diminish lsp-mode
+  :hook ((elixir-mode . lsp-deferred)
+         (js2-mode . lsp-deferred)
+         (typescript . lsp-deferred))
+  :init
+  (add-to-list 'exec-path "/Users/bosko/Code/elixir/elixir-ls/release")
+  :config
+  (progn
+    (setq lsp-enable-file-watchers nil)))
+
+(use-package lsp-ui
+  :commands lsp-ui-mode
+  :ensure t
+  :config
+  (setq lsp-ui-sideline-enable nil
+        lsp-ui-doc-enable nil
+        lsp-ui-flycheck-enable t
+        lsp-ui-imenu-enable t
+        lsp-ui-sideline-ignore-duplicate t))
+
+(use-package company-lsp
+  :commands company-lsp
+  :ensure t
+  :config
+  (add-to-list 'company-backends 'company-lsp))
+
 ;;; Elixir
 
 (use-package elixir-mode
   :ensure t
   :mode (("\\.exs\\'" . elixir-mode)) ("\\.ex\\'" . elixir-mode))
-
-(use-package alchemist
-  :ensure t)
 
 ;;;; yasnippet
 (use-package yasnippet-snippets
