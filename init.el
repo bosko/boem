@@ -182,6 +182,8 @@
 
 (load "init-packages")
 
+(pinentry-start)
+
 (with-eval-after-load 'em-term
   (nconc eshell-visual-commands
          '("htop" "pinentry-curses" "watch"))

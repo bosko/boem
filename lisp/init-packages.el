@@ -1544,7 +1544,15 @@
                               (0900 1100 1300 1500 1700)
                               "......" "----------------")))))
 
+    ;; After loading this package pinentry must be started
+    ;; with (pinentry-start) and line
+    ;; allow-emacs-pinentry
+    ;; must be added to ~/.gnupg/gpg-agent.conf file
+    (use-package pinentry
+      :ensure t)
+
     (use-package org-crypt
+      :after org
       :config
       (progn
         (org-crypt-use-before-save-magic)
