@@ -1566,9 +1566,9 @@
       :init
       (progn
         (setq org-capture-templates
-              '(("t" "Todo" entry (file+headline (expand-file-name "todos.org" boem-user-org-directory) "Tasks")
-                 "* TODO %?")
-                ("j" "Journal" entry (file+datetree (expand-file-name "journal.org" boem-user-org-directory))
+              `(("t" "Todo" entry (file+headline ,(expand-file-name "todos.org" boem-user-org-directory) "Tasks")
+                 "* TODO %?\n  %i\n  %a")
+                ("j" "Journal" entry (file+datetree ,(expand-file-name "journal.org" boem-user-org-directory))
                  "* %?\Zapisano  %U\n  %i\n  %a")))))
 
     (use-package org-journal
