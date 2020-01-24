@@ -186,7 +186,8 @@
   ;; Global settings (defaults)
   (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
         doom-themes-enable-italic t) ; if nil, italics is universally disabled
-  (load-theme 'doom-one t)
+
+  (load-theme 'railscasts t)
 
   ;; Enable flashing mode-line on errors
   (doom-themes-visual-bell-config)
@@ -202,7 +203,8 @@
 
 (load "init-packages")
 
-(pinentry-start)
+(if (string-equal system-type "darwin")
+    (pinentry-start))
 
 (with-eval-after-load 'em-term
   (nconc eshell-visual-commands
@@ -219,7 +221,7 @@
 
 (load custom-file 'no-error)
 
-(load-theme 'doom-molokai t)
+(load-theme 'railscasts t)
 
 (if (fboundp 'fringe-mode)
     (fringe-mode 9))
