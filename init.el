@@ -41,7 +41,6 @@
  calendar-week-start-day 1
  eshell-hist-ignoredups t
  eshell-destroy-buffer-when-process-dies t
- dired-dwim-target t
  epa-pinentry-mode 'loopback
  epa-armor t
  dired-listing-switches "-alh"
@@ -113,7 +112,7 @@
 (add-hook 'eww-mode-hook
           '(lambda () (setq show-trailing-whitespace nil)))
 
-"Kill up to, but not including ARGth occurrence of CHAR. (fn arg char)"
+;; "Kill up to, but not including ARGth occurrence of CHAR. (fn arg char)"
 (autoload 'zap-up-to-char "misc" 'interactive)
 
 (autoload 'inf-ruby-minor-mode "inf-ruby" "Run an inferior Ruby process" t)
@@ -170,15 +169,36 @@
 
 (defalias 'yes-or-no-p 'y-or-n-p)
 
-(eval-and-compile
-  (require 'package)
-  (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
-  (package-initialize t))
+(package-initialize)
+(add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
+
+;; override the default http with https
+(setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/")))
 
 (boem-install-package-if-needed 'use-package)
 (boem-install-package-if-needed 'railscasts-theme)
 
-(eval-when-compile (require 'use-package))
+(require 'use-package)
+
+(use-package doom-themes
+  :ensure t
+  :config
+  ;; Global settings (defaults)
+  (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
+        doom-themes-enable-italic t) ; if nil, italics is universally disabled
+  (load-theme 'doom-one t)
+
+  ;; Enable flashing mode-line on errors
+  (doom-themes-visual-bell-config)
+
+  ;; Enable custom neotree theme (all-the-icons must be installed!)
+  (doom-themes-neotree-config)
+  ;; or for treemacs users
+  (setq doom-themes-treemacs-theme "doom-colors") ; use the colorful treemacs theme
+  (doom-themes-treemacs-config)
+
+  ;; Corrects (and improves) org-mode's native fontification.
+  (doom-themes-org-config))
 
 (load "init-packages")
 
@@ -199,14 +219,7 @@
 
 (load custom-file 'no-error)
 
-(if (display-graphic-p)
-    (progn
-      (load-theme 'railscasts t)
-      (custom-theme-set-faces
-       'railscasts
-       '(hl-line ((t (:foreground nil :background "#505050"))))
-       '(region ((t (:background "#708238"))))))
-  (load-theme 'manoj-dark t))
+(load-theme 'doom-molokai t)
 
 (if (fboundp 'fringe-mode)
     (fringe-mode 9))
