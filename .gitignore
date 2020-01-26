@@ -11,3 +11,5 @@ image-dired/
 helm-adaptive-history
 helm-doc.org
 elpa/
+smex-items
+.lsp-session-v1
