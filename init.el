@@ -170,10 +170,7 @@
 (defalias 'yes-or-no-p 'y-or-n-p)
 
 (package-initialize)
-(add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
-
-;; override the default http with https
-(setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/")))
+(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 
 (boem-install-package-if-needed 'use-package)
 (boem-install-package-if-needed 'railscasts-theme)
