@@ -475,6 +475,7 @@
   )
 
 (use-package ivy
+  :ensure t
   :config
   (progn
     (ivy-mode 1) ; globally at startup
@@ -497,6 +498,7 @@
   )
 
 (use-package counsel
+  :ensure t
   :bind* ; load when pressed
   (("C-s"     . counsel-grep-or-swiper)
    ("C-c g"   . counsel-git)      ; search for files in git repo
@@ -844,7 +846,7 @@
 (cond
  ((string-equal system-type "darwin")
   (progn
-    (add-to-list 'load-path "/usr/local/lib/erlang/lib/tools-3.2.1/emacs")
+    (add-to-list 'load-path "/usr/local/lib/erlang/lib/tools-3.3/emacs")
     (setq erlang-root-dir "/usr/local/lib/erlang")
     (setq exec-path (cons "/usr/local/lib/erlang/bin" exec-path))
     (require 'erlang-start))
