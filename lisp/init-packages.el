@@ -5,7 +5,9 @@
 ;;
 
 (require 'dired-x)
-(require 'cl)
+(if (< emacs-major-version 27)
+    (require 'cl))
+
 ;;; Code:
 
 (require 'em-term)
