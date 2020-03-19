@@ -201,7 +201,6 @@
     (add-hook 'js-mode-hook 'flycheck-turn-on-maybe)
     (add-hook 'json-mode-hook 'flycheck-turn-on-maybe)
     (add-hook 'ruby-mode-hook 'flycheck-turn-on-maybe)
-    (add-hook 'coffee-mode-hook 'flycheck-turn-on-maybe)
     (add-hook 'php-mode-hook 'flycheck-turn-on-maybe)
     (add-hook 'scss-mode-hook 'flycheck-turn-on-maybe)
     (add-hook 'haskell-mode-hook 'flycheck-turn-on-maybe)
@@ -722,28 +721,6 @@
     (font-lock-add-keywords 'js2-mode
                             '(("\\<\\(FIX\\|TODO\\|FIXME\\|HACK\\|REFACTOR\\):"
                                1 font-lock-warning-face t)))))
-
-;;;; coffee-mode
-(use-package coffee-mode
-  :ensure t
-  :commands coffee-mode
-  :mode (("\\.coffee\\'" . coffee-mode)
-         ("Cakefile\\'" . coffee-mode))
-  :init
-  (progn
-    (setq
-     coffee-cleanup-whitespace nil
-     coffee-tab-width 2
-     coffe-js-mode 'js2-mode))
-  :config
-  (progn
-    (smartrep-define-key
-        coffee-mode-map
-        "C-c"
-      '((">" . coffee-indent-shift-right)
-        ("<" . coffee-indent-shift-left)))
-    ;; (unbind-key "\C-m" coffee-mode-map)
-    ))
 
 ;;;; typescript
 (use-package typescript-mode
@@ -1359,7 +1336,6 @@
                        (mode . python-mode)
                        (mode . ruby-mode)
                        (mode . elixir-mode)
-                       (mode . coffee-mode)
                        (mode . js-mode)
                        (mode . js2-mode)
                        (mode . actionscript-mode)
