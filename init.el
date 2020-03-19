@@ -5,7 +5,9 @@
 
 ;;; Code:
 ;;; Temporary problem with 26.2 version on OS x
-(setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
+(if (equal emacs-major-version 26)
+    (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3"))
+
 (defvar boem-current-user
   (getenv
    (if (equal system-type 'windows-nt) "USERNAME" "USER")))
@@ -45,6 +47,10 @@
  epa-armor t
  dired-listing-switches "-alh"
  dired-dwim-target t)
+
+;; Improve lsp-mode performances on version 27
+(if (equal emacs-major-version 27)
+    (setq read-process-output-max (* 1024 1024)))
 
 (setq ring-bell-function
       (lambda ()
