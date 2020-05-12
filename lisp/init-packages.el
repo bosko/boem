@@ -379,18 +379,6 @@
          ("C-S-<down>" . move-text-down)
          ("M-S-<down>" . move-text-down)))
 
-;;;; rainbow-mode
-(use-package rainbow-mode
-  :ensure t
-  :commands rainbow-mode
-  :init
-  (progn
-    (boem-hook-into-modes #'rainbow-mode
-                          '(css-mode-hook
-                            stylus-mode-hook
-                            sass-mode-hook)))
-  :diminish ((rainbow-mode . "rb")))
-
 ;;;; smartparens
 (use-package smartparens
   :ensure t
@@ -817,18 +805,26 @@
   :mode ("\\.y[a]?ml\\'" . yaml-mode))
 
 ;;; Erlang
-;;; Currently I am not automatically deceting installed version
-;;; so on new installation it might happen that directory tools-3.0
-;;; does not exist (different version) so code must be adjusted.
-;;; It would be better to either do that through configuration variable
-;;; or by searching for folder existance
 (cond
  ((string-equal system-type "darwin")
-  (progn
-    (add-to-list 'load-path "/usr/local/lib/erlang/lib/tools-3.3/emacs")
-    (setq erlang-root-dir "/usr/local/lib/erlang")
-    (setq exec-path (cons "/usr/local/lib/erlang/bin" exec-path))
-    (require 'erlang-start))
+  (let ((asdf-erl (shell-command-to-string "asdf which erl")))
+    (if (cl-search "command not found" asdf-erl)
+        (progn
+          (add-to-list 'load-path "/usr/local/lib/erlang/lib/tools-3.3/emacs")
+          (setq erlang-root-dir "/usr/local/lib/erlang")
+          (setq exec-path (cons "/usr/local/lib/erlang/bin" exec-path))
+          (require 'erlang-start))
+      (progn
+        (setq erlang-root-dir (substring asdf-erl 0 (cl-search "/bin/erl" asdf-erl)))
+        (setq exec-path (cons (concat erlang-root-dir "/bin") exec-path))
+        (let ((tools-dir (file-expand-wildcards (concat erlang-root-dir "/lib/tools-*"))))
+          (if tools-dir
+              (add-to-list 'load-path (concat (car tools-dir) "/emacs")))
+          )
+        (require 'erlang-start)
+        )
+      )
+    )
   (string-equal system-type "gnu/linux")
   (progn
     (add-to-list 'load-path "/usr/local/otp/lib/tools-<ToolsVer>/emacs")
@@ -1596,12 +1592,13 @@
            (js . t)
            (restclient . t)))))
 
-    (use-package org-bullets
+    (use-package org-superstar
       :ensure t
       :init
-      (progn
-        (setq org-bullets-bullet-list '("✺" "✹" "✸" "✷" "✶" "✭" "✦" "■" "▲" "●" ))
-        (add-hook 'org-mode-hook 'org-bullets-mode))))
+      (add-hook 'org-mode-hook (lambda() (org-superstar-mode)))
+      :config
+      (setq org-superstar-special-todo-items t))
+    )
 
   :config
   (progn
