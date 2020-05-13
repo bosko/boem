@@ -182,6 +182,7 @@
 (boem-install-package-if-needed 'use-package)
 (boem-install-package-if-needed 'railscasts-theme)
 
+(require 'package)
 (require 'use-package)
 
 (use-package doom-themes
