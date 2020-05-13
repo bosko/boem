@@ -175,7 +175,8 @@
 
 (defalias 'yes-or-no-p 'y-or-n-p)
 
-(package-initialize)
+(when (< emacs-major-version 27)
+  (package-initialize))
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 
 (boem-install-package-if-needed 'use-package)
@@ -223,8 +224,6 @@
 (set-face-attribute 'mode-line nil :box '(:line-width 2 :color "#009bff"))
 
 (load custom-file 'no-error)
-
-(load-theme 'railscasts t)
 
 (if (fboundp 'fringe-mode)
     (fringe-mode 9))
