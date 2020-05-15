@@ -175,14 +175,12 @@
 
 (defalias 'yes-or-no-p 'y-or-n-p)
 
-(when (< emacs-major-version 27)
-  (package-initialize))
+(package-initialize)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 
 (boem-install-package-if-needed 'use-package)
 (boem-install-package-if-needed 'railscasts-theme)
 
-(require 'package)
 (require 'use-package)
 
 (use-package doom-themes
