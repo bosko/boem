@@ -46,7 +46,8 @@
  epa-pinentry-mode 'loopback
  epa-armor t
  dired-listing-switches "-alh"
- dired-dwim-target t)
+ dired-dwim-target t
+ use-package-compute-statistics t)
 
 ;; Improve lsp-mode performances on version 27
 (if (equal emacs-major-version 27)

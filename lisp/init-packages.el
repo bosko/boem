@@ -752,7 +752,7 @@
          ("\\.rhtml\\'" . web-mode) ("\\.mustache\\'" . web-mode)
          ("\\.hbs\\'" . web-mode)
          ("/\\(views\\|html\\|theme\\|templates\\)/.*\\.php\\'" . web-mode)
-         ("\\.tsx" . web-mode))
+         ("\\.eex\\'" . web-mode) ("\\.tsx" . web-mode))
   :init
   (progn
     (setq web-mode-enable-auto-pairing nil)
@@ -781,22 +781,6 @@
 ;;;; Use it for live html editing preview
 (use-package impatient-mode
   :ensure t)
-
-;;;; GO
-
-;;;; go-mode
-(use-package go-mode
-  :ensure t
-  :init
-  (progn
-    (use-package company-go
-      :ensure t)
-    (use-package go-eldoc
-      :ensure t)
-    (use-package go-projectile
-      :ensure t)
-    (use-package gotest
-      :ensure t)))
 
 ;;;; yaml-mode
 (use-package yaml-mode
