@@ -1677,11 +1677,15 @@
   :disabled t)
 
 (use-package which-key
-  :defer 1
+  :commands (which-key)
   :ensure t
   :init
   (progn
     (add-hook 'after-init-hook 'which-key-mode)))
+
+(use-package websocket
+  :ensure t
+  :commands (websocket-open))
 
 (provide 'init-packages)
 
