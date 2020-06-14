@@ -3,6 +3,10 @@
 ;;; Commentary:
 ;;
 
+;; Make startup faster by reducing the frequency of garbage
+;; collection.  The default is 800 kilobytes.  Measured in bytes.
+(setq gc-cons-threshold (* 50 1000 1000))
+
 ;;; Code:
 ;;; Temporary problem with 26.2 version on OS x
 (if (equal emacs-major-version 26)
@@ -15,6 +19,8 @@
 (defvar boem-init-root (expand-file-name
                    (file-name-directory load-file-name)))
 (add-to-list 'load-path (expand-file-name "lisp" boem-init-root))
+
+(require 'abn-funcs-benchmark)
 
 (message "%s, starting up Emacs" boem-current-user)
 
@@ -235,11 +241,18 @@
 (when (member "Symbola" (font-family-list))
   (set-fontset-font t 'unicode "Symbola" nil 'prepend))
 
-(message "%s, Emacs started in %s" boem-current-user (format "%.1f seconds"
-                                                        (float-time
-                                                         (time-subtract (current-time) before-init-time))))
+(message "%s, Emacs started in %s with %d garbage collections."
+         boem-current-user
+         (format "%.2f seconds"
+                 (float-time
+                  (time-subtract (current-time) before-init-time)))
+         gcs-done)
+
+(put 'narrow-to-region 'disabled nil)
+
+;; Make gc pauses faster by decreasing the threshold.
+(setq gc-cons-threshold (* 2 1000 1000))
 
 (provide 'init)
 
 ;;; init.el ends here
-(put 'narrow-to-region 'disabled nil)

@@ -23,6 +23,7 @@
 )
 
 (use-package docker-cli
+  :commands (docker-cli)
   :ensure t)
 
 (use-package smart-mode-line
@@ -34,17 +35,25 @@
     (sml/setup)))
 
 (use-package neotree
+  :commands (neotree)
   :ensure t)
 
 (use-package all-the-icons
-  :ensure t)
+  :ensure t
+  :commands (dired
+             counsel-find-file
+             find-file
+             projectile-find-file
+             projectile-find-dir))
 
 (use-package all-the-icons-ivy
+  :after (ivy)
   :ensure t
   :config
   (all-the-icons-ivy-setup))
 
 (use-package all-the-icons-dired
+  :after (dired)
   :ensure t
   :init
   (progn
@@ -52,27 +61,44 @@
 
 (use-package dash
   :ensure t
-  :defer nil
+  :defer t
   :init
   (progn
     (eval-after-load 'dash '(dash-enable-font-lock))))
-(use-package s :ensure t)
-(use-package f :ensure t)
-(use-package diminish :ensure t)
-(use-package discover-my-major :ensure t)
+
+(use-package s :ensure t :defer t)
+(use-package f :ensure t :defer t)
+(use-package diminish
+  :ensure t
+  :commands (diminish))
+(use-package discover-my-major
+  :ensure t
+  :commands (discover-my-major discover-my-mode))
 ;; (use-package docker :ensure t
 ;;   :config
 ;;   (progn
 ;;     (setq docker-keymap-prefix "C-c C-d")
 ;;     (docker-global-mode)))
-(use-package docker-compose-mode :ensure t)
-(use-package dockerfile-mode :ensure t)
-(use-package fringe-helper :ensure t :defer t)
-(use-package smartrep :ensure t)
-(use-package ov :ensure t)
-(use-package restclient :ensure t)
-(use-package wgrep :ensure t)
-(use-package smex :ensure t)
+(use-package docker-compose-mode
+  :ensure t
+  :commands (docker-compose-mode))
+(use-package dockerfile-mode
+  :ensure t
+  :commands (dockerfile-mode))
+(use-package fringe-helper
+  :ensure t
+  :commands (fringe-mode))
+(use-package smartrep :ensure t :defer t)
+(use-package ov :ensure t :defer t)
+(use-package restclient
+  :ensure t
+  :commands (restclient-mode))
+(use-package wgrep
+  :ensure t
+  :commands (wgrep-change-to-wgrep-modex))
+(use-package smex
+  :ensure t
+  :commands (smex))
 
 (use-package tramp
   :defer t
@@ -85,6 +111,7 @@
 
 ;;;; savehist
 (use-package savehist
+  :commands (savehist-mode)
   :config
   (progn
     (setq
@@ -96,6 +123,8 @@
 
 ;;;; whitespace
 (use-package whitespace
+  :commands (whitespace-mode)
+  :defer t
   :bind (("C-c w" . whitespace-cleanup))
   :init
   (progn
@@ -116,12 +145,14 @@
 
 ;;;; anzu-mode
 (use-package anzu
+  :commands (anzu-mode)
   :ensure t
   :config (global-anzu-mode 1)
   :diminish "")
 
 ;;;; browse-kill-ring
 (use-package browse-kill-ring
+  :commands (browse-kill-ring)
   :ensure t
   :bind (("M-y" . browse-kill-ring)))
 
@@ -173,6 +204,7 @@
 
 ;;;; view large files
 (use-package vlf
+  :commands (vlf vlf-mode)
   :ensure t
   :config
   (progn
@@ -237,6 +269,7 @@
 
 ;;;; gitignore-mode
 (use-package gitignore-mode
+  :commands (gitignore-mode)
   :ensure t
   :mode (("/\\.gitignore_global\\'" . gitignore-mode)
          ("/\\.gitignore\\'" . gitignore-mode)
@@ -244,14 +277,10 @@
 
 ;;;; gitconfig-mode
 (use-package gitconfig-mode
+  :commands (gitconfig-mode)
   :ensure t
   :mode (("/\\.gitconfig\\'" . gitconfig-mode)
          ("/\\.git/config\\'" . gitconfig-mode)))
-
-;;;; grizzl
-(use-package grizzl
-  :ensure t
-  :commands (grizzl-completing-read grizzl-make-index))
 
 ;;;; projectile
 (use-package projectile
@@ -451,6 +480,7 @@
 
 ;;;; recentf
 (use-package recentf
+  :commands (recentf-mode recentf recentf-save-list recentf-load-list)
   :init
   (progn
     (setq
@@ -464,6 +494,7 @@
   )
 
 (use-package ivy
+  :commands (ivy-mode ivy-resume ivy-occur)
   :ensure t
   :config
   (progn
@@ -487,6 +518,7 @@
   )
 
 (use-package counsel
+  :commands (counsel-M-x counsel-git counsel-recentf)
   :ensure t
   :bind* ; load when pressed
   (("C-s"     . counsel-grep-or-swiper)
@@ -507,6 +539,7 @@
    ("C-c h i" . counsel-imenu)))
 
 (use-package helm-dash
+  :commands (helm-dash)
   :ensure t
   :config
   (progn
@@ -516,6 +549,7 @@
          ("C-h M-p" . helm-dash-at-point)))
 
 (use-package company
+  :commands (company-mode)
   :ensure t
   :config
   (progn
@@ -585,6 +619,7 @@
     (add-hook 'ruby-mode-hook 'ruby-electric-mode)))
 
 (use-package yari
+  :commands (yari)
   :ensure t)
 
 ;;;; Lisp
@@ -604,7 +639,7 @@
 
 ;;;; lisp-mode
 (use-package lisp-mode
-  :defer t
+  :commands (lisp-mode)
   :init
   (progn
     (defun emacs-lisp-remove-elc-on-save ()
@@ -620,9 +655,11 @@
 
 ;;;; Julia
 (use-package julia-mode
+  :commands (julia-mode)
   :ensure t)
 
 (use-package julia-shell
+  :commands (julia-mode)
   :ensure t)
 
 ;;;; litable
@@ -667,7 +704,7 @@
 ;;;; js
 (use-package js
   :ensure t
-  :defer t
+  :commands (js-mode)
   :config
   (progn
     (boem-rename-modeline "js" js-mode "js")
@@ -686,6 +723,7 @@
 ;;;; js2-mode
 (use-package js2-mode
   :ensure t
+  :commands (js2-mode)
   :mode (("\\.js\\'" . js2-mode)
          ("\\.jsx\\'" . js2-mode))
   :init
@@ -712,39 +750,14 @@
 
 ;;;; typescript
 (use-package typescript-mode
+  :commands (typescript-mode)
   :ensure t)
-
-(use-package tide
-  :ensure t
-  :config
-  (progn
-    (setq
-     tide-format-options '(:tabSize 2 :indentSize 2)
-     typescript-indent-level (or (plist-get (tide-tsfmt-options) ':indentSize) 2))
-
-    (defun setup-tide-mode ()
-      (interactive)
-      (tide-setup)
-      (flycheck-mode +1)
-      (setq flycheck-check-syntax-automatically '(save mode-enabled))
-      (tide-hl-identifier-mode +1)
-      ;; company is an optional dependency. You have to
-      ;; install it separately via package-install
-      ;; `M-x package-install [ret] company`
-      (company-mode +1))
-
-    ;; aligns annotation to the right hand side
-    (setq company-tooltip-align-annotations t)
-
-    ;; formats the buffer before saving
-    (add-hook 'before-save-hook 'tide-format-before-save)
-
-    (add-hook 'typescript-mode-hook #'setup-tide-mode)))
 
 ;;;; HTML
 
 ;;;; web-mode
 (use-package web-mode
+  :commands (web-mode)
   :ensure t
   :mode (("\\.phtml\\'" . web-mode) ("\\.erb\\'" . web-mode)
          ("\\.jsp\\'" . web-mode) ("\\.as[cp]x\\'" . web-mode)
@@ -774,12 +787,14 @@
 
 ;;;; haml-mode
 (use-package haml-mode
+  :commands (haml-mode)
   :ensure t
   :mode (("\\.haml\\'" . haml-mode)))
 
 ;;;; impatient-mode
 ;;;; Use it for live html editing preview
 (use-package impatient-mode
+  :commands (impatient-mode)
   :ensure t)
 
 ;;;; yaml-mode
@@ -817,7 +832,6 @@
     (require 'erlang-start))))
 
 ;;; LSP
-
 (use-package lsp-mode
   :bind ("C-c C-h" . lsp-describe-thing-at-point)
   :commands (lsp lsp-deferred)
@@ -849,21 +863,15 @@
   (add-to-list 'company-backends 'company-lsp))
 
 ;;; Elixir
-
 (use-package elixir-mode
+  :commands (elixir-mode)
   :ensure t
   :mode (("\\.exs\\'" . elixir-mode)) ("\\.ex\\'" . elixir-mode))
 
 ;;;; yasnippet
-(use-package yasnippet-snippets
-  :ensure t)
-
 (use-package yasnippet
   :ensure t
-  :commands (yas-reload-all yas-global-mode yas-minor-mode snippet-mode
-                            yas-expand yas-expand-snippet yas-minor-mode-on
-                            dired-snippets-dir yas-insert-snippet)
-  :bind (("C-c y" . dired-snippets-dir))
+  :commands (yas-minor-mode)
   :diminish yas-minor-mode
   :init
   (progn
@@ -888,12 +896,7 @@
                   'snippet-mode))
 
     (bind-key "C-x i" 'yas-insert-snippet)
-    (boem-hook-into-modes #'yas-minor-mode-on
-                          '(org-mode-hook
-                            git-commit-mode-hook))
-
-    (boem-hook-into-modes #'yas-minor-mode-on boem-prog-mode-hooks)
-    (add-hook 'org-mode-hook 'yas-minor-mode-on))
+    (add-hook 'prog-mode-hook #'yas-minor-mode))
   :config
   (progn
     (bind-key "C-x i" 'yas-insert-snippet yas-minor-mode-map)
@@ -902,25 +905,6 @@
       :commands yas-popup-isearch-prompt
       :config
       (progn
-        ;; ;; advice for whitespace-mode conflict
-        ;; (defvar my-prev-whitespace-mode nil)
-        ;; (make-variable-buffer-local 'my-prev-whitespace-mode)
-        ;; (defadvice popup-draw (before my-turn-off-whitespace)
-        ;; "Turn off whitespace mode before showing autocomplete box"
-        ;; (make-local-variable 'my-prev-whitespace-mode)
-        ;; (if whitespace-mode
-        ;; (progn
-        ;; (setq my-prev-whitespace-mode t)
-        ;; (whitespace-mode -1))
-        ;; (setq my-prev-whitespace-mode nil)))
-
-        ;; (defadvice popup-delete (after my-restore-whitespace)
-        ;; "Restore previous whitespace mode when deleting autocomplete box"
-        ;; (if my-prev-whitespace-mode
-        ;; (whitespace-mode 1)))
-        ;; (ad-activate 'popup-draw)
-        ;; (ad-activate 'popup-delete)
-
         ;; FIXME this should be niced up and contributed back.
         (defun yas-popup-isearch-prompt (prompt choices &optional display-fn)
           (let ((group-max-len 0)
@@ -997,7 +981,12 @@
       (dired (expand-file-name
               "snippets" user-emacs-directory)))
 
-    (yas-reload-all)))
+    (yas-reload-all))
+  )
+
+(use-package yasnippet-snippets
+  :ensure t
+  :after (yasnippet))
 
 ;;;; multiple-cursors
 (use-package multiple-cursors
@@ -1035,9 +1024,8 @@
 ;;;; saveplace
 (use-package saveplace
   :ensure t
-  :init
+  :config
   (progn
-    (setq save-place-file (expand-file-name "saveplace" boem-user-data-directory))
     (setq-default save-place t)))
 
 ;;;; rbenv
@@ -1492,7 +1480,8 @@
 ;;;; org
 (use-package org
   :commands (org-mode
-             org-store-link)
+             org-store-link
+             org-agenda)
   :mode (("\\.org_archive\\'" . org-mode)
          ("\\.org\\'" . org-mode))
   :init
@@ -1505,14 +1494,14 @@
     (setq org-refile-targets
           '((org-agenda-files :level . 1)))
 
-    (require 'ox-md nil t)
-
     (use-package org-habit
+      :after (org)
       :config
       (progn
         (setq org-habit-graph-column 90)))
 
     (use-package org-agenda
+      :commands (org-agenda)
       :bind ("C-c o a" . org-agenda)
       :config
       (progn
@@ -1526,10 +1515,11 @@
     ;; allow-emacs-pinentry
     ;; must be added to ~/.gnupg/gpg-agent.conf file
     (use-package pinentry
+      :after (org)
       :ensure t)
 
     (use-package org-crypt
-      :after org
+      :after (org)
       :config
       (progn
         (org-crypt-use-before-save-magic)
@@ -1539,6 +1529,7 @@
         (setq org-crypt-key nil)))
 
     (use-package org-capture
+      :commands (org-capture)
       :bind ("C-c o c" . org-capture)
       :init
       (progn
@@ -1548,19 +1539,19 @@
                 ("j" "Journal" entry (file+datetree ,(expand-file-name "journal.org" boem-user-org-directory))
                  "* %?\Zapisano  %U\n  %i\n  %a")))))
 
-    (use-package org-journal
-      :ensure t
-      :commands (org-journal-new-entry)
-      :init
-      (progn
-        (setq
-         org-journal-dir
-         (expand-file-name "journal/" boem-user-org-directory)
-         org-journal-file-pattern "[0-9]\\{8\\}$")))
+    ;; (use-package org-journal
+    ;;   :ensure t
+    ;;   :commands (org-journal-new-entry)
+    ;;   :init
+    ;;   (progn
+    ;;     (setq
+    ;;      org-journal-dir
+    ;;      (expand-file-name "journal/" boem-user-org-directory)
+    ;;      org-journal-file-pattern "[0-9]\\{8\\}$")))
 
-    (use-package ob-restclient :ensure t)
 
     (use-package ob
+      :after (org)
       :init
       (progn
         (org-babel-do-load-languages
@@ -1576,7 +1567,12 @@
            (js . t)
            (restclient . t)))))
 
+    (use-package ob-restclient
+      :ensure t
+      :after (ob))
+
     (use-package org-superstar
+      :after (org)
       :ensure t
       :init
       (add-hook 'org-mode-hook (lambda() (org-superstar-mode)))
@@ -1615,6 +1611,11 @@
         ("FIXED" :foreground "yellow" :weight bold)
         ("REPORT" :foreground "yellow" :weight bold)))))
 
+(use-package ox-md
+  :commands (org-md-export-as-markdown
+             org-md-export-to-markdown
+             org-md-export-block))
+
 ;;;; imenu
 (use-package imenu
   :init
@@ -1628,7 +1629,7 @@
 
 ;;;; auto-revert-mode
 (use-package autorevert
-  :defer t
+  :defer 1
   :init
   (progn
     (setq auto-revert-check-vc-info nil
@@ -1649,7 +1650,7 @@
     (setq csv-separators '("," ";" "|" " "))))
 
 (use-package term
-  :defer t
+  :defer 1
   :bind (("C-c t" . boem-open-term))
   :init
   (progn
@@ -1676,6 +1677,7 @@
   :disabled t)
 
 (use-package which-key
+  :defer 1
   :ensure t
   :init
   (progn

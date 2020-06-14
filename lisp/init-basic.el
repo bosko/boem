@@ -92,13 +92,10 @@ is true refresh is skipped"
   '(prog-mode-hook
     emacs-lisp-mode-hook
     pyhon-mode-hook
-    coffee-mode-hook
     js-mode-hook
     js2-mode-hook
     ruby-mode-hook
-    haskell-mode-hook
-    clojure-mode-hook
-    go-mode-hook
+    elixir-mode-hook
     sass-mode-hook))
 
 (defun boem-current-buffer-remote-p ()
