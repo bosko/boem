@@ -66,8 +66,8 @@
   (progn
     (eval-after-load 'dash '(dash-enable-font-lock))))
 
-(use-package s :ensure t :defer t)
-(use-package f :ensure t :defer t)
+(use-package s :ensure t)
+(use-package f :ensure t)
 (use-package diminish
   :ensure t
   :commands (diminish))
