@@ -87,7 +87,7 @@
   :commands (dockerfile-mode))
 (use-package fringe-helper
   :ensure t
-  :commands (fringe-mode))
+  :after (flycheck))
 (use-package smartrep :ensure t :defer t)
 (use-package ov :ensure t :defer t)
 (use-package restclient
