@@ -20,8 +20,6 @@
                    (file-name-directory load-file-name)))
 (add-to-list 'load-path (expand-file-name "lisp" boem-init-root))
 
-(require 'abn-funcs-benchmark)
-
 (message "%s, starting up Emacs" boem-current-user)
 
 (load "init-basic")
