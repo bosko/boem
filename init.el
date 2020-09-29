@@ -50,7 +50,8 @@
  epa-armor t
  dired-listing-switches "-alh"
  dired-dwim-target t
- use-package-compute-statistics t)
+ use-package-compute-statistics t
+ scroll-preserve-screen-position t)
 
 ;; Improve lsp-mode performances on version 27
 (if (equal emacs-major-version 27)
