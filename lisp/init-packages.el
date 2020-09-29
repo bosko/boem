@@ -61,6 +61,7 @@
     (add-hook 'dired-mode-hook 'all-the-icons-dired-mode)))
 
 (use-package doom-modeline
+  :ensure t
   :hook (after-init . doom-modeline-mode)
   :custom
   (doom-modeline-height 25)
