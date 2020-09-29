@@ -50,7 +50,8 @@
   :after (ivy)
   :ensure t
   :config
-  (all-the-icons-ivy-setup))
+  (if (display-graphic-p)
+      (all-the-icons-ivy-setup)))
 
 (use-package all-the-icons-dired
   :after (dired)
@@ -58,6 +59,47 @@
   :init
   (progn
     (add-hook 'dired-mode-hook 'all-the-icons-dired-mode)))
+
+(use-package doom-modeline
+  :hook (after-init . doom-modeline-mode)
+  :custom
+  (doom-modeline-height 25)
+  (doom-modeline-bar-width 1)
+  (doom-modeline-icon (display-graphic-p))
+  (doom-modeline-major-mode-icon t)
+  (doom-modeline-major-mode-color-icon t)
+  (doom-modeline-buffer-file-name-style 'auto)
+  (doom-modeline-buffer-state-icon t)
+  (doom-modeline-buffer-modification-icon t)
+  (doom-modeline-minor-modes nil)
+  (doom-modeline-enable-word-count nil)
+  (doom-modeline-buffer-encoding t)
+  (doom-modeline-indent-info nil)
+  (doom-modeline-checker-simple-format t)
+  (doom-modeline-vcs-max-length 15)
+  (doom-modeline-env-version t)
+  )
+
+(use-package doom-themes
+  :ensure t
+  :config
+  ;; Global settings (defaults)
+  (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
+        doom-themes-enable-italic t) ; if nil, italics is universally disabled
+
+  (load-theme 'railscasts t)
+
+  ;; Enable flashing mode-line on errors
+  (doom-themes-visual-bell-config)
+
+  ;; Enable custom neotree theme (all-the-icons must be installed!)
+  (doom-themes-neotree-config)
+  ;; or for treemacs users
+  (setq doom-themes-treemacs-theme "doom-colors") ; use the colorful treemacs theme
+  (doom-themes-treemacs-config)
+
+  ;; Corrects (and improves) org-mode's native fontification.
+  (doom-themes-org-config))
 
 (use-package dash
   :ensure t
