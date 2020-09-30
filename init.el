@@ -211,13 +211,6 @@
 (if (fboundp 'fringe-mode)
     (fringe-mode 9))
 
-;; For displaying emojis on OS X.
-;; Font Symbola must be downloaded from
-;; http://xahlee.info/comp/unicode_font_download.html
-;; and installed for this to work
-(when (member "Symbola" (font-family-list))
-  (set-fontset-font t 'unicode "Symbola" nil 'prepend))
-
 (message "%s, Emacs started in %s with %d garbage collections."
          boem-current-user
          (format "%.2f seconds"
