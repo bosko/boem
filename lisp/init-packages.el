@@ -328,8 +328,6 @@
 ;;;; projectile
 (use-package projectile
   :ensure t
-  :commands (projectile-mode
-             projectile-global-mode)
   :diminish ""
   :config
   (progn
@@ -350,7 +348,6 @@
        projectile-root-top-down
        projectile-root-top-down-recurring))
     (projectile-global-mode)
-    (define-key projectile-mode-map (kbd "s-p") 'projectile-command-map)
     (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map))
   )
 
@@ -1119,7 +1116,6 @@
 
     (defun ibuffer-projectile-dired-known-projects-root (&optional arg)
       (interactive "P")
-      (use-package projectile)
       (let ((project-to-switch
              (projectile-completing-read "Switch to project: "
                                          projectile-known-projects)))
