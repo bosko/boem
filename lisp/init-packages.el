@@ -807,7 +807,7 @@
          ("\\.rhtml\\'" . web-mode) ("\\.mustache\\'" . web-mode)
          ("\\.hbs\\'" . web-mode)
          ("/\\(views\\|html\\|theme\\|templates\\)/.*\\.php\\'" . web-mode)
-         ("\\.eex\\'" . web-mode) ("\\.tsx" . web-mode))
+         ("\\.l?eex\\'" . web-mode) ("\\.tsx" . web-mode))
   :init
   (progn
     (setq web-mode-enable-auto-pairing nil)
