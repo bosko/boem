@@ -81,16 +81,14 @@
   (doom-modeline-env-version t)
   )
 
+;;; Keep this till I find how to get base16 light theme
+;;; working in terminal
 (use-package doom-themes
   :ensure t
   :config
   ;; Global settings (defaults)
   (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
         doom-themes-enable-italic t) ; if nil, italics is universally disabled
-
-  (if (display-graphic-p)
-      (load-theme 'railscasts t)
-    (load-theme 'doom-gruvbox-light t))
 
   ;; Enable flashing mode-line on errors
   (doom-themes-visual-bell-config)
@@ -103,6 +101,15 @@
 
   ;; Corrects (and improves) org-mode's native fontification.
   (doom-themes-org-config))
+
+(use-package base16-theme
+  :ensure t
+  :config
+  (progn
+    (if (display-graphic-p)
+        (load-theme 'base16-gruvbox-light-medium t)
+      (load-theme 'doom-gruvbox-light t))
+    ))
 
 (use-package dash
   :ensure t
