@@ -42,9 +42,7 @@
   :ensure t
   :commands (dired
              counsel-find-file
-             find-file
-             projectile-find-file
-             projectile-find-dir))
+             find-file))
 
 (use-package all-the-icons-ivy
   :after (ivy)
@@ -333,32 +331,6 @@
   :ensure t
   :mode (("/\\.gitconfig\\'" . gitconfig-mode)
          ("/\\.git/config\\'" . gitconfig-mode)))
-
-;;;; projectile
-(use-package projectile
-  :ensure t
-  :diminish ""
-  :config
-  (progn
-    (setq
-     projectile-sort-order 'recently-active
-     projectile-completion-system 'ivy
-     projectile-require-project-root t
-     projectile-enable-caching t
-     projectile-known-projects-file (expand-file-name
-                                     "projectile-bookmarks.eld"
-                                     boem-user-data-directory)
-     projectile-cache-file (expand-file-name
-                            "projectile.cache" boem-user-data-directory)
-     projectile-file-exists-local-cache-expire nil
-     projectile-file-exists-remote-cache-expire (* 15 60)
-     projectile-project-root-files-functions
-     '(projectile-root-bottom-up
-       projectile-root-top-down
-       projectile-root-top-down-recurring))
-    (projectile-global-mode)
-    (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map))
-  )
 
 ;;;; git-timemachine
 (use-package git-timemachine
@@ -1123,33 +1095,6 @@
     (bind-key "s" 'isearch-forward-regexp ibuffer-mode-map)
     (bind-key "." 'ibuffer-invert-sorting ibuffer-mode-map)
 
-    (defun ibuffer-projectile-dired-known-projects-root (&optional arg)
-      (interactive "P")
-      (let ((project-to-switch
-             (projectile-completing-read "Switch to project: "
-                                         projectile-known-projects)))
-        (dired project-to-switch)
-        (ibuffer)))
-
-    (bind-key "o" 'ibuffer-projectile-dired-known-projects-root ibuffer-mode-map)
-
-    (defun ibuffer-projectile-find-file ()
-      (interactive)
-      (--when-let (get-buffer "*Ibuffer*")
-        (with-current-buffer it
-          (let* ((selected-buffer (ibuffer-current-buffer))
-                 (buffer-path (with-current-buffer
-                                  selected-buffer
-                                (or (buffer-file-name)
-                                    list-buffers-directory
-                                    default-directory)))
-                 (default-directory
-                   (if (file-regular-p buffer-path)
-                       (file-name-directory buffer-path)
-                     buffer-path)))
-            (projectile-find-file)))))
-    (bind-key "f" 'ibuffer-projectile-find-file ibuffer-mode-map)
-
     (defun ibuffer-magit-status ()
       (interactive)
       (--when-let (get-buffer "*Ibuffer*")
@@ -1231,27 +1176,10 @@
                       `(filename2 . ,it))
                      (mapcar 'cdr (magit-list-repos magit-repo-dirs))))))
 
-
-    (defvar ibuffer-projectile-filter-groups nil)
-    (defun ibuffer-projectile-define-filter-groups ()
-      (when (boundp 'projectile-known-projects)
-        (setq ibuffer-projectile-filter-groups
-              (-concat
-               (--map (list
-                       (concat "Project: "
-                               (file-name-nondirectory (directory-file-name it)))
-                       `(filename2 . ,it))
-                      projectile-known-projects)))))
-
     (defun ibuffer-set-filter-groups-by-root ()
       (interactive)
-      ;; (ibuffer-projectile-define-filter-groups)
-      ;; (ibuffer-magit-define-filter-groups)
       (setq ibuffer-filter-groups
             (-concat
-             ;; ibuffer-projectile-filter-groups
-             ;; ibuffer-magit-filter-groups
-
              '(("MORE"
                 (or (mode . magit-log-edit-mode)
                     (name . "^\\*\\(traad-server\\|httpd\\|epc con.*\\|tramp/.*\\|Completions\\)\\*$")

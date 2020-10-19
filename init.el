@@ -146,6 +146,7 @@
 (global-set-key (kbd "M-k") 'scroll-up-line)
 (global-set-key (kbd "C-c r a") 'inf-ruby-console-auto)
 (global-set-key (kbd "C-c C-p b") 'boem-pop-eshell-bottom)
+(global-set-key (kbd "C-c p  f") 'project-find-file)
 
 ;; Keep syntax highlighting in current line.
 (set-face-foreground 'highlight nil)
