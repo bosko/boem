@@ -1499,7 +1499,8 @@
       :config
       (progn
         (org-crypt-use-before-save-magic)
-        (setq org-tags-exclude-from-inheritance (quote ("crypt")))
+        (setq org-tags-exclude-from-inheritance (quote ("Encrypt")))
+        (setq org-crypt-tag-matcher "Encrypt")
         ;; GPG key to use for encryption
         ;; Either the Key ID or set to nil to use symmetric encryption.
         (setq org-crypt-key nil)))
@@ -1524,7 +1525,6 @@
     ;;      org-journal-dir
     ;;      (expand-file-name "journal/" boem-user-org-directory)
     ;;      org-journal-file-pattern "[0-9]\\{8\\}$")))
-
 
     (use-package ob
       :after (org)

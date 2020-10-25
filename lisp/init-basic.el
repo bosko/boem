@@ -195,7 +195,7 @@ Code from: http://emacsredux.com/blog/2013/04/28/switch-to-previous-buffer/"
     (switch-to-buffer $buf)
     (restclient-mode)))
 
-(defvar boem-org-tags '(("Project" . ?p) ("Article" . ?a) ("Book" . ?b) ("Code" . ?C) ("crypt". ?c))
+(defvar boem-org-tags '(("Project" . ?p) ("Article" . ?a) ("Book" . ?b) ("Code" . ?c) ("Encrypt". ?e))
   "Override this value by creating .boem-org-tags.el file in your home directory.")
 
 (provide 'init-basic)
