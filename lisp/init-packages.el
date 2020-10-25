@@ -877,12 +877,6 @@
         lsp-ui-imenu-enable t
         lsp-ui-sideline-ignore-duplicate t))
 
-(use-package company-lsp
-  :commands company-lsp
-  :ensure t
-  :config
-  (add-to-list 'company-backends 'company-lsp))
-
 ;;; Elixir
 (use-package elixir-mode
   :commands (elixir-mode)
