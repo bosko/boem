@@ -46,7 +46,6 @@
  calendar-week-start-day 1
  eshell-hist-ignoredups t
  eshell-destroy-buffer-when-process-dies t
- epa-pinentry-mode 'loopback
  epa-armor t
  dired-listing-switches "-alh"
  dired-dwim-target t
@@ -56,6 +55,10 @@
 ;; Improve lsp-mode performances on version 27
 (if (equal emacs-major-version 27)
     (setq read-process-output-max (* 1024 1024)))
+
+(if (equal emacs-major-version 27)
+    (setq epg-pinentry-mode nil)
+  (setq epa-pinentry-mode nil))
 
 (setq ring-bell-function
       (lambda ()
