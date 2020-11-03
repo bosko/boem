@@ -205,9 +205,10 @@
           ("rails" "c")
           ("sudo" "vi"))))
 
-;; Make multi-cursor cursors number more visible
-;; in the mode line
-(set-face-foreground 'font-lock-warning-face "red")
+(if (display-graphic-p)
+    (load-theme 'railscasts t)
+  (load-theme 'doom-gruvbox-light t))
+
 (set-face-attribute 'mode-line nil :box '(:line-width 2 :color "#009bff"))
 
 (load custom-file 'no-error)

@@ -101,13 +101,7 @@
   (doom-themes-org-config))
 
 (use-package base16-theme
-  :ensure t
-  :config
-  (progn
-    (if (display-graphic-p)
-        (load-theme 'base16-gruvbox-light-medium t)
-      (load-theme 'doom-gruvbox-light t))
-    ))
+  :ensure t)
 
 (use-package dash
   :ensure t
