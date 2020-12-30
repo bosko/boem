@@ -1372,6 +1372,13 @@
     (add-hook 'json-mode-hook
               #'(lambda ()
                   (setq-local js-indent-level 2)))))
+
+;;;; AsciiDoc
+(use-package adoc-mode
+  :ensure t
+  :commands adoc-mode
+  :mode ("\\.adoc\\'" . adoc-mode))
+
 ;;;; textile-mode
 (use-package textile-mode
   :ensure t
