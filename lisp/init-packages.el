@@ -560,7 +560,7 @@
   (progn
     (setq helm-dash-browser-func 'eww)
     (setq helm-dash-docsets-path (expand-file-name "~/.docsets"))
-    (setq helm-dash-common-docsets '("Ruby_2" "Ruby_on_Rails_5" "NodeJS" "jQuery" "jQuery_UI" "Nginx" "MySQL" "JavaScript" "Elixir" "Erlang" "ElasticSearch" "Emacs_Lisp" "Jekyll" "Julia" "MongoDB" "PostgreSQL")))
+    (setq helm-dash-common-docsets '("Ruby" "Ruby on Rails" "Nginx" "JavaScript" "Elixir" "Erlang" "ElasticSearch" "Emacs Lisp" "Julia" "MongoDB" "PostgreSQL")))
   :bind (("C-h M-d" . helm-dash)
          ("C-h M-p" . helm-dash-at-point)))
 
