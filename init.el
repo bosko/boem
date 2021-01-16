@@ -206,7 +206,11 @@
           ("sudo" "vi"))))
 
 (if (display-graphic-p)
-    (load-theme 'railscasts t)
+    (progn
+      (load-theme 'railscasts t)
+      (set-face-attribute 'selectrum-current-candidate nil
+                          :weight 'extra-bold)
+      )
   (load-theme 'doom-gruvbox-light t))
 
 (set-face-attribute 'mode-line nil :box '(:line-width 2 :color "#009bff"))
