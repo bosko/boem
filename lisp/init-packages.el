@@ -26,6 +26,94 @@
   :commands (docker-cli)
   :ensure t)
 
+(use-package orderless
+  :ensure t
+  :init (icomplete-mode) ; optional but recommended!
+  :custom (completion-styles '(orderless)))
+
+(use-package selectrum
+  :ensure t
+  :init
+  (selectrum-mode 1))
+
+(use-package prescient
+  :ensure t
+  :config
+  (prescient-persist-mode 1))
+
+(use-package selectrum-prescient
+  :ensure t
+  :init
+  (progn
+    (selectrum-prescient-mode 1)
+    (selectrum-prescient-toggle-fuzzy 1)))
+
+(use-package marginalia
+  :ensure t
+  :config
+  (marginalia-mode))
+
+;;;; embark
+(use-package embark
+  :ensure t
+  :init
+  (progn
+    (define-key selectrum-minibuffer-map (kbd "C-c C-o") 'embark-export)
+    (define-key selectrum-minibuffer-map (kbd "C-c C-c") 'embark-act)))
+
+;;;; consult
+(use-package consult
+  ;; Replace bindings. Lazily loaded due by `use-package'.
+  :bind (("C-x M-:" . consult-complex-command)
+         ("C-c h h" . consult-history)
+         ("C-c m" . consult-mode-command)
+         ("C-c k" . consult-keep-lines)
+         ("C-c C-k" . consult-focus-lines)
+         ("C-x b" . consult-buffer)
+         ("C-x 4 b" . consult-buffer-other-window)
+         ("C-x 5 b" . consult-buffer-other-frame)
+         ("C-x r x" . consult-register)
+         ("C-x r b" . consult-bookmark)
+         ("M-g g" . consult-goto-line)
+         ("M-g o" . consult-outline)       ;; "M-s o" is a good alternative.
+         ("M-g l" . consult-line)          ;; "M-s l" is a good alternative.
+         ("M-g m" . consult-mark)          ;; I recommend to bind Consult navigation
+         ("M-g k" . consult-global-mark)   ;; commands under the "M-g" prefix.
+         ("C-c c k" . consult-git-grep)      ;; or consult-grep, consult-ripgrep
+         ("M-g f" . consult-find)          ;; or consult-locate, my-fdfind
+         ("C-c h i" . consult-project-imenu) ;; or consult-imenu
+         ("M-g e" . consult-error)
+         ("M-s m" . consult-multi-occur)
+         ("M-y" . consult-yank-pop)
+         ("<help> a" . consult-apropos))
+
+  ;; The :init configuration is always executed (Not lazy!)
+  :init
+
+  ;; Configure register preview function.
+  ;; This gives a consistent display for both `consult-register' and
+  ;; the register preview when editing registers.
+  (setq register-preview-delay 0
+        register-preview-function #'consult-register-preview)
+  :config
+  (progn
+    (setq consult-project-root-function #'vc-root-dir)
+    (when (executable-find "rg")
+      (global-set-key (kbd "C-c c k") 'consult-ripgrep))))
+
+;; Optionally add the `consult-flycheck' command.
+(use-package consult-flycheck
+  :bind (:map flycheck-command-map
+              ("!" . consult-flycheck)))
+
+(use-package embark-consult
+  :ensure t
+  :demand t ; only necessary if you have the hook below
+  ;; if you want to have consult previews as you move around an
+  ;; auto-updating embark collect buffer
+  :hook
+  (embark-collect-mode . embark-consult-preview-minor-mode))
+
 (use-package smart-mode-line
   :ensure t
   :config
@@ -41,15 +129,8 @@
 (use-package all-the-icons
   :ensure t
   :commands (dired
-             counsel-find-file
+             consult-buffer
              find-file))
-
-(use-package all-the-icons-ivy
-  :after (ivy)
-  :ensure t
-  :config
-  (if (display-graphic-p)
-      (all-the-icons-ivy-setup)))
 
 (use-package all-the-icons-dired
   :after (dired)
@@ -200,19 +281,6 @@
   :ensure t
   :bind (("M-y" . browse-kill-ring)))
 
-;;;; diff-hl
-(use-package diff-hl
-  :ensure t
-  :commands (diff-hl-mode
-             turn-on-diff-hl-mode
-             global-diff-hl-mode)
-  :config
-  (progn
-    (use-package diff-hl-dired)
-    (global-diff-hl-mode +1)
-    (add-hook 'dired-mode-hook 'diff-hl-dired-mode)
-    (add-hook 'magit-post-refresh-hook 'diff-hl-magit-post-refresh)))
-
 ;;;; easy-kill
 (use-package easy-kill
   :ensure t
@@ -329,34 +397,7 @@
 ;;;; git-timemachine
 (use-package git-timemachine
   :ensure t
-  :commands (git-timemachine my-git-timemachine)
-  :config
-  (progn
-    ;;;; Methods taken from
-    ;;;; http://blog.binchen.org/posts/new-git-timemachine-ui-based-on-ivy-mode.html
-    (defun my-git-timemachine-show-selected-revision ()
-      "Show last (current) revision of file."
-      (interactive)
-      (let (collection)
-        (setq collection
-              (mapcar (lambda (rev)
-                        ;; re-shape list for the ivy-read
-                        (cons (concat (substring (nth 0 rev) 0 7) "|" (nth 5 rev) "|" (nth 6 rev)) rev))
-                      (git-timemachine--revisions)))
-        (ivy-read "commits:"
-                  collection
-                  :action (lambda (rev)
-                            (git-timemachine-show-revision (cdr rev))))
-        ))
-
-    (defun my-git-timemachine ()
-      "Open git snapshot with the selected version. Based on ivy-mode."
-      (interactive)
-      (unless (featurep 'git-timemachine)
-        (require 'git-timemachine))
-      (git-timemachine--start #'my-git-timemachine-show-selected-revision))
-    )
-  )
+  :commands (git-timemachine))
 
 ;;;; magit
 (use-package magit
@@ -370,7 +411,7 @@
      magit-repo-dirs-depth 4
      magit-status-buffer-switch-function 'switch-to-buffer
      magit-save-some-buffers t
-     magit-completing-read-function 'ivy-completing-read
+     ;; magit-completing-read-function 'ivy-completing-read
      ;; magit-diff-refine-hunk 'all
      magit-log-author-date-max-length 25
      magit-log-auto-more t
@@ -413,6 +454,17 @@
       (setq magit-diff-options (remove "-w" magit-diff-options))
       (magit-refresh))
     (bind-key "W" 'magit-toggle-whitespace magit-status-mode-map)))
+
+;;;; diff-hl
+(use-package diff-hl
+  :ensure t
+  :config
+  (global-diff-hl-mode)
+  (add-hook 'dired-mode-hook 'diff-hl-dired-mode)
+  (add-hook 'magit-pre-refresh-hook 'diff-hl-magit-pre-refresh)
+  (add-hook 'magit-post-refresh-hook 'diff-hl-magit-post-refresh)
+  ;; Fall back to the display margin, if the fringe is unavailable
+  (unless (display-graphic-p) (diff-hl-margin-mode)))
 
 ;;;; move-text
 (use-package move-text
@@ -508,50 +560,6 @@
     (recentf-mode 1))
   )
 
-(use-package ivy
-  :commands (ivy-mode ivy-resume ivy-occur)
-  :ensure t
-  :config
-  (progn
-    (ivy-mode 1) ; globally at startup
-    (setq ivy-use-virtual-buffers t)
-    (setq ivy-height 20)
-    (setq ivy-count-format "%d/%d ")
-    ;; Example how Ivy regex builders can be mixed
-    ;; (setq ivy-re-builders-alist
-    ;;       '((ivy-switch-buffer . ivy--regex-plus)
-    ;;         (t . ivy--regex-fuzzy)))
-    ;; (setq ivy-re-builders-alist
-    ;;       '((t . ivy--regex-fuzzy)))
-    ;; Since fuzzy mathing is turned on we do not need
-    ;; for ^ character to be inserted into input area.
-    ;; It is only useful with default matcher.
-    (setq ivy-initial-inputs-alist nil)
-    (setq counsel-grep-base-command
-          "rg -i --no-heading --line-number --color never '%s' %s")
-    (set-face-background 'ivy-minibuffer-match-face-1 nil))
-  )
-
-(use-package counsel
-  :commands (counsel-M-x counsel-git counsel-recentf)
-  :ensure t
-  :bind* ; load when pressed
-  (("C-s"     . counsel-grep-or-swiper)
-   ("C-c g"   . counsel-git)      ; search for files in git repo
-   ("C-c c j" . counsel-git-grep) ; search for regexp in git repo
-   ("C-c c k" . counsel-rg)       ; Use rg for regexp
-   ("C-x l"   . counsel-locate)
-   ("C-h f"   . counsel-describe-function)
-   ("C-h v"   . counsel-describe-variable)
-   ("C-c c l" . counsel-load-library)
-   ("C-c c i" . counsel-info-lookup-symbol)
-   ("C-c c u" . counsel-unicode-char)
-   ("C-x C-f" . counsel-find-file)
-   ("C-c c f" . counsel-find-library)
-   ("C-x C-m" . counsel-M-x)
-   ("C-c c r" . ivy-resume)
-   ("C-c f"   . counsel-recentf)  ; search for recently edited
-   ("C-c h i" . counsel-imenu)))
 
 (use-package helm-dash
   :commands (helm-dash)
@@ -1048,307 +1056,306 @@
     (global-rbenv-mode)))
 
 ;;;; ibuffer
-(use-package ibuffer
-  :defer t
-  :init
-  (progn
-    (defvar boem-ibuffer-separator " • ")
-    (setq ibuffer-filter-group-name-face 'variable-pitch
-          ibuffer-use-header-line nil
-          ibuffer-old-time 12)
-    (require 'vc)
-    (use-package ibuffer-vc
-      :ensure t
-      :commands
-      (ibuffer-vc-set-filter-groups-by-vc-root
-       ibuffer-vc-generate-filter-groups-by-vc-root)
-      :config
-      (progn
-        (ibuffer-vc-set-filter-groups-by-vc-root)))
-    (use-package ibuffer-tramp
-      :ensure t
-      :commands (ibuffer-tramp-generate-filter-groups-by-tramp-connection
-                 ibuffer-tramp-set-filter-groups-by-tramp-connection))
-    ;; Switching to ibuffer puts the cursor on the most recent buffer
-    (defadvice ibuffer (around ibuffer-point-to-most-recent activate)
-      "Open ibuffer with cursor pointed to most recent buffer name"
-      (let ((recent-buffer-name (buffer-name)))
-        ad-do-it
-        (ibuffer-update nil t)
-        (unless (string= recent-buffer-name "*Ibuffer*")
-          (ibuffer-jump-to-buffer recent-buffer-name)))))
-  :config
-  (progn
-    (unbind-key "M-o" ibuffer-mode-map)
-    (bind-key "r" 'ivy-recentf ibuffer-mode-map)
-    (bind-key "s" 'isearch-forward-regexp ibuffer-mode-map)
-    (bind-key "." 'ibuffer-invert-sorting ibuffer-mode-map)
+;; (use-package ibuffer
+;;   :defer t
+;;   :init
+;;   (progn
+;;     (defvar boem-ibuffer-separator " • ")
+;;     (setq ibuffer-filter-group-name-face 'variable-pitch
+;;           ibuffer-use-header-line nil
+;;           ibuffer-old-time 12)
+;;     (require 'vc)
+;;     (use-package ibuffer-vc
+;;       :ensure t
+;;       :commands
+;;       (ibuffer-vc-set-filter-groups-by-vc-root
+;;        ibuffer-vc-generate-filter-groups-by-vc-root)
+;;       :config
+;;       (progn
+;;         (ibuffer-vc-set-filter-groups-by-vc-root)))
+;;     (use-package ibuffer-tramp
+;;       :ensure t
+;;       :commands (ibuffer-tramp-generate-filter-groups-by-tramp-connection
+;;                  ibuffer-tramp-set-filter-groups-by-tramp-connection))
+;;     ;; Switching to ibuffer puts the cursor on the most recent buffer
+;;     (defadvice ibuffer (around ibuffer-point-to-most-recent activate)
+;;       "Open ibuffer with cursor pointed to most recent buffer name"
+;;       (let ((recent-buffer-name (buffer-name)))
+;;         ad-do-it
+;;         (ibuffer-update nil t)
+;;         (unless (string= recent-buffer-name "*Ibuffer*")
+;;           (ibuffer-jump-to-buffer recent-buffer-name)))))
+;;   :config
+;;   (progn
+;;     (unbind-key "M-o" ibuffer-mode-map)
+;;     (bind-key "s" 'isearch-forward-regexp ibuffer-mode-map)
+;;     (bind-key "." 'ibuffer-invert-sorting ibuffer-mode-map)
 
-    (defun ibuffer-magit-status ()
-      (interactive)
-      (--when-let (get-buffer "*Ibuffer*")
-        (with-current-buffer it
-          (let* ((selected-buffer (ibuffer-current-buffer))
-                 (buffer-path (with-current-buffer
-                                  selected-buffer
-                                (or (buffer-file-name)
-                                    list-buffers-directory
-                                    default-directory)))
-                 (default-directory
-                   (if (file-regular-p buffer-path)
-                       (file-name-directory buffer-path)
-                     buffer-path)))
-            (magit-status default-directory)))))
-    (bind-key "i" 'ibuffer-magit-status ibuffer-mode-map)
-    (bind-key "G" 'ibuffer-magit-status ibuffer-mode-map)
+;;     (defun ibuffer-magit-status ()
+;;       (interactive)
+;;       (--when-let (get-buffer "*Ibuffer*")
+;;         (with-current-buffer it
+;;           (let* ((selected-buffer (ibuffer-current-buffer))
+;;                  (buffer-path (with-current-buffer
+;;                                   selected-buffer
+;;                                 (or (buffer-file-name)
+;;                                     list-buffers-directory
+;;                                     default-directory)))
+;;                  (default-directory
+;;                    (if (file-regular-p buffer-path)
+;;                        (file-name-directory buffer-path)
+;;                      buffer-path)))
+;;             (magit-status default-directory)))))
+;;     (bind-key "i" 'ibuffer-magit-status ibuffer-mode-map)
+;;     (bind-key "G" 'ibuffer-magit-status ibuffer-mode-map)
 
-    (use-package ibuffer-git
-      :ensure t)
-    (use-package ibuffer-vc
-      :ensure t)
+;;     (use-package ibuffer-git
+;;       :ensure t)
+;;     (use-package ibuffer-vc
+;;       :ensure t)
 
-    (define-ibuffer-column name-strip
-      (:inline t
-               :header-mouse-map ibuffer-name-header-map
-               :props
-               ('mouse-face
-                'highlight 'keymap ibuffer-name-map
-                'ibuffer-name-column t
-                'help-echo
-                '(if tooltip-mode
-                     "mouse-1: mark this buffer\nmouse-2: select this buffer\nmouse-3: operate on this buffer"
-                   "mouse-1: mark buffer mouse-2: select buffer mouse-3: operate"))
-               :summarizer
-               (lambda (strings)
-                 (let ((bufs (length strings)))
-                   (cond ((zerop bufs) "No buffers")
-                         ((= 1 bufs) "1 buffer")
-                         (t (format "%s buffers" bufs))))))
-      (propertize
-       (s-left
-        (or
-         (s-index-of uniquify-separator (buffer-name))
-         (string-width (buffer-name)))
-        (buffer-name))
-       'font-lock-face (ibuffer-buffer-name-face buffer mark)))
+;;     (define-ibuffer-column name-strip
+;;       (:inline t
+;;                :header-mouse-map ibuffer-name-header-map
+;;                :props
+;;                ('mouse-face
+;;                 'highlight 'keymap ibuffer-name-map
+;;                 'ibuffer-name-column t
+;;                 'help-echo
+;;                 '(if tooltip-mode
+;;                      "mouse-1: mark this buffer\nmouse-2: select this buffer\nmouse-3: operate on this buffer"
+;;                    "mouse-1: mark buffer mouse-2: select buffer mouse-3: operate"))
+;;                :summarizer
+;;                (lambda (strings)
+;;                  (let ((bufs (length strings)))
+;;                    (cond ((zerop bufs) "No buffers")
+;;                          ((= 1 bufs) "1 buffer")
+;;                          (t (format "%s buffers" bufs))))))
+;;       (propertize
+;;        (s-left
+;;         (or
+;;          (s-index-of uniquify-separator (buffer-name))
+;;          (string-width (buffer-name)))
+;;         (buffer-name))
+;;        'font-lock-face (ibuffer-buffer-name-face buffer mark)))
 
-    (define-ibuffer-column size-h
-      (:name "Size" :inline t)
-      (cond
-       ((> (buffer-size) 1000)
-        (format "%7.1fk" (/ (buffer-size) 1000.0)))
-       ((> (buffer-size) 1000000)
-        (format "%7.1fM" (/ (buffer-size) 1000000.0)))
-       (t
-        (format "%8d" (buffer-size)))))
+;;     (define-ibuffer-column size-h
+;;       (:name "Size" :inline t)
+;;       (cond
+;;        ((> (buffer-size) 1000)
+;;         (format "%7.1fk" (/ (buffer-size) 1000.0)))
+;;        ((> (buffer-size) 1000000)
+;;         (format "%7.1fM" (/ (buffer-size) 1000000.0)))
+;;        (t
+;;         (format "%8d" (buffer-size)))))
 
-    (require 'ibuf-ext)
-    (define-ibuffer-filter filename2
-        "Toggle current view to buffers with filename matching QUALIFIER."
-      (:description "filename2"
-                    :reader (read-from-minibuffer "Filter by filename (regexp): "))
-      ;; (ibuffer-awhen (buffer-local-value 'buffer-file-name buf)
-      (ibuffer-awhen (with-current-buffer buf
-                       (or buffer-file-name
-                           default-directory))
-        (string-match qualifier it)))
-
-
-    (defvar ibuffer-magit-filter-groups nil)
-    (defun ibuffer-magit-define-filter-groups ()
-      (when (and (not ibuffer-magit-filter-groups)
-                 (boundp 'magit-repo-dirs))
-        (setq ibuffer-magit-filter-groups
-              (--map (list
-                      (concat "git:: "
-                              (file-name-nondirectory (directory-file-name it)))
-                      `(filename2 . ,it))
-                     (mapcar 'cdr (magit-list-repos magit-repo-dirs))))))
-
-    (defun ibuffer-set-filter-groups-by-root ()
-      (interactive)
-      (setq ibuffer-filter-groups
-            (-concat
-             '(("MORE"
-                (or (mode . magit-log-edit-mode)
-                    (name . "^\\*\\(traad-server\\|httpd\\|epc con.*\\|tramp/.*\\|Completions\\)\\*$")
-                    (name . "^\\*Pymacs\\*$")
-                    (name . "^\\*helm.*\\*")
-                    (name . "^\\*Compile-log\\*$")
-                    (name . "^\\*Ido Completions\\*$")
-                    (name . "^\\*magit-\\(process\\)\\*$")
-                    (name . "^ "))))
-             '(("EMACS"
-                (or
-                 (name . "^\\*scratch")
-                 (name . "^\\*Messages")
-                 (name . "^\\*Help")
-                 )))
-             (ibuffer-vc-generate-filter-groups-by-vc-root)
-             (ibuffer-tramp-generate-filter-groups-by-tramp-connection))))
+;;     (require 'ibuf-ext)
+;;     (define-ibuffer-filter filename2
+;;         "Toggle current view to buffers with filename matching QUALIFIER."
+;;       (:description "filename2"
+;;                     :reader (read-from-minibuffer "Filter by filename (regexp): "))
+;;       ;; (ibuffer-awhen (buffer-local-value 'buffer-file-name buf)
+;;       (ibuffer-awhen (with-current-buffer buf
+;;                        (or buffer-file-name
+;;                            default-directory))
+;;         (string-match qualifier it)))
 
 
-    (defun toggle-ibuffer-filter-groups ()
-      "DOCSTRING"
-      (interactive)
-      (let ((ibuf (get-buffer "*Ibuffer*")))
-        (when ibuf
-          (with-current-buffer ibuf
-            (let ((selected-buffer (ibuffer-current-buffer)))
-              (if (not ibuffer-filter-groups)
-                  (ibuffer-set-filter-groups-by-root)
-                (setq ibuffer-filter-groups nil))
-              (pop-to-buffer ibuf)
-              (ibuffer-update nil t)
-              (ibuffer-jump-to-buffer (buffer-name selected-buffer )))))))
-    (bind-key "h" 'toggle-ibuffer-filter-groups ibuffer-mode-map)
+;;     (defvar ibuffer-magit-filter-groups nil)
+;;     (defun ibuffer-magit-define-filter-groups ()
+;;       (when (and (not ibuffer-magit-filter-groups)
+;;                  (boundp 'magit-repo-dirs))
+;;         (setq ibuffer-magit-filter-groups
+;;               (--map (list
+;;                       (concat "git:: "
+;;                               (file-name-nondirectory (directory-file-name it)))
+;;                       `(filename2 . ,it))
+;;                      (mapcar 'cdr (magit-list-repos magit-repo-dirs))))))
 
-    (defun set-categorized-ibuffer-filter-group ()
-      "DOCSTRING"
-      (interactive)
-      (let ((ibuf (get-buffer "*Ibuffer*")))
-        (when ibuf
-          (with-current-buffer ibuf
-            (let ((selected-buffer (ibuffer-current-buffer)))
-              (pop-to-buffer ibuf)
-              (ibuffer-switch-to-saved-filter-groups "categorized")
-              (ibuffer-update nil t)
-              (ibuffer-jump-to-buffer (buffer-name selected-buffer )))))))
-
-    (bind-key "H" 'set-categorized-ibuffer-filter-group ibuffer-mode-map)
-
-
-    (defadvice ibuffer-invert-sorting (around ibuffer-point-to-same activate)
-      "TODO"
-      (let ((ibuf (get-buffer "*Ibuffer*")))
-        (when ibuf
-          (with-current-buffer ibuf
-            (let ((selected-buffer (ibuffer-current-buffer)))
-              ad-do-it
-              (ibuffer-jump-to-buffer (buffer-name selected-buffer )))))))
-
-    (defadvice ibuffer-toggle-sorting-mode (around ibuffer-point-to-same activate)
-      "TODO"
-      (let ((ibuf (get-buffer "*Ibuffer*")))
-        (when ibuf
-          (with-current-buffer ibuf
-            (let ((selected-buffer (ibuffer-current-buffer)))
-              ad-do-it
-              (ibuffer-jump-to-buffer (buffer-name selected-buffer )))))))
+;;     (defun ibuffer-set-filter-groups-by-root ()
+;;       (interactive)
+;;       (setq ibuffer-filter-groups
+;;             (-concat
+;;              '(("MORE"
+;;                 (or (mode . magit-log-edit-mode)
+;;                     (name . "^\\*\\(traad-server\\|httpd\\|epc con.*\\|tramp/.*\\|Completions\\)\\*$")
+;;                     (name . "^\\*Pymacs\\*$")
+;;                     (name . "^\\*helm.*\\*")
+;;                     (name . "^\\*Compile-log\\*$")
+;;                     (name . "^\\*Ido Completions\\*$")
+;;                     (name . "^\\*magit-\\(process\\)\\*$")
+;;                     (name . "^ "))))
+;;              '(("EMACS"
+;;                 (or
+;;                  (name . "^\\*scratch")
+;;                  (name . "^\\*Messages")
+;;                  (name . "^\\*Help")
+;;                  )))
+;;              (ibuffer-vc-generate-filter-groups-by-vc-root)
+;;              (ibuffer-tramp-generate-filter-groups-by-tramp-connection))))
 
 
-    (setq
-     ibuffer-default-sorting-mode 'recency
-     ibuffer-eliding-string "…"
-     ibuffer-compile-formats t
-     ibuffer-git-column-length 4
-     ibuffer-formats '(
-                       (
-                        mark
-                        (size-h 9 -1 :right)
-                        " "
-                        (mode 4 4 :right :elide)
-                        " "
-                        read-only
-                        modified
-                        " "
-                        (name-strip 25 25 :left :elide)
-                        " "
-                        (vc-status-mini 1 1)
-                        " "
-                        filename-and-process)
-                       (mark " " (name 16 -1) " " filename))
-     ibuffer-show-empty-filter-groups nil
-     ibuffer-saved-filter-groups
-     (quote (("flat")
-             ("categorized"
-              ;; -------------------------------------------------
-              ;; programming languages #1
-              ("code" (or
-                       (mode . emacs-lisp-mode)
-                       (mode . python-mode)
-                       (mode . ruby-mode)
-                       (mode . elixir-mode)
-                       (mode . js-mode)
-                       (mode . js2-mode)
-                       (mode . actionscript-mode)
-                       (mode . java-mode)
-                       (mode . sh-mode)
-                       (mode . haskell-mode)
-                       (mode . html-mode)
-                       (mode . web-mode)
-                       (mode . haml-mode)
-                       (mode . nxml-mode)
-                       (mode . kivy-mode)
-                       (mode . scss-mode)
-                       (mode . sass-mode)
-                       (mode . stylus-mode)
-                       (mode . css-mode)))
-              ;; -------------------------------------------------
-              ;; configuration/data files
-              ("conf" (or
-                       (mode . json-mode)
-                       (mode . yaml-mode)
-                       (mode . conf-mode)))
-              ;; -------------------------------------------------
-              ;; text/notetaking/org
-              ("org agenda" (mode . org-agenda-mode))
-              ("org" (or
-                      (mode . org-mode)
-                      (name . "^\\*Calendar\\*$")
-                      (name . "^diary$")))
-              ("text misc" (or
-                            (mode . text-mode)
-                            (mode . rst-mode)
-                            (mode . markdown-mode)))
-              ;; -------------------------------------------------
-              ;; media
-              ("media" (or
-                        (mode . image-mode)))
-              ;; -------------------------------------------------
-              ;; misc
-              ("w3m" (mode . w3m-mode))
-              ("scm" (or
-                      (mode . magit-status-mode)
-                      (mode . magit-log-mode)
-                      (mode . vc-annotate-mode)))
-              ("dired" (mode . dired-mode))
-              ("help" (or
-                       (mode . Info-mode)
-                       (mode . help-mode)
-                       (mode . Man-mode)
-                       (name . "^\\*frequencies\\*$")
-                       (name . "^\\*Smex: Unbound Commands\\*$")
-                       (name . "^\\*Personal Keybindings\\*$")))
-              ("weechat" (mode . weechat-mode))
-              ;; -------------------------------------------------
-              ;; *buffer* buffers
-              ("*kite*" (name . "^\\*kite.*\\*"))
-              ("MORE" (or (mode . magit-log-edit-mode)
-                          (name . "^\\*\\(traad-server\\|httpd\\|epc con.*\\|tramp/.*\\|Completions\\)\\*$")
-                          (name . "^\\*Pymacs\\*$")
-                          (name . "^\\*helm.*\\*")
-                          (name . "^\\*Compile-log\\*$")
-                          (name . "^\\*Ido Completions\\*$")
-                          (name . "^\\*magit-\\(process\\|commit\\)\\*$")
-                          (name . "^ ")))
-              ("*buffer*" (name . "\\*.*\\*"))))))
-    (add-hook 'ibuffer-mode-hook
-              #'(lambda ()
-                  (setq ibuffer-hidden-filter-groups '("MORE"))
-                  (ibuffer-update nil t)
-                  (hl-line-mode 1)
-                  (ibuffer-vc-set-filter-groups-by-vc-root)))
-    (defun ibuffer-ido-find-file ()
-      "Like `ido-find-file', but default to the directory of the buffer at point."
-      (interactive
-       (let ((default-directory (let ((buf (ibuffer-current-buffer)))
-                                  (if (buffer-live-p buf)
-                                      (with-current-buffer buf
-                                        default-directory)
-                                    default-directory))))
-         (ido-find-file-in-dir default-directory))))
-    (bind-key "C-x C-f" 'ibuffer-ido-find-file ibuffer-mode-map)))
+;;     (defun toggle-ibuffer-filter-groups ()
+;;       "DOCSTRING"
+;;       (interactive)
+;;       (let ((ibuf (get-buffer "*Ibuffer*")))
+;;         (when ibuf
+;;           (with-current-buffer ibuf
+;;             (let ((selected-buffer (ibuffer-current-buffer)))
+;;               (if (not ibuffer-filter-groups)
+;;                   (ibuffer-set-filter-groups-by-root)
+;;                 (setq ibuffer-filter-groups nil))
+;;               (pop-to-buffer ibuf)
+;;               (ibuffer-update nil t)
+;;               (ibuffer-jump-to-buffer (buffer-name selected-buffer )))))))
+;;     (bind-key "h" 'toggle-ibuffer-filter-groups ibuffer-mode-map)
+
+;;     (defun set-categorized-ibuffer-filter-group ()
+;;       "DOCSTRING"
+;;       (interactive)
+;;       (let ((ibuf (get-buffer "*Ibuffer*")))
+;;         (when ibuf
+;;           (with-current-buffer ibuf
+;;             (let ((selected-buffer (ibuffer-current-buffer)))
+;;               (pop-to-buffer ibuf)
+;;               (ibuffer-switch-to-saved-filter-groups "categorized")
+;;               (ibuffer-update nil t)
+;;               (ibuffer-jump-to-buffer (buffer-name selected-buffer )))))))
+
+;;     (bind-key "H" 'set-categorized-ibuffer-filter-group ibuffer-mode-map)
+
+
+;;     (defadvice ibuffer-invert-sorting (around ibuffer-point-to-same activate)
+;;       "TODO"
+;;       (let ((ibuf (get-buffer "*Ibuffer*")))
+;;         (when ibuf
+;;           (with-current-buffer ibuf
+;;             (let ((selected-buffer (ibuffer-current-buffer)))
+;;               ad-do-it
+;;               (ibuffer-jump-to-buffer (buffer-name selected-buffer )))))))
+
+;;     (defadvice ibuffer-toggle-sorting-mode (around ibuffer-point-to-same activate)
+;;       "TODO"
+;;       (let ((ibuf (get-buffer "*Ibuffer*")))
+;;         (when ibuf
+;;           (with-current-buffer ibuf
+;;             (let ((selected-buffer (ibuffer-current-buffer)))
+;;               ad-do-it
+;;               (ibuffer-jump-to-buffer (buffer-name selected-buffer )))))))
+
+
+;;     (setq
+;;      ibuffer-default-sorting-mode 'recency
+;;      ibuffer-eliding-string "…"
+;;      ibuffer-compile-formats t
+;;      ibuffer-git-column-length 4
+;;      ibuffer-formats '(
+;;                        (
+;;                         mark
+;;                         (size-h 9 -1 :right)
+;;                         " "
+;;                         (mode 4 4 :right :elide)
+;;                         " "
+;;                         read-only
+;;                         modified
+;;                         " "
+;;                         (name-strip 25 25 :left :elide)
+;;                         " "
+;;                         (vc-status-mini 1 1)
+;;                         " "
+;;                         filename-and-process)
+;;                        (mark " " (name 16 -1) " " filename))
+;;      ibuffer-show-empty-filter-groups nil
+;;      ibuffer-saved-filter-groups
+;;      (quote (("flat")
+;;              ("categorized"
+;;               ;; -------------------------------------------------
+;;               ;; programming languages #1
+;;               ("code" (or
+;;                        (mode . emacs-lisp-mode)
+;;                        (mode . python-mode)
+;;                        (mode . ruby-mode)
+;;                        (mode . elixir-mode)
+;;                        (mode . js-mode)
+;;                        (mode . js2-mode)
+;;                        (mode . actionscript-mode)
+;;                        (mode . java-mode)
+;;                        (mode . sh-mode)
+;;                        (mode . haskell-mode)
+;;                        (mode . html-mode)
+;;                        (mode . web-mode)
+;;                        (mode . haml-mode)
+;;                        (mode . nxml-mode)
+;;                        (mode . kivy-mode)
+;;                        (mode . scss-mode)
+;;                        (mode . sass-mode)
+;;                        (mode . stylus-mode)
+;;                        (mode . css-mode)))
+;;               ;; -------------------------------------------------
+;;               ;; configuration/data files
+;;               ("conf" (or
+;;                        (mode . json-mode)
+;;                        (mode . yaml-mode)
+;;                        (mode . conf-mode)))
+;;               ;; -------------------------------------------------
+;;               ;; text/notetaking/org
+;;               ("org agenda" (mode . org-agenda-mode))
+;;               ("org" (or
+;;                       (mode . org-mode)
+;;                       (name . "^\\*Calendar\\*$")
+;;                       (name . "^diary$")))
+;;               ("text misc" (or
+;;                             (mode . text-mode)
+;;                             (mode . rst-mode)
+;;                             (mode . markdown-mode)))
+;;               ;; -------------------------------------------------
+;;               ;; media
+;;               ("media" (or
+;;                         (mode . image-mode)))
+;;               ;; -------------------------------------------------
+;;               ;; misc
+;;               ("w3m" (mode . w3m-mode))
+;;               ("scm" (or
+;;                       (mode . magit-status-mode)
+;;                       (mode . magit-log-mode)
+;;                       (mode . vc-annotate-mode)))
+;;               ("dired" (mode . dired-mode))
+;;               ("help" (or
+;;                        (mode . Info-mode)
+;;                        (mode . help-mode)
+;;                        (mode . Man-mode)
+;;                        (name . "^\\*frequencies\\*$")
+;;                        (name . "^\\*Smex: Unbound Commands\\*$")
+;;                        (name . "^\\*Personal Keybindings\\*$")))
+;;               ("weechat" (mode . weechat-mode))
+;;               ;; -------------------------------------------------
+;;               ;; *buffer* buffers
+;;               ("*kite*" (name . "^\\*kite.*\\*"))
+;;               ("MORE" (or (mode . magit-log-edit-mode)
+;;                           (name . "^\\*\\(traad-server\\|httpd\\|epc con.*\\|tramp/.*\\|Completions\\)\\*$")
+;;                           (name . "^\\*Pymacs\\*$")
+;;                           (name . "^\\*helm.*\\*")
+;;                           (name . "^\\*Compile-log\\*$")
+;;                           (name . "^\\*Ido Completions\\*$")
+;;                           (name . "^\\*magit-\\(process\\|commit\\)\\*$")
+;;                           (name . "^ ")))
+;;               ("*buffer*" (name . "\\*.*\\*"))))))
+;;     (add-hook 'ibuffer-mode-hook
+;;               #'(lambda ()
+;;                   (setq ibuffer-hidden-filter-groups '("MORE"))
+;;                   (ibuffer-update nil t)
+;;                   (hl-line-mode 1)
+;;                   (ibuffer-vc-set-filter-groups-by-vc-root)))
+;;     (defun ibuffer-ido-find-file ()
+;;       "Like `ido-find-file', but default to the directory of the buffer at point."
+;;       (interactive
+;;        (let ((default-directory (let ((buf (ibuffer-current-buffer)))
+;;                                   (if (buffer-live-p buf)
+;;                                       (with-current-buffer buf
+;;                                         default-directory)
+;;                                     default-directory))))
+;;          (ido-find-file-in-dir default-directory))))
+;;     (bind-key "C-x C-f" 'ibuffer-ido-find-file ibuffer-mode-map)))
 
 ;;;; uniquify
 (use-package uniquify
