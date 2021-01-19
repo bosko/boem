@@ -132,7 +132,7 @@
 (autoload 'inf-ruby-minor-mode "inf-ruby" "Run an inferior Ruby process" t)
 (add-hook 'ruby-mode-hook 'inf-ruby-minor-mode)
 
-(global-set-key (kbd "C-x /") 'comment-or-uncomment-region)
+(global-set-key (kbd "C-x C-m") 'execute-extended-command)
 (global-set-key (kbd "C-x C-b") 'ibuffer)
 (global-set-key (kbd "C-S-<return>") 'boem-insert-line-above)
 (global-set-key (kbd "S-<return>") 'boem-insert-line)
@@ -149,7 +149,7 @@
 (global-set-key (kbd "M-k") 'scroll-up-line)
 (global-set-key (kbd "C-c r a") 'inf-ruby-console-auto)
 (global-set-key (kbd "C-c C-p b") 'boem-pop-eshell-bottom)
-(global-set-key (kbd "C-c p  f") 'project-find-file)
+(global-set-key (kbd "C-c p f") 'project-find-file)
 
 ;; Keep syntax highlighting in current line.
 (set-face-foreground 'highlight nil)

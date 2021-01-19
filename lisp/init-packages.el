@@ -88,7 +88,7 @@
          ("M-g k" . consult-global-mark)   ;; commands under the "M-g" prefix.
          ("C-c c k" . consult-git-grep)      ;; or consult-grep, consult-ripgrep
          ("M-g f" . consult-find)          ;; or consult-locate, my-fdfind
-         ("C-c h i" . consult-project-imenu) ;; or consult-imenu
+         ("C-c h i" . consult-imenu) ;; or consult-imenu
          ("M-g e" . consult-error)
          ("M-s m" . consult-multi-occur)
          ("M-y" . consult-yank-pop)
