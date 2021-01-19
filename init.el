@@ -209,7 +209,8 @@
     (progn
       (load-theme 'railscasts t)
       (set-face-attribute 'selectrum-current-candidate nil
-                          :weight 'extra-bold)
+                          :weight 'extra-bold
+                          :underline t)
       )
   (load-theme 'doom-gruvbox-light t))
 
