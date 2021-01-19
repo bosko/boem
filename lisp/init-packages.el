@@ -46,7 +46,9 @@
   :init
   (progn
     (selectrum-prescient-mode 1)
-    (selectrum-prescient-toggle-fuzzy 1)))
+    (selectrum-prescient-toggle-fuzzy 1)
+    (setq selectrum-refine-candidates-function #'orderless-filter)
+    (setq selectrum-highlight-candidates-function #'orderless-highlight-matches)))
 
 (use-package marginalia
   :ensure t
