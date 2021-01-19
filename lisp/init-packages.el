@@ -29,7 +29,7 @@
 (use-package orderless
   :ensure t
   :init (icomplete-mode) ; optional but recommended!
-  :custom (completion-styles '(orderless)))
+  :custom (completion-styles '(orderless partial-completion)))
 
 (use-package selectrum
   :ensure t
