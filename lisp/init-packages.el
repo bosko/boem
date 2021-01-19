@@ -58,8 +58,13 @@
   :ensure t
   :init
   (progn
-    (define-key selectrum-minibuffer-map (kbd "C-c C-o") 'embark-export)
-    (define-key selectrum-minibuffer-map (kbd "C-c C-c") 'embark-act)))
+    (define-key selectrum-minibuffer-map (kbd "C-c .") 'embark-act)
+    (define-key selectrum-minibuffer-map (kbd "C-c ,") 'embark-act-noexit)
+    (setq embark-action-indicator
+      (lambda (map)
+        (which-key--show-keymap "Embark" map nil nil 'no-paging)
+        #'which-key--hide-popup-ignore-command)
+      embark-become-indicator embark-action-indicator)))
 
 ;;;; consult
 (use-package consult
