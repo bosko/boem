@@ -788,7 +788,9 @@
 ;;;; typescript
 (use-package typescript-mode
   :commands (typescript-mode)
-  :ensure t)
+  :ensure t
+  :config
+  (setq typescript-indent-level 2))
 
 ;;;; HTML
 
