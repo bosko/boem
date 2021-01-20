@@ -70,6 +70,7 @@
 
 ;;;; consult
 (use-package consult
+  :demand t
   ;; Replace bindings. Lazily loaded due by `use-package'.
   :bind (("C-x M-:" . consult-complex-command)
          ("C-c h h" . consult-history)
@@ -120,6 +121,11 @@
   ;; auto-updating embark collect buffer
   :hook
   (embark-collect-mode . embark-consult-preview-minor-mode))
+
+(use-package wgrep
+  :ensure t
+  :demand t
+  :bind (("C-x C-q" . wgrep-change-to-wgrep-mode)))
 
 (use-package smart-mode-line
   :ensure t
