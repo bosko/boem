@@ -87,7 +87,6 @@
          ("M-g l" . consult-line)          ;; "M-s l" is a good alternative.
          ("M-g m" . consult-mark)          ;; I recommend to bind Consult navigation
          ("M-g k" . consult-global-mark)   ;; commands under the "M-g" prefix.
-         ("C-c c k" . consult-git-grep)      ;; or consult-grep, consult-ripgrep
          ("M-g f" . consult-find)          ;; or consult-locate, my-fdfind
          ("C-c h i" . consult-imenu) ;; or consult-imenu
          ("M-g e" . consult-error)
@@ -103,11 +102,13 @@
   ;; the register preview when editing registers.
   (setq register-preview-delay 0
         register-preview-function #'consult-register-preview)
+  (if (executable-find "rg")
+      (bind-key "C-c c k" 'consult-ripgrep)
+    (bind-key "C-c c k" 'consult-git-grep))
+
   :config
   (progn
-    (setq consult-project-root-function #'vc-root-dir)
-    (when (executable-find "rg")
-      (global-set-key (kbd "C-c c k") 'consult-ripgrep))))
+    (setq consult-project-root-function #'vc-root-dir)))
 
 ;; Optionally add the `consult-flycheck' command.
 (use-package consult-flycheck
