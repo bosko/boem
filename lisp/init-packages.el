@@ -60,13 +60,13 @@
   :ensure t
   :init
   (progn
-    (define-key selectrum-minibuffer-map (kbd "C-c .") 'embark-act)
-    (define-key selectrum-minibuffer-map (kbd "C-c ,") 'embark-act-noexit)
     (setq embark-action-indicator
       (lambda (map)
         (which-key--show-keymap "Embark" map nil nil 'no-paging)
         #'which-key--hide-popup-ignore-command)
-      embark-become-indicator embark-action-indicator)))
+      embark-become-indicator embark-action-indicator))
+  :bind (("C-c ." . embark-act)
+         ("C-c ," . embark-act-noexit)))
 
 ;;;; consult
 (use-package consult
