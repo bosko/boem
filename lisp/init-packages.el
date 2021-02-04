@@ -92,7 +92,12 @@
          ("M-g e" . consult-error)
          ("M-s m" . consult-multi-occur)
          ("M-y" . consult-yank-pop)
-         ("<help> a" . consult-apropos))
+         ("<help> a" . consult-apropos)
+         ;; Isearch integration
+         :map isearch-mode-map
+         ("M-e" . consult-isearch)                 ;; orig. isearch-edit-string
+         ("M-s e" . consult-isearch)               ;; orig. isearch-edit-string
+         ("M-s l" . consult-line))
 
   ;; The :init configuration is always executed (Not lazy!)
   :init
