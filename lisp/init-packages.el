@@ -182,29 +182,10 @@
   (doom-modeline-env-version t)
   )
 
-;;; Keep this till I find how to get base16 light theme
-;;; working in terminal
-(use-package doom-themes
+(use-package base16-theme
   :ensure t
   :config
-  ;; Global settings (defaults)
-  (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
-        doom-themes-enable-italic t) ; if nil, italics is universally disabled
-
-  ;; Enable flashing mode-line on errors
-  (doom-themes-visual-bell-config)
-
-  ;; Enable custom neotree theme (all-the-icons must be installed!)
-  (doom-themes-neotree-config)
-  ;; or for treemacs users
-  (setq doom-themes-treemacs-theme "doom-colors") ; use the colorful treemacs theme
-  (doom-themes-treemacs-config)
-
-  ;; Corrects (and improves) org-mode's native fontification.
-  (doom-themes-org-config))
-
-(use-package base16-theme
-  :ensure t)
+  (setq base16-theme-256-color-source "colors"))
 
 (use-package dash
   :ensure t
