@@ -868,7 +868,8 @@
   :diminish lsp-mode
   :hook ((elixir-mode . lsp-deferred)
          (js2-mode . lsp-deferred)
-         (typescript . lsp-deferred))
+         (typescript . lsp-deferred)
+         (lsp-mode . lsp-enable-which-key-integration))
   :init
   (add-to-list 'exec-path "/Users/bosko/Code/elixir/elixir-ls/release")
   :config
