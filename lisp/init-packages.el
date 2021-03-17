@@ -84,7 +84,7 @@
          ("C-x r b" . consult-bookmark)
          ("M-g g" . consult-goto-line)
          ("M-g o" . consult-outline)       ;; "M-s o" is a good alternative.
-         ("M-g l" . consult-line)          ;; "M-s l" is a good alternative.
+         ("C-s" . consult-line)            ;; Replace standard isearch-forward
          ("M-g m" . consult-mark)          ;; I recommend to bind Consult navigation
          ("M-g k" . consult-global-mark)   ;; commands under the "M-g" prefix.
          ("M-g f" . consult-find)          ;; or consult-locate, my-fdfind
