@@ -146,7 +146,8 @@
 
 (use-package neotree
   :commands (neotree)
-  :ensure t)
+  :ensure t
+  :bind ("<f8>" . neotree-toggle))
 
 (use-package all-the-icons
   :ensure t
