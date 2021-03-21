@@ -45,8 +45,14 @@
   :ensure t
   :init
   (progn
+    (setq selectrum-prescient-enable-filtering nil)
     (selectrum-prescient-mode 1)
     (selectrum-prescient-toggle-fuzzy 1)
+    ;; Next two 'setq' lines are taken from reddit
+    ;; For more efficient highlighting (only displayed candidates are highlighted)
+    (setq orderless-skip-highlighting (lambda () selectrum-is-active))
+    (setq selectrum-highlight-candidates-function #'orderless-highlight-matches)
+    ;; reddit end
     (setq selectrum-refine-candidates-function #'orderless-filter)
     (setq selectrum-highlight-candidates-function #'orderless-highlight-matches)))
 
