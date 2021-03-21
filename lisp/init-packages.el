@@ -142,6 +142,14 @@
   :demand t
   :bind (("C-x C-q" . wgrep-change-to-wgrep-mode)))
 
+(use-package modus-themes
+  :ensure
+  :init
+  ;; Add all your customizations prior to loading the themes
+  (setq modus-themes-slanted-constructs t
+        modus-themes-bold-constructs nil)
+  :bind ("<f5>" . modus-themes-toggle))
+
 (use-package smart-mode-line
   :ensure t
   :config

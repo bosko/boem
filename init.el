@@ -205,12 +205,10 @@
           ("rails" "c")
           ("sudo" "vi"))))
 
-;; Customize look
-(load-theme 'railscasts t)
-(set-face-attribute 'mode-line nil :box '(:line-width 2 :color "#009bff"))
-(set-face-attribute 'selectrum-current-candidate nil
-                    :weight 'extra-bold
-                    :underline t)
+(if (display-graphic-p)
+    (progn
+      (load-theme 'modus-vivendi t))
+  (load-theme 'base16-gruvbox-light-hard t))
 
 (load custom-file 'no-error)
 
