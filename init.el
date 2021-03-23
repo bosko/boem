@@ -56,9 +56,14 @@
 (if (equal emacs-major-version 27)
     (setq read-process-output-max (* 1024 1024)))
 
+;; Add following two lines in ~/.gnupg/gpg-agent.conf
+;; allow-emacs-pinentry
+;; allow-loopback-pinentry
+;; and run:
+;; gpgconf --reload gpg-agent
 (if (equal emacs-major-version 27)
-    (setq epg-pinentry-mode nil)
-  (setq epa-pinentry-mode nil))
+    (setq epg-pinentry-mode 'loopback)
+  (setq epa-pinentry-mode 'loopback))
 
 (setq ring-bell-function
       (lambda ()
