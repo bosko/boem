@@ -137,15 +137,16 @@
 (autoload 'inf-ruby-minor-mode "inf-ruby" "Run an inferior Ruby process" t)
 (add-hook 'ruby-mode-hook 'inf-ruby-minor-mode)
 
+(global-set-key (kbd "M-o d") 'boem-duplicate-line-or-region)
+(global-set-key (kbd "M-o b") 'boem-switch-to-previous-buffer)
+(global-set-key (kbd "M-o e") 'boem-pop-eshell-bottom)
+(global-set-key (kbd "M-o k a") 'boem-kill-user-buffers)
 (global-set-key (kbd "C-x C-m") 'execute-extended-command)
 (global-set-key (kbd "C-x C-b") 'ibuffer)
 (global-set-key (kbd "C-S-<return>") 'boem-insert-line-above)
 (global-set-key (kbd "S-<return>") 'boem-insert-line)
-(global-set-key (kbd "C-c d") 'boem-duplicate-line-or-region)
 (global-set-key (kbd "M-Z") 'zap-up-to-char)
-(global-set-key (kbd "C-c k a") 'boem-kill-user-buffers)
 (global-set-key (kbd "C-x /") 'boem-comment-uncomment)
-(global-set-key (kbd "C-c b") 'boem-switch-to-previous-buffer)
 (global-set-key (kbd "C-c <left>") 'windmove-left)
 (global-set-key (kbd "C-c <up>") 'windmove-up)
 (global-set-key (kbd "C-c <right>") 'windmove-right)
@@ -153,7 +154,6 @@
 (global-set-key (kbd "M-l") 'scroll-down-line)
 (global-set-key (kbd "M-k") 'scroll-up-line)
 (global-set-key (kbd "C-c r a") 'inf-ruby-console-auto)
-(global-set-key (kbd "C-c C-p b") 'boem-pop-eshell-bottom)
 (global-set-key (kbd "C-c p f") 'project-find-file)
 
 ;; Keep syntax highlighting in current line.
