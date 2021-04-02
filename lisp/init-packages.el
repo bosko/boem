@@ -78,28 +78,40 @@
 (use-package consult
   :demand t
   ;; Replace bindings. Lazily loaded due by `use-package'.
-  :bind (("C-x M-:" . consult-complex-command)
-         ("C-c h h" . consult-history)
+  :bind (;; C-c bindings (mode-specific-map)
+         ("C-c h" . consult-history)
          ("C-c m" . consult-mode-command)
-         ("C-c k" . consult-keep-lines)
-         ("C-c C-k" . consult-focus-lines)
+         ;; C-x bindings (ctl-x-map)
+         ("C-x M-:" . consult-complex-command)
          ("C-x b" . consult-buffer)
          ("C-x 4 b" . consult-buffer-other-window)
          ("C-x 5 b" . consult-buffer-other-frame)
          ("C-x r x" . consult-register)
          ("C-x r b" . consult-bookmark)
+         ;; Custom M-# bindings for fast register access
+         ("M-#" . consult-register-load)
+         ("M-'" . consult-register-store)          ;; orig. abbrev-prefix-mark (unrelated)
+         ;; Other custom bindings
+         ("M-y" . consult-yank-pop)                ;; orig. yank-pop
+         ("<help> a" . consult-apropos)            ;; orig. apropos-command
+         ;; M-g bindings (goto-map)
+         ("M-g e" . consult-compile-error)
          ("M-g g" . consult-goto-line)
          ("M-g o" . consult-outline)       ;; "M-s o" is a good alternative.
-         ("C-s" . consult-line)            ;; Replace standard isearch-forward
          ("M-g m" . consult-mark)          ;; I recommend to bind Consult navigation
          ("M-g k" . consult-global-mark)   ;; commands under the "M-g" prefix.
-         ("M-g f" . consult-find)          ;; or consult-locate, my-fdfind
-         ("C-c h i" . consult-imenu) ;; or consult-imenu
-         ("M-g e" . consult-error)
+         ("M-g i" . consult-imenu)         ;; or consult-imenu
+         ;; M-s bindings (search-map)
+         ("M-s f" . consult-find)          ;; or consult-locate, my-fdfind
+         ("M-s g" . consult-grep)
+         ("M-s G" . consult-git-grep)
+         ("M-s r" . consult-ripgrep)
+         ("M-s l" . consult-line)
          ("M-s m" . consult-multi-occur)
-         ("M-y" . consult-yank-pop)
-         ("<help> a" . consult-apropos)
+         ("M-s k" . consult-keep-lines)
+         ("M-s u" . consult-focus-lines)
          ;; Isearch integration
+         ("M-s e" . consult-isearch)
          :map isearch-mode-map
          ("M-e" . consult-isearch)                 ;; orig. isearch-edit-string
          ("M-s e" . consult-isearch)               ;; orig. isearch-edit-string
@@ -112,17 +124,30 @@
   ;; This gives a consistent display for both `consult-register' and
   ;; the register preview when editing registers.
   (setq register-preview-delay 0
-        register-preview-function #'consult-register-preview)
+        register-preview-function #'consult-register-format)
+
+  ;; Optionally tweak the register preview window.
+  ;; This adds thin lines, sorting and hides the mode line of the window.
+  (advice-add #'register-preview :override #'consult-register-window)
+
+  ;; Use Consult to select xref locations with preview
+  (setq xref-show-xrefs-function #'consult-xref
+        xref-show-definitions-function #'consult-xref)
+
   (if (executable-find "rg")
       (bind-key "C-c c k" 'consult-ripgrep)
     (bind-key "C-c c k" 'consult-git-grep))
 
   :config
-  (progn
-    (setq consult-project-root-function #'vc-root-dir)
-    (setq consult-config `((consult-ripgrep :preview-key ,(kbd "M-."))
-                           (consult-grep :preview-key ,(kbd "M-."))
-                           (consult-git-grep :preview-key ,(kbd "M-."))))))
+
+  ;; Optionally configure the narrowing key.
+  ;; Both < and C-+ work reasonably well.
+  (setq consult-narrow-key "<") ;; (kbd "C-+")
+
+  (setq consult-project-root-function #'vc-root-dir)
+  (setq consult-config `((consult-ripgrep :preview-key ,(kbd "M-."))
+                         (consult-grep :preview-key ,(kbd "M-."))
+                         (consult-git-grep :preview-key ,(kbd "M-.")))))
 
 ;; Optionally add the `consult-flycheck' command.
 (use-package consult-flycheck
