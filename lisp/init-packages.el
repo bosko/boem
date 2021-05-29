@@ -26,35 +26,38 @@
   :commands (docker-cli)
   :ensure t)
 
+;; Enable vertico
+(use-package vertico
+  :init
+  (vertico-mode)
+
+  ;; Optionally enable cycling for `vertico-next' and `vertico-previous'.
+  ;; (setq vertico-cycle t)
+  )
+
+;; A few more useful configurations...
+(use-package emacs
+  :init
+  ;; Add prompt indicator to `completing-read-multiple'.
+  (defun crm-indicator (args)
+    (cons (concat "[CRM] " (car args)) (cdr args)))
+  (advice-add #'completing-read-multiple :filter-args #'crm-indicator)
+
+  ;; Grow and shrink minibuffer
+  ;;(setq resize-mini-windows t)
+
+  ;; Do not allow the cursor in the minibuffer prompt
+  (setq minibuffer-prompt-properties
+        '(read-only t cursor-intangible t face minibuffer-prompt))
+  (add-hook 'minibuffer-setup-hook #'cursor-intangible-mode)
+
+  ;; Enable recursive minibuffers
+  (setq enable-recursive-minibuffers t))
+
 (use-package orderless
   :ensure t
   :init (icomplete-mode) ; optional but recommended!
   :custom (completion-styles '(orderless partial-completion)))
-
-(use-package selectrum
-  :ensure t
-  :init
-  (selectrum-mode 1))
-
-(use-package prescient
-  :ensure t
-  :config
-  (prescient-persist-mode 1))
-
-(use-package selectrum-prescient
-  :ensure t
-  :init
-  (progn
-    (setq selectrum-prescient-enable-filtering nil)
-    (selectrum-prescient-mode 1)
-    (selectrum-prescient-toggle-fuzzy 1)
-    ;; Next two 'setq' lines are taken from reddit
-    ;; For more efficient highlighting (only displayed candidates are highlighted)
-    (setq orderless-skip-highlighting (lambda () selectrum-is-active))
-    (setq selectrum-highlight-candidates-function #'orderless-highlight-matches)
-    ;; reddit end
-    (setq selectrum-refine-candidates-function #'orderless-filter)
-    (setq selectrum-highlight-candidates-function #'orderless-highlight-matches)))
 
 (use-package marginalia
   :ensure t
