@@ -68,12 +68,11 @@
 (use-package embark
   :ensure t
   :init
-  (progn
-    (setq embark-action-indicator
-      (lambda (map)
-        (which-key--show-keymap "Embark" map nil nil 'no-paging)
-        #'which-key--hide-popup-ignore-command)
-      embark-become-indicator embark-action-indicator))
+  (setq embark-action-indicator
+        (lambda (map _target)
+          (which-key--show-keymap "Embark" map nil nil 'no-paging)
+          #'which-key--hide-popup-ignore-command)
+        embark-become-indicator embark-action-indicator)
   :bind (("C-c ." . embark-act)
          ("C-c ," . embark-act-noexit)))
 
