@@ -191,6 +191,7 @@
 
 (package-initialize)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
+(add-to-list 'package-archives '("nonGnu" . "https://elpa.nongnu.org/nongnu/") t)
 
 (boem-install-package-if-needed 'use-package)
 (boem-install-package-if-needed 'railscasts-theme)
