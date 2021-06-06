@@ -281,15 +281,14 @@
 
 ;;;; savehist
 (use-package savehist
-  :commands (savehist-mode)
-  :config
-  (progn
-    (setq
-     ;; save searh entries
-     savehist-additional-variables '(search ring regexp-search-ring)
-     savehist-autosave-interval 60
-     savehist-file (expand-file-name "savehist" boem-user-data-directory))
-    (savehist-mode)))
+  :hook (after-init . savehist-mode)
+  :init
+  (setq
+   ;; save searh entries
+   savehist-additional-variables '(search-ring regexp-search-ring extended-command-history)
+   savehist-autosave-interval 60
+   history-length 1000
+   savehist-file (expand-file-name "savehist" boem-user-data-directory)))
 
 ;;;; whitespace
 (use-package whitespace
