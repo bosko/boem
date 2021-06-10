@@ -50,7 +50,15 @@
  dired-listing-switches "-alh"
  dired-dwim-target t
  use-package-compute-statistics t
- scroll-preserve-screen-position t)
+ scroll-preserve-screen-position t
+ calendar-latitude 45.267136
+ calendar-longitude 19.833549
+ calendar-location-name "Нови Сад, Србија"
+ calendar-day-name-array ["недеља" "понедељак" "уторак" "среда" "четвртак" "петак" "субота"]
+ calendar-day-abbrev-array ["не" "по" "ут" "ср" "че" "пе" "су"]
+ calendar-day-header-array ["не" "по" "ут" "ср" "че" "пе" "су"]
+ calendar-month-name-array ["Јануар" "Фебруар" "Март" "Април" "Мај" "Јун" "Јул"
+                            "Август" "Септембар" "Октобар" "Новембар" "Децембар"])
 
 ;; Improve lsp-mode performances on version 27
 (if (equal emacs-major-version 27)
