@@ -175,6 +175,10 @@
   :init
   ;; Add all your customizations prior to loading the themes
   (setq modus-themes-slanted-constructs t
+        modus-themes-hl-line '(accented intense)
+        modus-themes-mode-line '(3d accented)
+        modus-themes-prompts '(background intense bold)
+        modus-themes-paren-match '(intense bold)
         modus-themes-bold-constructs nil)
   :bind ("<f5>" . modus-themes-toggle))
 
