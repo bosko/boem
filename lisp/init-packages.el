@@ -55,6 +55,13 @@
   ;; Enable recursive minibuffers
   (setq enable-recursive-minibuffers t))
 
+(use-package dired-subtree
+  :ensure t
+  :after dired
+  :config
+  (bind-key "<tab>" #'dired-subtree-toggle dired-mode-map)
+  (bind-key "<backtab>" #'dired-subtree-cycle dired-mode-map))
+
 (use-package orderless
   :ensure t
   :init (icomplete-mode) ; optional but recommended!
@@ -168,7 +175,7 @@
 (use-package wgrep
   :ensure t
   :demand t
-  :bind (("C-x C-q" . wgrep-change-to-wgrep-mode)))
+  :bind (("C-x C-q" . boem-change-to-writable-mode)))
 
 (use-package modus-themes
   :ensure

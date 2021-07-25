@@ -189,7 +189,7 @@ Code from: http://emacsredux.com/blog/2013/04/28/switch-to-previous-buffer/"
       (find-alternate-file (concat "/sudo::" file-name)))
     (goto-char p)))
 
-(defun boem/restclient ()
+(defun boem-restclient ()
   (interactive)
   (let (($buf (generate-new-buffer "*Restclient*")))
     (switch-to-buffer $buf)
@@ -197,6 +197,12 @@ Code from: http://emacsredux.com/blog/2013/04/28/switch-to-previous-buffer/"
 
 (defvar boem-org-tags '(("Project" . ?p) ("Article" . ?a) ("Book" . ?b) ("Code" . ?c) ("Encrypt". ?e))
   "Override this value by creating .boem-org-tags.el file in your home directory.")
+
+(defun boem-change-to-writable-mode ()
+  (interactive)
+  (if (eq 'grep-mode (buffer-local-value 'major-mode (current-buffer)))
+      (wgrep-change-to-wgrep-mode)
+    (wdired-change-to-wdired-mode)))
 
 (provide 'init-basic)
 
