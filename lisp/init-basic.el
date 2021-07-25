@@ -172,7 +172,7 @@ is true refresh is skipped"
 (add-hook 'font-lock-mode-hook 'boem-try-to-add-imenu)
 
 (defun boem-switch-to-previous-buffer ()
-  "Switch to previously open buffer.
+  "Switch to previously opened buffer.
 Repeated invocations toggle between the two most recently open buffers.
 Code from: http://emacsredux.com/blog/2013/04/28/switch-to-previous-buffer/"
   (interactive)
