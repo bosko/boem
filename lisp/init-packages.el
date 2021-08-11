@@ -1576,17 +1576,9 @@
               `(("t" "Todo" entry (file+headline ,(expand-file-name "todos.org" boem-user-org-directory) "Tasks")
                  "* TODO %?\n  %i\n  %a")
                 ("j" "Journal" entry (file+datetree ,(expand-file-name "journal.org" boem-user-org-directory))
-                 "* %?\Zapisano  %U\n  %i\n  %a")))))
-
-    ;; (use-package org-journal
-    ;;   :ensure t
-    ;;   :commands (org-journal-new-entry)
-    ;;   :init
-    ;;   (progn
-    ;;     (setq
-    ;;      org-journal-dir
-    ;;      (expand-file-name "journal/" boem-user-org-directory)
-    ;;      org-journal-file-pattern "[0-9]\\{8\\}$")))
+                 "* %?\Zapisano  %U\n  %i\n  %a")
+                ("l" "Link" plain (file+headline ,(expand-file-name "za-citanje.org" boem-user-org-directory) "Nepročitani tabovi")
+                 "  - %c %U")))))
 
     (use-package ob
       :after (org)
