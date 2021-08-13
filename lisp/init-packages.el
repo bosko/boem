@@ -76,11 +76,25 @@
 (use-package embark
   :ensure t
   :init
-  (setq embark-action-indicator
-        (lambda (map _target)
-          (which-key--show-keymap "Embark" map nil nil 'no-paging)
-          #'which-key--hide-popup-ignore-command)
-        embark-become-indicator embark-action-indicator)
+  (progn
+    (defun embark-which-key-indicator ()
+      "An embark indicator that displays keymaps using which-key.
+The which-key help message will show the type and value of the
+current target followed by an ellipsis if there are further
+targets."
+      (lambda (&optional keymap targets prefix)
+        (if (null keymap)
+            (kill-buffer which-key--buffer)
+          (which-key--show-keymap
+           (if (eq (caar targets) 'embark-become)
+               "Become"
+             (format "Act on %s '%s'%s"
+                     (caar targets)
+                     (embark--truncate-target (cdar targets))
+                     (if (cdr targets) "…" "")))
+           (if prefix (lookup-key keymap prefix) keymap)
+           nil nil t))))
+    (setq embark-indicator #'embark-which-key-indicator))
   :bind (("C-c ." . embark-act)
          ("C-c ," . embark-act-noexit)))
 
@@ -166,11 +180,12 @@
 
 (use-package embark-consult
   :ensure t
+  :after (embark consult)
   :demand t ; only necessary if you have the hook below
   ;; if you want to have consult previews as you move around an
   ;; auto-updating embark collect buffer
   :hook
-  (embark-collect-mode . embark-consult-preview-minor-mode))
+  (embark-collect-mode . embark-consult-preview-at-point-mode))
 
 (use-package wgrep
   :ensure t
