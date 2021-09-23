@@ -138,6 +138,7 @@
           '(lambda () (setq show-trailing-whitespace nil)))
 (add-hook 'eww-mode-hook
           '(lambda () (setq show-trailing-whitespace nil)))
+(add-hook 'dired-mode-hook #'dired-hide-details-mode)
 
 ;; "Kill up to, but not including ARGth occurrence of CHAR. (fn arg char)"
 (autoload 'zap-up-to-char "misc" 'interactive)
