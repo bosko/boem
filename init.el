@@ -240,8 +240,8 @@
 
 (put 'narrow-to-region 'disabled nil)
 
-(if (find-font (font-spec :name "IBM Plex Mono"))
-    (set-frame-font "IBM Plex Mono-12" t t))
+(if (find-font (font-spec :name "Ubuntu Mono"))
+    (set-frame-font "Ubuntu Mono-14" t t))
 
 ;; Make gc pauses faster by decreasing the threshold.
 (setq gc-cons-threshold (* 2 1000 1000))
