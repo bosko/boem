@@ -97,7 +97,7 @@
 (put 'upcase-region 'disabled nil)
 
 (setq-default ;; xdisp.c
- cursor-type 'bar
+ cursor-type 'box
  tab-width 2
  indent-tabs-mode nil
  frame-title-format "emacs - %b"
@@ -129,15 +129,19 @@
 
 (add-hook 'eshell-mode-hook
           '(lambda () (setq show-trailing-whitespace nil)))
+(add-hook 'term-mode-hook
+          '(lambda () (setq show-trailing-whitespace nil)))
+(add-hook 'eww-mode-hook
+          '(lambda () (setq show-trailing-whitespace nil)))
+(add-hook 'erc-mode-hook
+          '(lambda () (setq show-trailing-whitespace nil)))
+
 (add-hook 'sql-interactive-mode-hook
           '(lambda ()
              (boem-set-proper-sql-prompt-regex)
              (setq show-trailing-whitespace nil)
              (toggle-truncate-lines)))
-(add-hook 'term-mode-hook
-          '(lambda () (setq show-trailing-whitespace nil)))
-(add-hook 'eww-mode-hook
-          '(lambda () (setq show-trailing-whitespace nil)))
+
 (add-hook 'dired-mode-hook #'dired-hide-details-mode)
 
 ;; "Kill up to, but not including ARGth occurrence of CHAR. (fn arg char)"
@@ -201,7 +205,6 @@
 
 (package-initialize)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
-(add-to-list 'package-archives '("nonGnu" . "https://elpa.nongnu.org/nongnu/") t)
 
 (boem-install-package-if-needed 'use-package)
 (boem-install-package-if-needed 'railscasts-theme)
