@@ -64,8 +64,10 @@
 
 (use-package orderless
   :ensure t
-  :init (icomplete-mode) ; optional but recommended!
-  :custom (completion-styles '(orderless partial-completion)))
+  :init
+  (setq completion-styles '(orderless)
+        completion-category-defaults nil
+        completion-category-overrides '((file (styles partial-complete)))))
 
 (use-package marginalia
   :ensure t
@@ -75,28 +77,21 @@
 ;;;; embark
 (use-package embark
   :ensure t
+  :after (which-key)
   :init
-  (progn
-    (defun embark-which-key-indicator ()
-      "An embark indicator that displays keymaps using which-key.
-The which-key help message will show the type and value of the
-current target followed by an ellipsis if there are further
-targets."
-      (lambda (&optional keymap targets prefix)
-        (if (null keymap)
-            (kill-buffer which-key--buffer)
-          (which-key--show-keymap
-           (if (eq (caar targets) 'embark-become)
-               "Become"
-             (format "Act on %s '%s'%s"
-                     (caar targets)
-                     (embark--truncate-target (cdar targets))
-                     (if (cdr targets) "…" "")))
-           (if prefix (lookup-key keymap prefix) keymap)
-           nil nil t))))
-    (setq embark-indicator #'embark-which-key-indicator))
+  (setq embark-action-indicator
+        (lambda (map _target)
+          (which-key--show-keymap "Embark" map nil nil 'no-paging)
+          #'which-key--hide-popup-ignore-command)
+        embark-become-indicator embark-action-indicator)
   :bind (("C-c ." . embark-act)
-         ("C-c ," . embark-act-noexit)))
+         ("C-c ," . embark-act-noexit))
+  :config
+  ;; Hide the mode line of the Embark live/completions buffers
+  (add-to-list 'display-buffer-alist
+               '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
+                 nil
+                 (window-parameters (mode-line-format . none)))))
 
 ;;;; consult
 (use-package consult
@@ -1449,10 +1444,10 @@ targets."
   :mode (("\\.json\\'" . json-mode)
          ("\\.ipynb\\'" . json-mode))
   :config
-  (progn
-    (add-hook 'json-mode-hook
-              #'(lambda ()
-                  (setq-local js-indent-level 2)))))
+  (add-hook 'json-mode-hook
+            #'(lambda ()
+                (setq-local js-indent-level 2)
+                (hs-minor-mode))))
 
 ;;;; AsciiDoc
 (use-package adoc-mode
@@ -1725,8 +1720,8 @@ targets."
   :commands (which-key)
   :ensure t
   :init
-  (progn
-    (add-hook 'after-init-hook 'which-key-mode)))
+  (add-hook 'after-init-hook 'which-key-mode)
+  (setq which-key-idle-delay 0.5))
 
 (use-package websocket
   :ensure t
