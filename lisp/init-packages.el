@@ -1535,6 +1535,7 @@
   :init
   (progn
     (setq
+     org-startup-folded t
      org-directory boem-user-org-directory
      org-src-fontify-natively t)
     ;; (setq org-refile-targets
