@@ -1538,7 +1538,8 @@
      org-startup-folded t
      org-directory boem-user-org-directory
      org-src-fontify-natively t
-     org-latex-create-formula-image-program 'dvisvgm)
+     org-preview-latex-default-process 'dvisvgm
+     org-format-latex-options (plist-put org-format-latex-options :scale 1.7))
     ;; (setq org-refile-targets
     ;;       '((org-agenda-files :regexp . "Tasks")))
     (setq org-refile-targets
