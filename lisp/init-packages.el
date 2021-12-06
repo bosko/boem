@@ -1537,7 +1537,8 @@
     (setq
      org-startup-folded t
      org-directory boem-user-org-directory
-     org-src-fontify-natively t)
+     org-src-fontify-natively t
+     org-latex-create-formula-image-program 'dvisvgm)
     ;; (setq org-refile-targets
     ;;       '((org-agenda-files :regexp . "Tasks")))
     (setq org-refile-targets
