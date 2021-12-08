@@ -1532,14 +1532,15 @@
              org-agenda)
   :mode (("\\.org_archive\\'" . org-mode)
          ("\\.org\\'" . org-mode))
+  :config
+  (setq org-format-latex-options (plist-put org-format-latex-options :scale 1.7))
   :init
   (progn
     (setq
      org-startup-folded t
      org-directory boem-user-org-directory
      org-src-fontify-natively t
-     org-preview-latex-default-process 'dvisvgm
-     org-format-latex-options (plist-put org-format-latex-options :scale 1.7))
+     org-preview-latex-default-process 'dvisvgm)
     ;; (setq org-refile-targets
     ;;       '((org-agenda-files :regexp . "Tasks")))
     (setq org-refile-targets
