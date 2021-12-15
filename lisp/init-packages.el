@@ -445,20 +445,9 @@
   :commands (gist-region gist-buffer gist-region-or-buffer
                          gist-region-or-buffer-private gist-list))
 
-;;;; gitignore-mode
-(use-package gitignore-mode
-  :commands (gitignore-mode)
-  :ensure t
-  :mode (("/\\.gitignore_global\\'" . gitignore-mode)
-         ("/\\.gitignore\\'" . gitignore-mode)
-         ("/\\.git/info/exclude\\'" . gitignore-mode)))
-
-;;;; gitconfig-mode
-(use-package gitconfig-mode
-  :commands (gitconfig-mode)
-  :ensure t
-  :mode (("/\\.gitconfig\\'" . gitconfig-mode)
-         ("/\\.git/config\\'" . gitconfig-mode)))
+;;;; git-modes
+(use-package git-modes
+  :ensure t)
 
 ;;;; git-timemachine
 (use-package git-timemachine
