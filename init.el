@@ -20,6 +20,64 @@
                    (file-name-directory load-file-name)))
 (add-to-list 'load-path (expand-file-name "lisp" boem-init-root))
 
+(defvar boem-custom-daily-agenda
+  ;; NOTE 2021-12-08: Specifying a match like the following does not
+  ;; work.
+  ;;
+  ;; tags-todo "+PRIORITY=\"A\""
+  ;;
+  ;; So we match everything and then skip entries with
+  ;; `org-agenda-skip-function'.
+  `((tags-todo "*"
+               ((org-agenda-skip-function
+                 `(org-agenda-skip-entry-if
+                   'notregexp ,(format "\\[#%s\\]" (char-to-string org-priority-highest))))
+                (org-agenda-block-separator nil)
+                (org-agenda-overriding-header "Важни задаци\n")))
+    (agenda "" ((org-agenda-time-grid nil)
+                (org-agenda-start-on-weekday nil)
+                (org-agenda-span 1)
+                (org-agenda-show-all-dates nil)
+                (org-scheduled-past-days 365)
+                ;; Excludes today's scheduled items
+                (org-scheduled-delay-days 1)
+                (org-agenda-block-separator nil)
+                (org-agenda-entry-types '(:scheduled))
+                (org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))
+                (org-agenda-day-face-function (lambda (date) 'org-agenda-date))
+                (org-agenda-format-date "")
+                (org-agenda-overriding-header "\nПрошли неурађени задаци")))
+    (agenda "" ((org-agenda-span 1)
+                (org-deadline-warning-days 0)
+                (org-agenda-block-separator nil)
+                (org-scheduled-past-days 0)
+                ;; We don't need the `org-agenda-date-today'
+                ;; highlight because that only has a practical
+                ;; utility in multi-day views.
+                (org-agenda-day-face-function (lambda (date) 'org-agenda-date))
+                (org-agenda-format-date "%A %-e %B %Y")
+                (org-agenda-overriding-header "\nДанашњи распоред\n")))
+    (agenda "" ((org-agenda-start-on-weekday nil)
+                (org-agenda-start-day "+1d")
+                (org-agenda-span 5)
+                (org-deadline-warning-days 0)
+                (org-agenda-block-separator nil)
+                (org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))
+                (org-agenda-overriding-header "\nНаредних пет дана\n")))
+    (agenda "" ((org-agenda-time-grid nil)
+                (org-agenda-start-on-weekday nil)
+                ;; We don't want to replicate the previous section's
+                ;; three days, so we start counting from the day after.
+                (org-agenda-start-day "+4d")
+                (org-agenda-span 14)
+                (org-agenda-show-all-dates nil)
+                (org-deadline-warning-days 0)
+                (org-agenda-block-separator nil)
+                (org-agenda-entry-types '(:deadline))
+                (org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))
+                (org-agenda-overriding-header "\nПредстојећи рокови (+14д)\n"))))
+  "Custom agenda for use in `org-agenda-custom-commands'.")
+
 (message "%s, starting up Emacs" boem-current-user)
 
 (load "init-basic")

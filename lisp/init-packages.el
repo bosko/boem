@@ -1556,11 +1556,16 @@
       :commands (org-agenda)
       :bind ("C-c o a" . org-agenda)
       :config
-      (progn
-        (setq org-agenda-time-grid (quote
-                             ((daily today remove-match)
-                              (0900 1100 1300 1500 1700)
-                              "......" "----------------")))))
+      (setq
+       org-agenda-files (directory-files boem-user-org-directory t "org$")
+       org-agenda-include-diary nil
+       org-agenda-time-leading-zero t
+       org-agenda-time-grid (quote
+                             ((daily today require-timed)
+                              (0700 0900 1100 1300 1500 1700 1900 2100)
+                              " ....." "-----------------"))
+       org-agenda-custom-commands `(("A" "Daily agenda and top priority tasks"
+                                     ,boem-custom-daily-agenda))))
 
     ;; After loading this package pinentry must be started
     ;; with (pinentry-start) and line
@@ -1631,8 +1636,6 @@
      org-global-properties '(("Effort_ALL". "0 0:30 1:00 2:00 3:00 4:00 6:00 8:00"))
      org-columns-default-format "%50ITEM(Task) %6Effort{:} %10CLOCKSUM %SCHEDULED"
      org-tag-alist boem-org-tags
-     org-agenda-files (directory-files boem-user-org-directory t "org$")
-     org-agenda-include-diary nil
      org-ellipsis "…"
      org-clock-sound t
      org-enforce-todo-dependencies t
