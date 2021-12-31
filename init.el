@@ -183,7 +183,23 @@
    ".pyo" ".idx" ".lof" ".lot" ".glo" ".blg" ".bbl" ".cp" ".cps"
    ".fn" ".fns" ".ky" ".kys" ".pg" ".pgs" ".tp" ".tps" ".vr"
    ".vrs" ".sass-cache" ".min.js" "-min.js" ".min.css" "-min.css"
-   ".hi" ".pyx" ".map"))
+   ".hi" ".pyx" ".map")
+ mode-line-format '("%e"
+                    mode-line-front-space
+                    mode-line-mule-info
+                    mode-line-client
+                    mode-line-modified
+                    mode-line-remote
+                    mode-line-frame-identification
+                    mode-line-buffer-identification
+                    "  "
+                    mode-line-position
+                    mode-line-modes
+                    "  "
+                    (vc-mode vc-mode)
+                    "  "
+                    mode-line-misc-info
+                    mode-line-end-spaces))
 
 (add-hook 'eshell-mode-hook
           '(lambda () (setq show-trailing-whitespace nil)))
