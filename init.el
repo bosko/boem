@@ -298,10 +298,7 @@
           ("rails" "c")
           ("sudo" "vi"))))
 
-(if (display-graphic-p)
-    (progn
-      (load-theme 'modus-vivendi t))
-  (load-theme 'base16-gruvbox-light-hard t))
+(load-theme 'modus-vivendi t)
 
 (load custom-file 'no-error)
 

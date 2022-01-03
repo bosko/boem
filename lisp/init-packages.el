@@ -217,11 +217,6 @@
   (progn
     (add-hook 'dired-mode-hook 'all-the-icons-dired-mode)))
 
-(use-package base16-theme
-  :ensure t
-  :config
-  (setq base16-theme-256-color-source "colors"))
-
 (use-package dash
   :ensure t
   :defer t
