@@ -908,7 +908,16 @@
 (use-package elixir-mode
   :commands (elixir-mode)
   :ensure t
-  :mode (("\\.exs\\'" . elixir-mode)) ("\\.ex\\'" . elixir-mode))
+  :mode (("\\.exs\\'" . elixir-mode)) ("\\.ex\\'" . elixir-mode)
+  :init
+  (eval-after-load "hideshow"
+      '(add-to-list 'hs-special-modes-alist
+                    `(elixir-mode
+                      ,(rx (or "def" "defp" "defmodule" "do" "{" "[" "if" "else" "unless")) ; Block start
+                      ,(rx (or "}" "]" "end"))                       ; Block end
+                      ,(rx (or "#"))                        ; Comment start
+                      )))
+  (add-hook 'elixir-mode-hook (lambda() (hs-minor-mode))))
 
 ;;;; yasnippet
 (use-package yasnippet
