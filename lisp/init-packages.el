@@ -913,7 +913,7 @@
   (eval-after-load "hideshow"
       '(add-to-list 'hs-special-modes-alist
                     `(elixir-mode
-                      ,(rx (or "def" "defp" "defmodule" "do" "{" "[" "if" "else" "unless")) ; Block start
+                      ,(rx (or "def" "defp" "defmodule" "do" "{" "[" "if" "else" "unless" "describe" "setup" "test")) ; Block start
                       ,(rx (or "}" "]" "end"))                       ; Block end
                       ,(rx (or "#"))                        ; Comment start
                       )))
