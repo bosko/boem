@@ -205,6 +205,7 @@
 
 (use-package all-the-icons
   :ensure t
+  :if (display-graphic-p)
   :commands (dired
              consult-buffer
              find-file))
@@ -212,6 +213,7 @@
 (use-package all-the-icons-dired
   :after (dired)
   :ensure t
+  :if (display-graphic-p)
   :init
   (progn
     (add-hook 'dired-mode-hook 'all-the-icons-dired-mode)))
