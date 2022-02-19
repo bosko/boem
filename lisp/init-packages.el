@@ -66,8 +66,7 @@
   :ensure t
   :init
   (setq completion-styles '(orderless)
-        completion-category-defaults nil
-        completion-category-overrides '((file (styles partial-complete)))))
+        completion-category-defaults nil))
 
 (use-package marginalia
   :ensure t
