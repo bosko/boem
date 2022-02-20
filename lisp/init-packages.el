@@ -90,7 +90,9 @@
   (add-to-list 'display-buffer-alist
                '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
                  nil
-                 (window-parameters (mode-line-format . none)))))
+                 (window-parameters (mode-line-format . none))))
+  (customize-set-variable 'embark-verbose-indicator-display-action
+                          '(display-buffer-at-bottom (window-height . fit-window-to-buffer))))
 
 ;;;; consult
 (use-package consult
