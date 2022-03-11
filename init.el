@@ -118,9 +118,8 @@
  calendar-month-name-array ["Јануар" "Фебруар" "Март" "Април" "Мај" "Јун" "Јул"
                             "Август" "Септембар" "Октобар" "Новембар" "Децембар"])
 
-;; Improve lsp-mode performances on version 27
-(if (equal emacs-major-version 27)
-    (setq read-process-output-max (* 1024 1024)))
+;; Improve lsp-mode performances
+(setq read-process-output-max (* 1024 1024))
 
 ;; Add following two lines in ~/.gnupg/gpg-agent.conf
 ;; allow-emacs-pinentry
