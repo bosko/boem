@@ -815,11 +815,11 @@
          ("\\.rhtml\\'" . web-mode) ("\\.mustache\\'" . web-mode)
          ("\\.hbs\\'" . web-mode)
          ("/\\(views\\|html\\|theme\\|templates\\)/.*\\.php\\'" . web-mode)
-         ("\\.l?eex\\'" . web-mode) ("\\.tsx" . web-mode))
+         ("\\.html\\.heex\\'" . web-mode) ("\\.tsx" . web-mode))
   :init
   (progn
-    (setq web-mode-enable-auto-pairing nil)
     (setq
+     web-mode-enable-auto-pairing nil
      web-mode-comment-style 2
      web-mode-indent-style 2
      web-mode-enable-whitespaces nil
@@ -827,7 +827,8 @@
      web-mode-enable-part-face t
      web-mode-enable-heredoc-fontification t
      web-mode-enable-comment-keywords t
-     web-mode-enable-current-element-highlight t))
+     web-mode-enable-current-element-highlight t
+     web-mode-engines-alist '(("elixir" . "\\.html\\.heex\\'"))))
   :config
   (progn
     (bind-key "C-c ;" 'web-mode-comment-or-uncomment web-mode-map)
@@ -905,6 +906,7 @@
         lsp-ui-doc-enable nil
         lsp-ui-flycheck-enable t
         lsp-ui-imenu-enable t
+        lsp-lens-enable nil
         lsp-ui-sideline-ignore-duplicate t))
 
 ;;; Elixir
