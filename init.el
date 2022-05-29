@@ -284,6 +284,9 @@
 
 (require 'use-package)
 
+(if (find-font (font-spec :name "Ubuntu Mono"))
+    (set-frame-font "Ubuntu Mono-14" t t))
+
 (load "init-packages")
 
 (if (string-equal system-type "darwin")
@@ -296,8 +299,6 @@
         '(("git" "log" "l" "lol" "diff" "d" "dc" "show")
           ("rails" "c")
           ("sudo" "vi"))))
-
-(load-theme 'modus-vivendi t)
 
 (load custom-file 'no-error)
 
@@ -312,9 +313,6 @@
          gcs-done)
 
 (put 'narrow-to-region 'disabled nil)
-
-(if (find-font (font-spec :name "Ubuntu Mono"))
-    (set-frame-font "Ubuntu Mono-14" t t))
 
 ;; Make gc pauses faster by decreasing the threshold.
 (setq gc-cons-threshold (* 2 1000 1000))
