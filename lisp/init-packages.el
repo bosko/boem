@@ -600,16 +600,18 @@
          ("C-h M-p" . helm-dash-at-point)))
 
 (use-package company
-  :commands (company-mode)
   :ensure t
-  :config
+  :init
   (progn
     (setq
      company-idle-delay 0.5
      company-tooltip-limit 10
      company-minimum-prefix-length 2
-     company-tooltip-flip-when-above t)
-    (global-company-mode))
+     company-tooltip-flip-when-above t
+     company-require-match 'never)
+    (setq-default company-dabbrev-other-buffers 'all
+                  company-tooltip-align-annotations t)
+    (global-company-mode t))
   :diminish "co")
 
 ;;;; which-func
@@ -885,35 +887,9 @@
     (setq exec-path (cons "/usr/local/otp/bin" exec-path))
     (require 'erlang-start))))
 
-;;; LSP
-(use-package lsp-mode
-  :bind ("C-c C-h" . lsp-describe-thing-at-point)
-  :commands (lsp lsp-deferred)
-  :ensure t
-  :diminish lsp-mode
-  :hook ((elixir-mode . lsp-deferred)
-         (js2-mode . lsp-deferred)
-         (typescript . lsp-deferred)
-         (lsp-mode . lsp-enable-which-key-integration))
-  :init
-  (add-to-list 'exec-path "/Users/bosko/Code/elixir/elixir-ls/release")
-  :config
-  (progn
-    (setq lsp-enable-file-watchers nil)))
-
-(use-package lsp-ui
-  :commands lsp-ui-mode
-  :ensure t
-  :config
-  (setq lsp-ui-sideline-enable nil
-        lsp-ui-doc-enable nil
-        lsp-ui-flycheck-enable t
-        lsp-ui-imenu-enable t
-        lsp-lens-enable nil
-        lsp-ui-sideline-ignore-duplicate t))
-
 ;;; Elixir
 (use-package elixir-mode
+  :after (company)
   :commands (elixir-mode)
   :ensure t
   :mode (("\\.exs\\'" . elixir-mode)) ("\\.ex\\'" . elixir-mode)
@@ -925,7 +901,17 @@
                       ,(rx (or "}" "]" "end"))                       ; Block end
                       ,(rx (or "#"))                        ; Comment start
                       )))
-  (add-hook 'elixir-mode-hook (lambda() (hs-minor-mode))))
+  (add-hook 'elixir-mode-hook (lambda() (hs-minor-mode)))
+  (add-hook 'elixir-mode-hook
+            (lambda () (add-hook 'before-save-hook 'elixir-format))))
+
+(use-package eglot
+  :after (elixir-mode)
+  :config
+  (add-to-list 'eglot-server-programs '(elixir-mode "~/Code/elixir/elixir-ls/release/language_server.sh"))
+
+  :init
+  (add-hook 'elixir-mode-hook 'eglot-ensure))
 
 ;;;; yasnippet
 (use-package yasnippet
