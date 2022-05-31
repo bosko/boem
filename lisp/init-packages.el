@@ -200,7 +200,9 @@
         modus-themes-bold-constructs nil)
   (modus-themes-load-themes)
   :config
-  (modus-themes-load-vivendi)
+  (if (eq nil (display-graphic-p))
+      (modus-themes-load-operandi)
+      (modus-themes-load-vivendi))
   :bind ("<f5>" . modus-themes-toggle))
 
 (use-package neotree
