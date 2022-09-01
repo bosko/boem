@@ -116,7 +116,8 @@
  calendar-day-abbrev-array ["не" "по" "ут" "ср" "че" "пе" "су"]
  calendar-day-header-array ["не" "по" "ут" "ср" "че" "пе" "су"]
  calendar-month-name-array ["Јануар" "Фебруар" "Март" "Април" "Мај" "Јун" "Јул"
-                            "Август" "Септембар" "Октобар" "Новембар" "Децембар"])
+                            "Август" "Септембар" "Октобар" "Новембар" "Децембар"]
+ view-read-only t)
 
 ;; Improve lsp-mode performances
 (setq read-process-output-max (* 1024 1024))
