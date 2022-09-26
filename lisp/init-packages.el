@@ -589,7 +589,6 @@
     (recentf-mode 1))
   )
 
-
 (use-package helm-dash
   :commands (helm-dash)
   :ensure t
@@ -601,20 +600,11 @@
   :bind (("C-h M-d" . helm-dash)
          ("C-h M-p" . helm-dash-at-point)))
 
-(use-package company
+;;; Completion at point
+(use-package corfu
   :ensure t
   :init
-  (progn
-    (setq
-     company-idle-delay 0.5
-     company-tooltip-limit 10
-     company-minimum-prefix-length 2
-     company-tooltip-flip-when-above t
-     company-require-match 'never)
-    (setq-default company-dabbrev-other-buffers 'all
-                  company-tooltip-align-annotations t)
-    (global-company-mode t))
-  :diminish "co")
+  (global-corfu-mode))
 
 ;;;; which-func
 (use-package which-func
