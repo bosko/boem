@@ -284,8 +284,8 @@
 
 (require 'use-package)
 
-(if (find-font (font-spec :name "Ubuntu Mono"))
-    (set-frame-font "Ubuntu Mono-14" t t))
+(if (find-font (font-spec :name "JuliaMono"))
+    (set-frame-font "JuliaMono-12" t t))
 
 (load "init-packages")
 
