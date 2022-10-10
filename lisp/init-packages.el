@@ -202,7 +202,9 @@
   :config
   (if (eq nil (display-graphic-p))
       (modus-themes-load-operandi)
-      (modus-themes-load-vivendi))
+    (progn
+      (modus-themes-load-vivendi)
+      (set-face-attribute 'modus-themes-completion-selected nil :background "gray34")))
   :bind ("<f5>" . modus-themes-toggle))
 
 (use-package neotree
@@ -867,9 +869,9 @@
   (let ((asdf-erl (shell-command-to-string "asdf which erl")))
     (if (cl-search "command not found" asdf-erl)
         (progn
-          (add-to-list 'load-path "/usr/local/lib/erlang/lib/tools-3.3/emacs")
-          (setq erlang-root-dir "/usr/local/lib/erlang")
-          (setq exec-path (cons "/usr/local/lib/erlang/bin" exec-path))
+          (add-to-list 'load-path "/Users/bosko/.asdf/installs/erlang/25.0.4/lib/tools-3.5.3/emacs/")
+          (setq erlang-root-dir "/Users/bosko/.asdf/installs/erlang/25.0.4/")
+          (setq exec-path (cons "/Users/bosko/.asdf/installs/erlang/25.0.4/bin" exec-path))
           (require 'erlang-start))
       (progn
         (setq erlang-root-dir (substring asdf-erl 0 (cl-search "/bin/erl" asdf-erl)))
@@ -908,10 +910,10 @@
             (lambda () (add-hook 'before-save-hook 'elixir-format))))
 
 (use-package eglot
+  :ensure t
   :after (elixir-mode)
   :config
   (add-to-list 'eglot-server-programs '(elixir-mode "~/Code/elixir/elixir-ls/release/language_server.sh"))
-
   :init
   (add-hook 'elixir-mode-hook 'eglot-ensure))
 
