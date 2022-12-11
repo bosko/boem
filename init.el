@@ -89,7 +89,12 @@
  inhibit-startup-message t
  backup-directory-alist `((".*" . ,temporary-file-directory))
  auto-save-file-name-transforms `((".*" ,temporary-file-directory t))
+ ;; Use data directory for storing some packages data
  custom-file (expand-file-name "custom.el" boem-user-data-directory)
+ transient-history-file (expand-file-name "transient/history.el" boem-user-data-directory)
+ org-persist-directory (expand-file-name "org-persist" boem-user-data-directory)
+ project-list-file (expand-file-name "projects" boem-user-data-directory)
+ newsticker-dir (expand-file-name "newsticker" boem-user-data-directory)
  tags-revert-without-query t
  ;; Set standard indent to 2 rather then 4
  standard-indent 2
