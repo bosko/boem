@@ -8,6 +8,19 @@
 (if (< emacs-major-version 27)
     (require 'cl))
 
+(use-package dash
+  :ensure t
+  :defer t
+  :init
+  (progn
+    (eval-after-load 'dash '(dash-enable-font-lock))))
+
+(use-package s :ensure t)
+(use-package f :ensure t)
+(use-package diminish
+  :ensure t
+  :commands (diminish))
+
 ;;; Code:
 
 (require 'em-term)
@@ -25,6 +38,11 @@
 (use-package docker-cli
   :commands (docker-cli)
   :ensure t)
+
+(use-package dash-docs
+  :ensure t
+  :config
+  (mapc #'(lambda (doc) (dash-docs-activate-docset doc)) (dash-docs-installed-docsets)))
 
 ;; Enable vertico
 (use-package vertico
@@ -179,6 +197,12 @@
   :bind (:map flycheck-command-map
               ("!" . consult-flycheck)))
 
+(use-package consult-dash
+  :bind (("M-s d" . consult-dash))
+  :config
+  ;; Use the symbol at point as initial search term
+  (consult-customize consult-dash :initial (thing-at-point 'symbol)))
+
 (use-package embark-consult
   :ensure t
   :after (embark consult)
@@ -232,18 +256,6 @@
   (progn
     (add-hook 'dired-mode-hook 'all-the-icons-dired-mode)))
 
-(use-package dash
-  :ensure t
-  :defer t
-  :init
-  (progn
-    (eval-after-load 'dash '(dash-enable-font-lock))))
-
-(use-package s :ensure t)
-(use-package f :ensure t)
-(use-package diminish
-  :ensure t
-  :commands (diminish))
 (use-package discover-my-major
   :ensure t
   :commands (discover-my-major discover-my-mode))
@@ -595,18 +607,6 @@
                             "TAGS" "ido.hist" ".gz" "sql-out-*"))
     (recentf-mode 1))
   )
-
-
-(use-package helm-dash
-  :commands (helm-dash)
-  :ensure t
-  :config
-  (progn
-    (setq helm-dash-browser-func 'eww)
-    (setq helm-dash-docsets-path (expand-file-name "~/.docsets"))
-    (setq helm-dash-common-docsets '("Ruby" "Ruby on Rails" "Nginx" "JavaScript" "Elixir" "Erlang" "ElasticSearch" "Emacs Lisp" "Julia" "MongoDB" "PostgreSQL")))
-  :bind (("C-h M-d" . helm-dash)
-         ("C-h M-p" . helm-dash-at-point)))
 
 (use-package company
   :ensure t
