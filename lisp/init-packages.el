@@ -41,6 +41,8 @@
 
 (use-package dash-docs
   :ensure t
+  :init
+  (setq dash-docs-enable-debugging nil)
   :config
   (mapc #'(lambda (doc) (dash-docs-activate-docset doc)) (dash-docs-installed-docsets)))
 
