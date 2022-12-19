@@ -229,7 +229,7 @@
 (autoload 'inf-ruby-minor-mode "inf-ruby" "Run an inferior Ruby process" t)
 (add-hook 'ruby-mode-hook 'inf-ruby-minor-mode)
 
-(global-set-key (kbd "M-o d") 'boem-duplicate-line-or-region)
+(global-set-key (kbd "M-o d") 'duplicate-dwim)
 (global-set-key (kbd "M-o b") 'boem-switch-to-previous-buffer)
 (global-set-key (kbd "M-o e") 'boem-pop-eshell-bottom)
 (global-set-key (kbd "M-o r") 'boem-restclient)

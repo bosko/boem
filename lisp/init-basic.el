@@ -131,21 +131,6 @@ is true refresh is skipped"
   (interactive)
   (ansi-term (getenv "SHELL")))
 
-(defun boem-duplicate-line-or-region ()
-  (interactive)
-  (let ((string "")  (end nil))
-    (if (use-region-p)
-        (progn
-          (setq end (region-end))
-          (setq string (buffer-substring-no-properties (region-beginning) end))
-          (goto-char end))
-      (progn
-        (setq end (line-end-position)
-              string (buffer-substring-no-properties (line-beginning-position) end))
-        (goto-char end)
-        (newline)))
-    (insert string)))
-
 (defun boem-kill-user-buffers ()
   "Kills all opened buffers except *scratch* and *Messages*"
   (interactive)
