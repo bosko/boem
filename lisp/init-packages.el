@@ -1583,9 +1583,14 @@
            (css . t)
            (sql . t)
            (js . t)
-           (restclient . t)))))
+           (restclient . t)
+           (graphql . t)))))
 
     (use-package ob-restclient
+      :ensure t
+      :after (ob))
+
+    (use-package ob-graphql
       :ensure t
       :after (ob))
 
