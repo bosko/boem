@@ -31,9 +31,7 @@
   :init
   (progn
     (when (memq window-system '(mac ns x))
-      (exec-path-from-shell-initialize))
-    )
-)
+      (exec-path-from-shell-initialize))))
 
 (use-package docker-cli
   :commands (docker-cli)
@@ -90,8 +88,9 @@
 (use-package orderless
   :ensure t
   :init
-  (setq completion-styles '(orderless)
-        completion-category-defaults nil))
+  (setq completion-styles '(orderless basic)
+        completion-category-defaults nil
+        completion-category-overrides '((file (styles . (partial-completion))) (eglot (styles orderless)))))
 
 (use-package marginalia
   :ensure t
@@ -610,20 +609,36 @@
     (recentf-mode 1))
   )
 
-(use-package company
-  :ensure t
+(use-package corfu
+  :custom
+  (corfu-cycle t)           ;; Enable cycling for `corfu-next/previous'
+  (corfu-preselect 'prompt) ;; Always preselect the prompt
+
+  :config
+  (defun corfu-move-to-minibuffer ()
+    (interactive)
+    (let ((completion-extra-properties corfu--extra)
+          completion-cycle-threshold completion-cycling)
+      (apply #'consult-completion-in-region completion-in-region--data)))
+
+  ;; Use TAB for cycling, default is `corfu-complete'.
+  :bind
+  (:map corfu-map
+        ("TAB" . corfu-next)
+        ([tab] . corfu-next)
+        ("S-TAB" . corfu-previous)
+        ([backtab] . corfu-previous)
+        ("<escape>" . corfu-quit)
+        ("M-m" . corfu-move-to-minibuffer))
+
   :init
-  (progn
-    (setq
-     company-idle-delay 0.5
-     company-tooltip-limit 10
-     company-minimum-prefix-length 2
-     company-tooltip-flip-when-above t
-     company-require-match 'never)
-    (setq-default company-dabbrev-other-buffers 'all
-                  company-tooltip-align-annotations t)
-    (global-company-mode t))
-  :diminish "co")
+  (use-package corfu-terminal
+    :ensure t)
+
+  (unless (display-graphic-p)
+    (corfu-terminal-mode +1))
+
+  (global-corfu-mode))
 
 ;;;; which-func
 (use-package which-func
@@ -900,7 +915,6 @@
 
 ;;; Elixir
 (use-package elixir-mode
-  :after (company)
   :commands (elixir-mode)
   :ensure t
   :mode (("\\.exs\\'" . elixir-mode)) ("\\.ex\\'" . elixir-mode)
