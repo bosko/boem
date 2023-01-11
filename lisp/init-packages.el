@@ -201,6 +201,7 @@
               ("!" . consult-flycheck)))
 
 (use-package consult-dash
+  :ensure t
   :bind (("M-s d" . consult-dash))
   :config
   ;; Use the symbol at point as initial search term
