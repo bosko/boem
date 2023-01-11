@@ -76,7 +76,9 @@
   (add-hook 'minibuffer-setup-hook #'cursor-intangible-mode)
 
   ;; Enable recursive minibuffers
-  (setq enable-recursive-minibuffers t))
+  (setq enable-recursive-minibuffers t)
+  ;; Enable tab completion
+  (setq tab-always-indent 'complete))
 
 (use-package dired-subtree
   :ensure t
