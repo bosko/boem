@@ -917,6 +917,24 @@
     (require 'erlang-start))))
 
 ;;; Elixir
+(use-package elixir-ts-mode
+  :ensure t
+  :mode (("\\.exs\\'" . elixir-mode)) ("\\.ex\\'" . elixir-mode)
+  :init
+  (eval-after-load "hideshow"
+    '(add-to-list 'hs-special-modes-alist
+                  `(elixir-mode
+                    ,(rx (or "def" "defp" "defmodule" "do" "{" "[" "if" "else" "unless" "describe" "setup" "test")) ; Block start
+                    ,(rx (or "}" "]" "end"))                       ; Block end
+                    ,(rx (or "#"))                        ; Comment start
+                    )))
+  (add-hook 'elixir-mode-hook (lambda() (hs-minor-mode)))
+  (add-hook 'elixir-mode-hook
+            (lambda () (add-hook 'before-save-hook 'elixir-format))))
+
+(use-package heex-ts-mode
+  :ensure t)
+
 (use-package elixir-mode
   :commands (elixir-mode)
   :ensure t
@@ -935,11 +953,15 @@
 
 (use-package eglot
   :ensure t
-  :after (elixir-mode)
+  :after (:any elixir-mode elixir-ts-mode)
   :config
-  (add-to-list 'eglot-server-programs '(elixir-mode "~/Code/elixir/elixir-ls/release/language_server.sh"))
+  (add-to-list 'eglot-server-programs
+               '(elixir-mode . ("~/Code/elixir/elixir-ls/release/language_server.sh")))
+  (add-to-list 'eglot-server-programs
+               '(elixir-ts-mode . ("~/Code/elixir/elixir-ls/release/language_server.sh")))
   :init
-  (add-hook 'elixir-mode-hook 'eglot-ensure))
+  (add-hook 'elixir-mode-hook 'eglot-ensure)
+  (add-hook 'elixir-ts-mode-hook 'eglot-ensure))
 
 ;;;; yasnippet
 (use-package yasnippet
