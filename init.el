@@ -82,6 +82,8 @@
 
 (load "init-basic")
 
+(add-to-list 'treesit-extra-load-path (expand-file-name "tree-sitter" boem-user-data-directory))
+
 (setq
  package-enable-at-startup nil
  package-user-dir boem-user-package-directory
