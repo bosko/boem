@@ -226,8 +226,8 @@
   :bind (("C-x C-q" . boem-change-to-writable-mode)))
 
 (use-package modus-themes
-  :ensure
-  :init
+  :ensure t
+  :config
   ;; Add all your customizations prior to loading the themes
   (setq modus-themes-slanted-constructs t
         modus-themes-hl-line '(accented intense)
@@ -235,14 +235,14 @@
         modus-themes-prompts '(background intense bold)
         modus-themes-paren-match '(intense bold)
         modus-themes-bold-constructs nil)
-  (modus-themes-load-themes)
-  :config
+
   (if (eq nil (display-graphic-p))
-      (modus-themes-load-operandi)
+      (load-theme 'modus-operandi t)
     (progn
-      (modus-themes-load-vivendi)
-      (set-face-attribute 'modus-themes-completion-selected nil :background "gray34")))
-  :bind ("<f5>" . modus-themes-toggle))
+      (load-theme 'modus-vivendi t)
+         (set-face-attribute 'modus-themes-completion-selected nil :background "gray34")))
+
+  (define-key global-map (kbd "<f5>") #'modus-themes-toggle))
 
 (use-package neotree
   :commands (neotree)
