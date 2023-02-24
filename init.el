@@ -209,24 +209,29 @@
                     mode-line-end-spaces))
 
 (add-hook 'eshell-mode-hook
-          '(lambda () (setq show-trailing-whitespace nil)))
+          '(lambda() (setq show-trailing-whitespace nil)))
 (add-hook 'term-mode-hook
-          '(lambda () (setq show-trailing-whitespace nil)))
+          '(lambda() (setq show-trailing-whitespace nil)))
 (add-hook 'eww-mode-hook
-          '(lambda () (setq show-trailing-whitespace nil)))
+          '(lambda() (setq show-trailing-whitespace nil)))
 (add-hook 'erc-mode-hook
-          '(lambda () (setq show-trailing-whitespace nil)))
+          '(lambda() (setq show-trailing-whitespace nil)))
 
 (add-hook 'sql-interactive-mode-hook
-          '(lambda ()
+          '(lambda()
              (boem-set-proper-sql-prompt-regex)
-             (setq show-trailing-whitespace nil)
+             (setq-local show-trailing-whitespace nil)
              (toggle-truncate-lines)))
 
 (add-hook 'dired-mode-hook #'dired-hide-details-mode)
 
 (add-hook 'js-ts-mode-hook
-          '(lambda() (setq js-indent-level 2)))
+          '(lambda() (setq-local js-indent-level 2)))
+
+(add-hook 'json-ts-mode-hook
+          '(lambda()
+             (setq-local js-indent-level 2)
+             (hs-minor-mode)))
 
 ;; "Kill up to, but not including ARGth occurrence of CHAR. (fn arg char)"
 (autoload 'zap-up-to-char "misc" 'interactive)
@@ -301,14 +306,6 @@
 
 (if (string-equal system-type "darwin")
     (pinentry-start))
-
-(with-eval-after-load 'em-term
-  (nconc eshell-visual-commands
-         '("htop" "pinentry-curses" "watch"))
-  (setq eshell-visual-subcommands
-        '(("git" "log" "l" "lol" "diff" "d" "dc" "show")
-          ("rails" "c")
-          ("sudo" "vi"))))
 
 (load custom-file 'no-error)
 

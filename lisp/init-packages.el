@@ -827,11 +827,11 @@
   :commands (impatient-mode)
   :ensure t)
 
-;;;; yaml-mode
-(use-package yaml-mode
-  :ensure t
-  :commands yaml-mode
-  :mode ("\\.y[a]?ml\\'" . yaml-mode))
+;; ;;;; yaml-mode
+;; (use-package yaml-mode
+;;   :ensure t
+;;   :commands yaml-mode
+;;   :mode ("\\.y[a]?ml\\'" . yaml-mode))
 
 ;;; Erlang
 (cond
@@ -1319,8 +1319,8 @@
               ;; -------------------------------------------------
               ;; configuration/data files
               ("conf" (or
-                       (mode . json-mode)
-                       (mode . yaml-mode)
+                       (mode . json-ts-mode)
+                       (mode . yaml-ts-mode)
                        (mode . conf-mode)))
               ;; -------------------------------------------------
               ;; text/notetaking/org
@@ -1393,17 +1393,17 @@
      uniquify-after-kill-buffer-p t
      uniquify-ignore-buffers-re "^\\*")))
 
-;;;; json-mode
-(use-package json-mode
-  :ensure t
-  :commands json-mode
-  :mode (("\\.json\\'" . json-mode)
-         ("\\.ipynb\\'" . json-mode))
-  :config
-  (add-hook 'json-mode-hook
-            #'(lambda ()
-                (setq-local js-indent-level 2)
-                (hs-minor-mode))))
+;; ;;;; json-mode
+;; (use-package json-mode
+;;   :ensure t
+;;   :commands json-mode
+;;   :mode (("\\.json\\'" . json-mode)
+;;          ("\\.ipynb\\'" . json-mode))
+;;   :config
+;;   (add-hook 'json-mode-hook
+;;             #'(lambda ()
+;;                 (setq-local js-indent-level 2)
+;;                 (hs-minor-mode))))
 
 ;;;; AsciiDoc
 (use-package adoc-mode
