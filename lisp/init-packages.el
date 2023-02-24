@@ -408,7 +408,6 @@
       (unless (boem-current-buffer-remote-p)
         (flycheck-mode)))
     (add-hook 'python-mode-hook 'flycheck-turn-on-maybe)
-    (add-hook 'js2-mode-hook 'flycheck-turn-on-maybe)
     (add-hook 'js-mode-hook 'flycheck-turn-on-maybe)
     (add-hook 'json-mode-hook 'flycheck-turn-on-maybe)
     (add-hook 'ruby-mode-hook 'flycheck-turn-on-maybe)
@@ -783,62 +782,6 @@
   :ensure t
   :commands sass-mode
   :mode "\\.sass\\'")
-
-;;;; JavaScript
-
-;;;; js
-(use-package js
-  :ensure t
-  :commands (js-mode)
-  :config
-  (progn
-    (boem-rename-modeline "js" js-mode "js")
-    (font-lock-add-keywords
-     'js-mode `(("\\(function *\\)("
-                 (0 (progn (compose-region
-                            (match-beginning 1)
-                            (match-end 1) "ƒ") nil)))))
-    (font-lock-add-keywords 'js-mode
-                            '(("\\<\\(FIX\\|TODO\\|FIXME\\|HACK\\|REFACTOR\\):"
-                               1 font-lock-warning-face t)))
-    (add-hook 'js-mode-hook
-              #'(lambda()
-                  (setq-local js-indent-level 2)))))
-
-;;;; js2-mode
-(use-package js2-mode
-  :ensure t
-  :commands (js2-mode)
-  :mode (("\\.js\\'" . js2-mode)
-         ("\\.jsx\\'" . js2-mode))
-  :init
-  (progn
-    (setq js2-strict-missing-semi-warning nil
-          js2-basic-offset 2))
-  :config
-  (progn
-    (use-package js2-imenu-extras
-      :config
-      (progn
-        (js2-imenu-extras-setup)))
-
-    (boem-rename-modeline "js2-mode" js2-mode "js2")
-
-    (font-lock-add-keywords
-     'js2-mode `(("\\(function *\\)("
-                  (0 (progn (compose-region
-                             (match-beginning 1)
-                             (match-end 1) "ƒ") nil)))))
-    (font-lock-add-keywords 'js2-mode
-                            '(("\\<\\(FIX\\|TODO\\|FIXME\\|HACK\\|REFACTOR\\):"
-                               1 font-lock-warning-face t)))))
-
-;;;; typescript
-(use-package typescript-mode
-  :commands (typescript-mode)
-  :ensure t
-  :config
-  (setq typescript-indent-level 2))
 
 ;;;; HTML
 
@@ -1360,7 +1303,6 @@
                        (mode . ruby-mode)
                        (mode . elixir-mode)
                        (mode . js-mode)
-                       (mode . js2-mode)
                        (mode . actionscript-mode)
                        (mode . java-mode)
                        (mode . sh-mode)

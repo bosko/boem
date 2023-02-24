@@ -93,7 +93,6 @@ is true refresh is skipped"
     emacs-lisp-mode-hook
     pyhon-mode-hook
     js-mode-hook
-    js2-mode-hook
     ruby-mode-hook
     elixir-mode-hook
     sass-mode-hook))

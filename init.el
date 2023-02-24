@@ -225,6 +225,9 @@
 
 (add-hook 'dired-mode-hook #'dired-hide-details-mode)
 
+(add-hook 'js-ts-mode-hook
+          '(lambda() (setq js-indent-level 2)))
+
 ;; "Kill up to, but not including ARGth occurrence of CHAR. (fn arg char)"
 (autoload 'zap-up-to-char "misc" 'interactive)
 
