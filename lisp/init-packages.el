@@ -37,6 +37,10 @@
   :commands (docker-cli)
   :ensure t)
 
+(use-package docker
+  :ensure t
+  :bind ("C-c d" . docker))
+
 (use-package dash-docs
   :ensure t
   :init
@@ -849,7 +853,7 @@
          ("\\.rhtml\\'" . web-mode) ("\\.mustache\\'" . web-mode)
          ("\\.hbs\\'" . web-mode)
          ("/\\(views\\|html\\|theme\\|templates\\)/.*\\.php\\'" . web-mode)
-         ("\\.html\\.heex\\'" . web-mode) ("\\.tsx" . web-mode))
+         ("\\.tsx" . web-mode))
   :init
   (progn
     (setq
@@ -861,8 +865,7 @@
      web-mode-enable-part-face t
      web-mode-enable-heredoc-fontification t
      web-mode-enable-comment-keywords t
-     web-mode-enable-current-element-highlight t
-     web-mode-engines-alist '(("elixir" . "\\.html\\.heex\\'"))))
+     web-mode-enable-current-element-highlight t))
   :config
   (progn
     (bind-key "C-c ;" 'web-mode-comment-or-uncomment web-mode-map)
@@ -923,45 +926,50 @@
   :init
   (eval-after-load "hideshow"
     '(add-to-list 'hs-special-modes-alist
-                  `(elixir-mode
+                  `(elixir-ts-mode
                     ,(rx (or "def" "defp" "defmodule" "do" "{" "[" "if" "else" "unless" "describe" "setup" "test")) ; Block start
                     ,(rx (or "}" "]" "end"))                       ; Block end
                     ,(rx (or "#"))                        ; Comment start
                     )))
-  (add-hook 'elixir-mode-hook (lambda() (hs-minor-mode)))
-  (add-hook 'elixir-mode-hook
-            (lambda () (add-hook 'before-save-hook 'elixir-format))))
+  (add-hook 'elixir-ts-mode-hook (lambda() (hs-minor-mode)))
+  (add-hook 'elixir-ts-mode-hook
+            (lambda () (add-hook 'before-save-hook 'elixir-format)))
+  (global-subword-mode t))
 
 (use-package heex-ts-mode
-  :ensure t)
-
-(use-package elixir-mode
-  :commands (elixir-mode)
   :ensure t
-  :mode (("\\.exs\\'" . elixir-mode)) ("\\.ex\\'" . elixir-mode)
+  :mode ("\\.heex\\'" . heex-ts-mode)
   :init
-  (eval-after-load "hideshow"
-      '(add-to-list 'hs-special-modes-alist
-                    `(elixir-mode
-                      ,(rx (or "def" "defp" "defmodule" "do" "{" "[" "if" "else" "unless" "describe" "setup" "test")) ; Block start
-                      ,(rx (or "}" "]" "end"))                       ; Block end
-                      ,(rx (or "#"))                        ; Comment start
-                      )))
-  (add-hook 'elixir-mode-hook (lambda() (hs-minor-mode)))
-  (add-hook 'elixir-mode-hook
+  (add-hook 'heex-ts-mode-hook
             (lambda () (add-hook 'before-save-hook 'elixir-format))))
+
+;; (use-package elixir-mode
+;;   :commands (elixir-mode)
+;;   :ensure t
+;;   :mode (("\\.exs\\'" . elixir-mode)) ("\\.ex\\'" . elixir-mode)
+;;   :init
+;;   (eval-after-load "hideshow"
+;;       '(add-to-list 'hs-special-modes-alist
+;;                     `(elixir-mode
+;;                       ,(rx (or "def" "defp" "defmodule" "do" "{" "[" "if" "else" "unless" "describe" "setup" "test")) ; Block start
+;;                       ,(rx (or "}" "]" "end"))                       ; Block end
+;;                       ,(rx (or "#"))                        ; Comment start
+;;                       )))
+;;   (add-hook 'elixir-mode-hook (lambda() (hs-minor-mode)))
+;;   (add-hook 'elixir-mode-hook
+;;             (lambda () (add-hook 'before-save-hook 'elixir-format))))
 
 (use-package eglot
   :ensure t
   :after (:any elixir-mode elixir-ts-mode)
   :config
-  (add-to-list 'eglot-server-programs
-               '(elixir-mode . ("~/Code/elixir/elixir-ls/release/language_server.sh")))
-  (add-to-list 'eglot-server-programs
-               '(elixir-ts-mode . ("~/Code/elixir/elixir-ls/release/language_server.sh")))
+  (dolist (mode '(elixir-ts-mode heex-ts-mode elixir-mode))
+    (add-to-list 'eglot-server-programs
+                 `(,mode . ("~/Code/elixir/elixir-ls/release/language_server.sh"))))
   :init
-  (add-hook 'elixir-mode-hook 'eglot-ensure)
-  (add-hook 'elixir-ts-mode-hook 'eglot-ensure))
+  (add-hook 'elixir-ts-mode-hook 'eglot-ensure)
+  (add-hook 'heex-ts-mode-hook 'eglot-ensure)
+  (add-hook 'elixir-mode-hook 'eglot-ensure))
 
 ;;;; yasnippet
 (use-package yasnippet
