@@ -23,7 +23,12 @@
 
 ;;; Code:
 
-(require 'em-term)
+(use-package treesit-auto
+  :ensure t
+  :demand t
+  :config
+  (setq treesit-auto-install 'prompt)
+  (global-treesit-auto-mode))
 
 (use-package exec-path-from-shell
   :ensure t
