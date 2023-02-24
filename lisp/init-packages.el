@@ -679,8 +679,7 @@
   :commands ruby-mode
   :config
   (progn
-    (inf-ruby-minor-mode +1)
-    (subword-mode +1))
+    (inf-ruby-minor-mode +1))
   :init
   (progn
     (add-hook 'inf-ruby-mode-hook (lambda() (setq show-trailing-whitespace nil)))))
@@ -933,8 +932,7 @@
                     )))
   (add-hook 'elixir-ts-mode-hook (lambda() (hs-minor-mode)))
   (add-hook 'elixir-ts-mode-hook
-            (lambda () (add-hook 'before-save-hook 'elixir-format)))
-  (global-subword-mode t))
+            (lambda () (add-hook 'before-save-hook 'elixir-format))))
 
 (use-package heex-ts-mode
   :ensure t
