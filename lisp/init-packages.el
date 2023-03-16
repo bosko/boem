@@ -413,13 +413,13 @@
       (unless (boem-current-buffer-remote-p)
         (flycheck-mode)))
     (add-hook 'python-mode-hook 'flycheck-turn-on-maybe)
-    (add-hook 'js-mode-hook 'flycheck-turn-on-maybe)
-    (add-hook 'json-mode-hook 'flycheck-turn-on-maybe)
-    (add-hook 'ruby-mode-hook 'flycheck-turn-on-maybe)
+    (add-hook 'js-ts-mode-hook 'flycheck-turn-on-maybe)
+    (add-hook 'json-ts-mode-hook 'flycheck-turn-on-maybe)
+    (add-hook 'ruby-ts-mode-hook 'flycheck-turn-on-maybe)
     (add-hook 'php-mode-hook 'flycheck-turn-on-maybe)
     (add-hook 'scss-mode-hook 'flycheck-turn-on-maybe)
     (add-hook 'haskell-mode-hook 'flycheck-turn-on-maybe)
-    (add-hook 'elixir-mode-hook 'flycheck-turn-on-maybe)
+    (add-hook 'elixir-ts-mode-hook 'flycheck-turn-on-maybe)
 
     (when (fboundp 'define-fringe-bitmap)
       (require 'fringe-helper)
@@ -661,8 +661,8 @@
 ;;;; Ruby
 
 ;;;; ruby-mode
-(use-package ruby-mode
-  :commands ruby-mode
+(use-package ruby-ts-mode
+  :commands ruby-ts-mode
   :init
   (progn
     (setq
@@ -670,17 +670,17 @@
      ruby-deep-indent-paren nil)
     (eval-after-load "hideshow"
       '(add-to-list 'hs-special-modes-alist
-                    `(ruby-mode
+                    `(ruby-ts-mode
                       ,(rx (or "def" "class" "module" "do" "{" "[" "if" "else" "unless")) ; Block start
                       ,(rx (or "}" "]" "end"))                       ; Block end
                       ,(rx (or "#" "=begin"))                        ; Comment start
                       ruby-forward-sexp nil)))
-    (add-hook 'ruby-mode-hook (lambda() (hs-minor-mode))))
-  :mode (("\\.rabl\\'" . ruby-mode)))
+    (add-hook 'ruby-ts-mode-hook (lambda() (hs-minor-mode))))
+  :mode (("\\.rabl\\'" . ruby-ts-mode)))
 
 (use-package inf-ruby
   :ensure t
-  :commands ruby-mode
+  :commands ruby-ts-mode
   :config
   (progn
     (inf-ruby-minor-mode +1))
@@ -705,7 +705,7 @@
     (setq
      ruby-block-highlight-toggle t
      ruby-block-delay 0.8)
-    (add-hook 'ruby-mode-hook 'ruby-electric-mode)))
+    (add-hook 'ruby-ts-mode-hook 'ruby-electric-mode)))
 
 (use-package yari
   :commands (yari)
@@ -868,8 +868,7 @@
 
 ;;; Elixir
 (use-package elixir-ts-mode
-  :ensure t
-  :mode (("\\.exs\\'" . elixir-mode)) ("\\.ex\\'" . elixir-mode)
+  :mode (("\\.exs\\'" . elixir-ts-mode)) ("\\.ex\\'" . elixir-ts-mode)
   :init
   (eval-after-load "hideshow"
     '(add-to-list 'hs-special-modes-alist
@@ -878,16 +877,16 @@
                     ,(rx (or "}" "]" "end"))                       ; Block end
                     ,(rx (or "#"))                        ; Comment start
                     )))
-  (add-hook 'elixir-ts-mode-hook (lambda() (hs-minor-mode)))
   (add-hook 'elixir-ts-mode-hook
-            (lambda () (add-hook 'before-save-hook 'elixir-format))))
+            (lambda ()
+              (hs-minor-mode)
+              (add-hook 'before-save-hook #'eglot-format nil t))))
 
 (use-package heex-ts-mode
-  :ensure t
   :mode ("\\.heex\\'" . heex-ts-mode)
   :init
   (add-hook 'heex-ts-mode-hook
-            (lambda () (add-hook 'before-save-hook 'elixir-format))))
+            (lambda () (add-hook 'before-save-hook #'eglot-format nil t))))
 
 ;; (use-package elixir-mode
 ;;   :commands (elixir-mode)
@@ -1305,8 +1304,8 @@
               ("code" (or
                        (mode . emacs-lisp-mode)
                        (mode . python-mode)
-                       (mode . ruby-mode)
-                       (mode . elixir-mode)
+                       (mode . ruby-ts-mode)
+                       (mode . elixir-ts-mode)
                        (mode . js-mode)
                        (mode . actionscript-mode)
                        (mode . java-mode)
