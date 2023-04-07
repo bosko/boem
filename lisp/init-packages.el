@@ -662,6 +662,7 @@
 
 ;;;; ruby-mode
 (use-package ruby-ts-mode
+  :after tree-sitter
   :commands ruby-ts-mode
   :init
   (progn
@@ -868,6 +869,7 @@
 
 ;;; Elixir
 (use-package elixir-ts-mode
+  :after tree-sitter
   :mode (("\\.exs\\'" . elixir-ts-mode)) ("\\.ex\\'" . elixir-ts-mode)
   :init
   (eval-after-load "hideshow"
@@ -883,6 +885,7 @@
               (add-hook 'before-save-hook #'eglot-format nil t))))
 
 (use-package heex-ts-mode
+  :after tree-sitter
   :mode ("\\.heex\\'" . heex-ts-mode)
   :init
   (add-hook 'heex-ts-mode-hook
