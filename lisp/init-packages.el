@@ -231,7 +231,6 @@
   :bind (("C-x C-q" . boem-change-to-writable-mode)))
 
 (use-package modus-themes
-  :ensure t
   :config
   ;; Add all your customizations prior to loading the themes
   (setq modus-themes-slanted-constructs t
@@ -254,29 +253,25 @@
   :ensure t
   :bind ("<f8>" . neotree-toggle))
 
-(use-package all-the-icons
+(use-package nerd-icons
   :ensure t
-  :if (display-graphic-p)
-  :commands (dired
-             consult-buffer
-             find-file))
+  :custom
+  ;; The Nerd Font you want to use in GUI
+  ;; "Symbols Nerd Font Mono" is the default and is recommended
+  ;; but you can use any other Nerd Font if you want
+  (nerd-icons-font-family "FiraCode Nerd Font Mono")
+  :config
+  (require 'nerd-icons-dired)
+  (add-hook 'dired-mode-hook 'nerd-icons-dired-mode))
 
-(use-package all-the-icons-dired
-  :after (dired)
+(use-package nerd-icons-ibuffer
   :ensure t
-  :if (display-graphic-p)
-  :init
-  (progn
-    (add-hook 'dired-mode-hook 'all-the-icons-dired-mode)))
+  :hook (ibuffer-mode . nerd-icons-ibuffer-mode))
 
 (use-package discover-my-major
   :ensure t
   :commands (discover-my-major discover-my-mode))
-;; (use-package docker :ensure t
-;;   :config
-;;   (progn
-;;     (setq docker-keymap-prefix "C-c C-d")
-;;     (docker-global-mode)))
+
 (use-package docker-compose-mode
   :ensure t
   :commands (docker-compose-mode))
@@ -662,7 +657,6 @@
 
 ;;;; ruby-mode
 (use-package ruby-ts-mode
-  :after tree-sitter
   :commands ruby-ts-mode
   :init
   (progn
@@ -800,8 +794,7 @@
          ("\\.blade\\.php\\'" . web-mode) ("\\.html\\'" . web-mode)
          ("\\.rhtml\\'" . web-mode) ("\\.mustache\\'" . web-mode)
          ("\\.hbs\\'" . web-mode)
-         ("/\\(views\\|html\\|theme\\|templates\\)/.*\\.php\\'" . web-mode)
-         ("\\.tsx" . web-mode))
+         ("/\\(views\\|html\\|theme\\|templates\\)/.*\\.php\\'" . web-mode))
   :init
   (progn
     (setq
@@ -869,8 +862,8 @@
 
 ;;; Elixir
 (use-package elixir-ts-mode
-  :after tree-sitter
-  :mode (("\\.exs\\'" . elixir-ts-mode)) ("\\.ex\\'" . elixir-ts-mode)
+  :mode (("\\.ex\\'" . elixir-ts-mode)
+         ("\\.exs\\'" . elixir-ts-mode))
   :init
   (eval-after-load "hideshow"
     '(add-to-list 'hs-special-modes-alist
@@ -885,8 +878,7 @@
               (add-hook 'before-save-hook #'eglot-format nil t))))
 
 (use-package heex-ts-mode
-  :after tree-sitter
-  :mode ("\\.heex\\'" . heex-ts-mode)
+  :mode (("\\.heex\\'" . heex-ts-mode))
   :init
   (add-hook 'heex-ts-mode-hook
             (lambda () (add-hook 'before-save-hook #'eglot-format nil t))))
@@ -906,6 +898,27 @@
 ;;   (add-hook 'elixir-mode-hook (lambda() (hs-minor-mode)))
 ;;   (add-hook 'elixir-mode-hook
 ;;             (lambda () (add-hook 'before-save-hook 'elixir-format))))
+
+;;; Typescript
+(use-package typescript-ts-mode
+  ;; This is not needed for other modes but this one
+  ;; needs this 'after' section
+  :after tree-sitter
+  :config
+  ;; we choose this instead of tsx-mode so that eglot can
+  ;; automatically figure out language for server see
+  ;; https://github.com/joaotavora/eglot/issues/624 and
+  ;; https://github.com/joaotavora/eglot#handling-quirky-servers
+  (define-derived-mode typescriptreact-mode typescript-mode
+    "TypeScript TSX")
+
+  ;; use our derived mode for tsx files
+  (add-to-list 'auto-mode-alist '("\\.tsx?\\'" . typescriptreact-mode))
+  ;; by default, typescript-mode is mapped to the treesitter
+  ;; typescript parser use our derived mode to map both .tsx AND .ts
+  ;; -> typescriptreact-mode -> treesitter tsx
+  (add-to-list 'tree-sitter-major-mode-language-alist
+               '(typescriptreact-mode . tsx)))
 
 (use-package eglot
   :ensure t
@@ -1309,6 +1322,7 @@
                        (mode . python-mode)
                        (mode . ruby-ts-mode)
                        (mode . elixir-ts-mode)
+                       (mode . typescript-ts-mode)
                        (mode . js-mode)
                        (mode . actionscript-mode)
                        (mode . java-mode)
