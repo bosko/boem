@@ -19,6 +19,7 @@
 (defvar boem-init-root (expand-file-name
                    (file-name-directory load-file-name)))
 (add-to-list 'load-path (expand-file-name "lisp" boem-init-root))
+(add-to-list 'load-path (expand-file-name "experiments" boem-init-root))
 
 (defvar boem-custom-daily-agenda
   ;; NOTE 2021-12-08: Specifying a match like the following does not
@@ -299,8 +300,8 @@
 
 (require 'use-package)
 
-(if (find-font (font-spec :name "JuliaMono"))
-    (set-frame-font "JuliaMono-12" t t))
+(if (find-font (font-spec :name "FiraCode Nerd Font Mono 12"))
+    (set-frame-font "FiraCode Nerd Font Mono 12" t t))
 
 (load "init-packages")
 
