@@ -46,6 +46,20 @@
   :ensure t
   :bind ("C-c d" . docker))
 
+(use-package popper
+  :ensure t
+  :bind (("M-§"   . popper-toggle-latest)
+         ("C-§"   . popper-cycle)
+         ("C-M-§" . popper-toggle-type))
+  :init
+  (setq popper-reference-buffers
+        '("\\*Messages\\*"
+          "\\*eat\\*"
+          "^\\*eshell.*\\*$" eshell-mode
+          help-mode))
+  (popper-mode +1)
+  (popper-echo-mode +1))
+
 (use-package dash-docs
   :ensure t
   :init
