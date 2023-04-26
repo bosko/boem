@@ -38,6 +38,15 @@
     (when (memq window-system '(mac ns x))
       (exec-path-from-shell-initialize))))
 
+(use-package eat
+  :ensure t
+  :config
+  (progn
+    (add-hook 'eshell-load-hook #'eat-eshell-mode)
+    (add-hook 'eshell-load-hook #'eat-eshell-visual-command-mode)
+    (add-hook 'eat-mode-hook (lambda() (setq show-trailing-whitespace nil)))
+    (eat-eshell-mode 1)))
+
 (use-package docker-cli
   :commands (docker-cli)
   :ensure t)
@@ -55,6 +64,7 @@
   (setq popper-reference-buffers
         '("\\*Messages\\*"
           "\\*eat\\*"
+          "\\*emacs-eshell\\*"
           "^\\*eshell.*\\*$" eshell-mode
           help-mode))
   (popper-mode +1)
