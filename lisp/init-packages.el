@@ -255,6 +255,7 @@
   :bind (("C-x C-q" . boem-change-to-writable-mode)))
 
 (use-package modus-themes
+  :ensure t
   :config
   ;; Add all your customizations prior to loading the themes
   (setq modus-themes-slanted-constructs t
