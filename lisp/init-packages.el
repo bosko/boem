@@ -889,6 +889,7 @@
 
 ;;; Elixir
 (use-package elixir-ts-mode
+  :ensure t
   :mode (("\\.ex\\'" . elixir-ts-mode)
          ("\\.exs\\'" . elixir-ts-mode))
   :init
@@ -905,6 +906,7 @@
               (add-hook 'before-save-hook #'eglot-format nil t))))
 
 (use-package heex-ts-mode
+  :ensure t
   :mode (("\\.heex\\'" . heex-ts-mode))
   :init
   (add-hook 'heex-ts-mode-hook
