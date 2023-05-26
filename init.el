@@ -242,6 +242,7 @@
 (global-set-key (kbd "M-o d") 'duplicate-dwim)
 (global-set-key (kbd "M-o b") 'boem-switch-to-previous-buffer)
 (global-set-key (kbd "M-o e") 'boem-pop-eshell-bottom)
+(global-set-key (kbd "M-o t") 'eat)
 (global-set-key (kbd "M-o r") 'boem-restclient)
 (global-set-key (kbd "M-o k a") 'boem-kill-user-buffers)
 (global-set-key (kbd "C-x C-m") 'execute-extended-command)
