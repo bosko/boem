@@ -124,7 +124,10 @@
  calendar-day-header-array ["не" "по" "ут" "ср" "че" "пе" "су"]
  calendar-month-name-array ["Јануар" "Фебруар" "Март" "Април" "Мај" "Јун" "Јул"
                             "Август" "Септембар" "Октобар" "Новембар" "Децембар"]
- view-read-only t)
+ view-read-only t
+ isearch-lazy-count t
+ lazy-count-prefix-format nil
+ lazy-count-suffix-format "   (%s/%s)")
 
 ;; Improve lsp-mode performances
 (setq read-process-output-max (* 1024 1024))
