@@ -303,8 +303,8 @@
 
 (require 'use-package)
 
-(if (find-font (font-spec :name "InconsolataLGC Nerd Font Mono 12"))
-    (set-frame-font "InconsolataLGC Nerd Font Mono 12" t t))
+(if (find-font (font-spec :name "DejaVuSansMono Nerd Font Mono 12"))
+    (set-frame-font "DejaVuSansMono Nerd Font Mono 12" t t))
 
 (load "init-packages")
 
