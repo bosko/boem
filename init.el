@@ -125,6 +125,7 @@
  calendar-month-name-array ["Јануар" "Фебруар" "Март" "Април" "Мај" "Јун" "Јул"
                             "Август" "Септембар" "Октобар" "Новембар" "Децембар"]
  view-read-only t
+ isearch-allow-scroll t
  isearch-lazy-count t
  lazy-count-prefix-format nil
  lazy-count-suffix-format "   (%s/%s)")
