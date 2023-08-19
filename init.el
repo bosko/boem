@@ -7,163 +7,19 @@
 ;; collection.  The default is 800 kilobytes.  Measured in bytes.
 (setq gc-cons-threshold (* 50 1000 1000))
 
-;;; Code:
-;;; Temporary problem with 26.2 version on OS x
-(if (equal emacs-major-version 26)
-    (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3"))
+(defvar boem-init-root
+  (expand-file-name (file-name-directory load-file-name)))
 
-(defvar boem-current-user
-  (getenv
-   (if (equal system-type 'windows-nt) "USERNAME" "USER")))
-
-(defvar boem-init-root (expand-file-name
-                   (file-name-directory load-file-name)))
 (add-to-list 'load-path (expand-file-name "lisp" boem-init-root))
 (add-to-list 'load-path (expand-file-name "experiments" boem-init-root))
 
-(defvar boem-custom-daily-agenda
-  ;; NOTE 2021-12-08: Specifying a match like the following does not
-  ;; work.
-  ;;
-  ;; tags-todo "+PRIORITY=\"A\""
-  ;;
-  ;; So we match everything and then skip entries with
-  ;; `org-agenda-skip-function'.
-  `((tags-todo "*"
-               ((org-agenda-skip-function
-                 `(org-agenda-skip-entry-if
-                   'notregexp ,(format "\\[#%s\\]" (char-to-string org-priority-highest))))
-                (org-agenda-block-separator nil)
-                (org-agenda-overriding-header "Важни задаци\n")))
-    (agenda "" ((org-agenda-time-grid nil)
-                (org-agenda-start-on-weekday nil)
-                (org-agenda-span 1)
-                (org-agenda-show-all-dates nil)
-                (org-scheduled-past-days 365)
-                ;; Excludes today's scheduled items
-                (org-scheduled-delay-days 1)
-                (org-agenda-block-separator nil)
-                (org-agenda-entry-types '(:scheduled))
-                (org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))
-                (org-agenda-day-face-function (lambda (date) 'org-agenda-date))
-                (org-agenda-format-date "")
-                (org-agenda-overriding-header "\nПрошли неурађени задаци")))
-    (agenda "" ((org-agenda-span 1)
-                (org-deadline-warning-days 0)
-                (org-agenda-block-separator nil)
-                (org-scheduled-past-days 0)
-                ;; We don't need the `org-agenda-date-today'
-                ;; highlight because that only has a practical
-                ;; utility in multi-day views.
-                (org-agenda-day-face-function (lambda (date) 'org-agenda-date))
-                (org-agenda-overriding-header "\nДанашњи распоред\n")))
-    (agenda "" ((org-agenda-start-on-weekday nil)
-                (org-agenda-start-day "+1d")
-                (org-agenda-span 5)
-                (org-deadline-warning-days 0)
-                (org-agenda-block-separator nil)
-                (org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))
-                (org-agenda-overriding-header "\nНаредних пет дана\n")))
-    (agenda "" ((org-agenda-time-grid nil)
-                (org-agenda-start-on-weekday nil)
-                ;; We don't want to replicate the previous section's
-                ;; three days, so we start counting from the day after.
-                (org-agenda-start-day "+4d")
-                (org-agenda-span 14)
-                (org-agenda-show-all-dates nil)
-                (org-deadline-warning-days 0)
-                (org-agenda-block-separator nil)
-                (org-agenda-entry-types '(:deadline))
-                (org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))
-                (org-agenda-overriding-header "\nПредстојећи рокови (+14д)\n"))))
-  "Custom agenda for use in `org-agenda-custom-commands'.")
+(load "init-basic")
 
 (message "%s, starting up Emacs" boem-current-user)
 
-(load "init-basic")
+(boem-install-package-if-needed 'use-package)
 
 (add-to-list 'treesit-extra-load-path (expand-file-name "tree-sitter" boem-user-data-directory))
-
-(setq
- package-enable-at-startup nil
- package-user-dir boem-user-package-directory
- inhibit-splash-screen t
- inhibit-startup-message t
- backup-directory-alist `((".*" . ,temporary-file-directory))
- auto-save-file-name-transforms `((".*" ,temporary-file-directory t))
- ;; Use data directory for storing some packages data
- custom-file (expand-file-name "custom.el" boem-user-data-directory)
- transient-history-file (expand-file-name "transient/history.el" boem-user-data-directory)
- org-persist-directory (expand-file-name "org-persist" boem-user-data-directory)
- project-list-file (expand-file-name "projects" boem-user-data-directory)
- newsticker-dir (expand-file-name "newsticker" boem-user-data-directory)
- tags-revert-without-query t
- ;; Set standard indent to 2 rather then 4
- standard-indent 2
- ;; Prevent Emacs from extending file when
- ;; pressing down arrow at end of buffer.
- next-line-add-newlines nil
- grep-command "grep -n -r --exclude=\\*{.git,TAGS,sqlite3,log,tmp/\\*,vendor/bundle/\\*,.bundle/\\*} -e "
- use-package-idle-interval 1.5
- fill-column 80
- echo-keystrokes 0.1
- bookmark-default-file (expand-file-name "bookmarks" boem-user-data-directory)
- calendar-week-start-day 1
- eshell-hist-ignoredups t
- eshell-destroy-buffer-when-process-dies t
- epa-armor t
- dired-listing-switches "-alh"
- dired-dwim-target t
- use-package-compute-statistics t
- scroll-preserve-screen-position t
- calendar-latitude 45.267136
- calendar-longitude 19.833549
- calendar-location-name "Нови Сад, Србија"
- calendar-day-name-array ["недеља" "понедељак" "уторак" "среда" "четвртак" "петак" "субота"]
- calendar-day-abbrev-array ["не" "по" "ут" "ср" "че" "пе" "су"]
- calendar-day-header-array ["не" "по" "ут" "ср" "че" "пе" "су"]
- calendar-month-name-array ["Јануар" "Фебруар" "Март" "Април" "Мај" "Јун" "Јул"
-                            "Август" "Септембар" "Октобар" "Новембар" "Децембар"]
- view-read-only t
- isearch-allow-scroll t
- isearch-lazy-count t
- lazy-count-prefix-format nil
- lazy-count-suffix-format "   (%s/%s)")
-
-;; Improve lsp-mode performances
-(setq read-process-output-max (* 1024 1024))
-
-;; Add following two lines in ~/.gnupg/gpg-agent.conf
-;; allow-emacs-pinentry
-;; allow-loopback-pinentry
-;; and run:
-;; gpgconf --reload gpg-agent
-(if (equal emacs-major-version 27)
-    (setq epg-pinentry-mode 'loopback)
-  (setq epa-pinentry-mode 'loopback))
-
-(setq ring-bell-function
-      (lambda ()
-        (let ((orig-bg (face-background 'mode-line)))
-          (set-face-background 'mode-line "#F2804F")
-          (run-with-idle-timer 0.1 nil
-                               (lambda (fg) (set-face-background 'mode-line fg))
-                               orig-bg))))
-
-(setq eshell-prompt-function
-      (lambda nil
-        (let ((path (abbreviate-file-name (eshell/pwd))))
-          (concat
-           (format
-            (propertize "(%s@%s)[%s]\n>" 'face '(:weight bold))
-            (propertize (user-login-name) 'face '(:foreground "cyan"))
-            (propertize (system-name) 'face '(:foreground "cyan"))
-            (propertize path 'face `(:foreground ,(if (= (user-uid) 0) "red" "green") :weight bold)))
-           " "))))
-
-(put 'dired-find-alternate-file 'disabled nil)
-(put 'downcase-region 'disabled nil)
-(put 'upcase-region 'disabled nil)
 
 (setq-default ;; xdisp.c
  cursor-type 'box
@@ -212,14 +68,103 @@
                     mode-line-misc-info
                     mode-line-end-spaces))
 
-(add-hook 'eshell-mode-hook
-          '(lambda() (setq show-trailing-whitespace nil)))
-(add-hook 'term-mode-hook
-          '(lambda() (setq show-trailing-whitespace nil)))
-(add-hook 'eww-mode-hook
-          '(lambda() (setq show-trailing-whitespace nil)))
-(add-hook 'erc-mode-hook
-          '(lambda() (setq show-trailing-whitespace nil)))
+(setq
+ package-user-dir boem-user-package-directory
+ custom-file (expand-file-name "custom.el" boem-user-data-directory)
+ ;; Use data directory for storing some packages data
+ transient-history-file (expand-file-name "transient/history.el" boem-user-data-directory)
+ org-persist-directory (expand-file-name "org-persist" boem-user-data-directory)
+ project-list-file (expand-file-name "projects" boem-user-data-directory)
+ bookmark-default-file (expand-file-name "bookmarks" boem-user-data-directory)
+ newsticker-dir (expand-file-name "newsticker" boem-user-data-directory)
+
+ package-enable-at-startup nil
+ inhibit-splash-screen t
+ inhibit-startup-message t
+ backup-directory-alist `((".*" . ,temporary-file-directory))
+ auto-save-file-name-transforms `((".*" ,temporary-file-directory t))
+ tags-revert-without-query t
+ ;; Set standard indent to 2 rather then 4
+ standard-indent 2
+ ;; Prevent Emacs from extending file when
+ ;; pressing down arrow at end of buffer.
+ next-line-add-newlines nil
+ grep-command "grep -n -r --exclude=\\*{.git,TAGS,sqlite3,log,tmp/\\*,vendor/bundle/\\*,.bundle/\\*} -e "
+ use-package-idle-interval 1.5
+ fill-column 80
+ echo-keystrokes 0.1
+ calendar-week-start-day 1
+ eshell-hist-ignoredups t
+ eshell-destroy-buffer-when-process-dies t
+ epa-armor t
+ dired-listing-switches "-alh"
+ dired-dwim-target t
+ use-package-compute-statistics t
+ scroll-preserve-screen-position t
+ calendar-latitude 44.787197
+ calendar-longitude 20.457273
+ calendar-location-name "Београд, Србија"
+ calendar-day-name-array ["недеља" "понедељак" "уторак" "среда" "четвртак" "петак" "субота"]
+ calendar-day-abbrev-array ["не" "по" "ут" "ср" "че" "пе" "су"]
+ calendar-day-header-array ["не" "по" "ут" "ср" "че" "пе" "су"]
+ calendar-month-name-array ["Јануар" "Фебруар" "Март" "Април" "Мај" "Јун" "Јул"
+                            "Август" "Септембар" "Октобар" "Новембар" "Децембар"]
+ view-read-only t
+ isearch-allow-scroll t
+ isearch-lazy-count t
+ lazy-count-prefix-format nil
+ lazy-count-suffix-format "   (%s/%s)"
+ ediff-keep-variants nil
+ ediff-split-window-function #'split-window-horizontally
+ ediff-window-setup-function #'ediff-setup-windows-plain
+ load-prefer-newer t
+ ;; Improve lsp-mode performances
+ read-process-output-max (* 1024 1024)
+ ;; Add following two lines in ~/.gnupg/gpg-agent.conf
+ ;; allow-emacs-pinentry
+ ;; allow-loopback-pinentry
+ ;; and run:
+ ;; gpgconf --reload gpg-agent
+ epa-pinentry-mode 'loopback
+ ;; modus-themes configuration
+ modus-themes-slanted-constructs t
+ modus-themes-hl-line '(accented intense)
+ modus-themes-mode-line '(3d accented)
+ modus-themes-prompts '(background intense bold)
+ modus-themes-paren-match '(intense bold)
+ modus-themes-bold-constructs nil
+ ansi-color-for-comint-mode t
+ locale-coding-system 'utf-8
+ default-file-name-coding-system 'utf-8
+ ;; Treat clipboard input as UTF-8 string first; compound text next, etc.
+ x-select-request-type '(UTF8_STRING COMPOUND_TEXT TEXT STRING))
+
+(setq ring-bell-function
+      (lambda ()
+        (let ((orig-bg (face-background 'mode-line)))
+          (set-face-background 'mode-line "#F2804F")
+          (run-with-idle-timer 0.1 nil
+                               (lambda (fg) (set-face-background 'mode-line fg))
+                               orig-bg))))
+
+(setq eshell-prompt-function
+      (lambda nil
+        (let ((path (abbreviate-file-name (eshell/pwd))))
+          (concat
+           (format
+            (propertize "(%s@%s)[%s]\n>" 'face '(:weight bold))
+            (propertize (user-login-name) 'face '(:foreground "cyan"))
+            (propertize (system-name) 'face '(:foreground "cyan"))
+            (propertize path 'face
+                        `(:foreground ,(if (= (user-uid) 0) "red" "green") :weight bold)))
+           " "))))
+
+(put 'dired-find-alternate-file 'disabled nil)
+(put 'downcase-region 'disabled nil)
+(put 'upcase-region 'disabled nil)
+
+(dolist (hook '(eshell-mode-hook term-mode-hook eww-mode-hook erc-mode-hook))
+  (add-hook hook '(lambda() (setq show-trailing-whitespace nil))))
 
 (add-hook 'sql-interactive-mode-hook
           '(lambda()
@@ -300,8 +245,14 @@
 (package-initialize)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 
-(boem-install-package-if-needed 'use-package)
-(boem-install-package-if-needed 'railscasts-theme)
+;;; Theme
+(if (eq nil (display-graphic-p))
+    (load-theme 'modus-operandi t)
+  (progn
+    (load-theme 'modus-vivendi t)
+    (set-face-attribute 'modus-themes-completion-selected nil :background "gray34")))
+
+(define-key global-map (kbd "<f5>") #'modus-themes-toggle)
 
 (require 'use-package)
 

@@ -5,8 +5,6 @@
 ;;
 
 (require 'dired-x)
-(if (< emacs-major-version 27)
-    (require 'cl))
 
 (use-package dash
   :ensure t
@@ -254,25 +252,6 @@
   :demand t
   :bind (("C-x C-q" . boem-change-to-writable-mode)))
 
-(use-package modus-themes
-  :ensure t
-  :config
-  ;; Add all your customizations prior to loading the themes
-  (setq modus-themes-slanted-constructs t
-        modus-themes-hl-line '(accented intense)
-        modus-themes-mode-line '(3d accented)
-        modus-themes-prompts '(background intense bold)
-        modus-themes-paren-match '(intense bold)
-        modus-themes-bold-constructs nil)
-
-  (if (eq nil (display-graphic-p))
-      (load-theme 'modus-operandi t)
-    (progn
-      (load-theme 'modus-vivendi t)
-         (set-face-attribute 'modus-themes-completion-selected nil :background "gray34")))
-
-  (define-key global-map (kbd "<f5>") #'modus-themes-toggle))
-
 (use-package neotree
   :commands (neotree)
   :ensure t
@@ -493,8 +472,6 @@
      magit-repo-dirs-depth 4
      magit-status-buffer-switch-function 'switch-to-buffer
      magit-save-some-buffers t
-     ;; magit-completing-read-function 'ivy-completing-read
-     ;; magit-diff-refine-hunk 'all
      magit-log-author-date-max-length 25
      magit-log-auto-more t
      magit-last-seen-setup-instructions "1.4.0")
@@ -507,19 +484,6 @@
   :config
   (progn
     (require 'json)
-    ;; (defadvice magit-status (around magit-fullscreen activate)
-    ;;   (window-configuration-to-register :magit-fullscreen)
-    ;;   ad-do-it
-    ;;   (delete-other-windows))
-    ;; (defun magit-quit-session ()
-    ;;   "Restores the previous window configuration and kills the magit buffer"
-    ;;   (interactive)
-    ;;   ;; TODO maybe in some cases
-    ;;   ;; (kill-buffer)
-    ;;   (bury-buffer)
-    ;;   (when (get-register :magit-fullscreen)
-    ;;     (jump-to-register :magit-fullscreen)
-    ;;     (set-register :magit-fullscreen nil)))
     (bind-key "q" 'previous-buffer magit-status-mode-map)
     (bind-key "h" 'ibuffer magit-status-mode-map)
     (defun magit-toggle-whitespace ()
@@ -738,14 +702,7 @@
 (use-package rainbow-delimiters
   :ensure t
   :commands rainbow-delimiters-mode
-  :bind (("M-o m r" . rainbow-delimiters-mode))
-  :init
-  (progn
-    ;; (boem-hook-into-modes #'rainbow-delimiters-mode
-    ;; '(clojure-mode-hook
-    ;; emacs-lisp-mode-hook
-    ;; haskell-mode-hook))
-    ))
+  :bind (("M-o m r" . rainbow-delimiters-mode)))
 
 ;;;; lisp-mode
 (use-package lisp-mode
@@ -852,12 +809,6 @@
   :commands (impatient-mode)
   :ensure t)
 
-;; ;;;; yaml-mode
-;; (use-package yaml-mode
-;;   :ensure t
-;;   :commands yaml-mode
-;;   :mode ("\\.y[a]?ml\\'" . yaml-mode))
-
 ;;; Erlang
 (cond
  ((string-equal system-type "darwin")
@@ -910,22 +861,6 @@
   :init
   (add-hook 'heex-ts-mode-hook
             (lambda () (add-hook 'before-save-hook #'eglot-format nil t))))
-
-;; (use-package elixir-mode
-;;   :commands (elixir-mode)
-;;   :ensure t
-;;   :mode (("\\.exs\\'" . elixir-mode)) ("\\.ex\\'" . elixir-mode)
-;;   :init
-;;   (eval-after-load "hideshow"
-;;       '(add-to-list 'hs-special-modes-alist
-;;                     `(elixir-mode
-;;                       ,(rx (or "def" "defp" "defmodule" "do" "{" "[" "if" "else" "unless" "describe" "setup" "test")) ; Block start
-;;                       ,(rx (or "}" "]" "end"))                       ; Block end
-;;                       ,(rx (or "#"))                        ; Comment start
-;;                       )))
-;;   (add-hook 'elixir-mode-hook (lambda() (hs-minor-mode)))
-;;   (add-hook 'elixir-mode-hook
-;;             (lambda () (add-hook 'before-save-hook 'elixir-format))))
 
 ;;; Typescript
 (use-package typescript-ts-mode
@@ -1441,18 +1376,6 @@
      uniquify-min-dir-content 3
      uniquify-after-kill-buffer-p t
      uniquify-ignore-buffers-re "^\\*")))
-
-;; ;;;; json-mode
-;; (use-package json-mode
-;;   :ensure t
-;;   :commands json-mode
-;;   :mode (("\\.json\\'" . json-mode)
-;;          ("\\.ipynb\\'" . json-mode))
-;;   :config
-;;   (add-hook 'json-mode-hook
-;;             #'(lambda ()
-;;                 (setq-local js-indent-level 2)
-;;                 (hs-minor-mode))))
 
 ;;;; AsciiDoc
 (use-package adoc-mode

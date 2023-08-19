@@ -5,6 +5,9 @@
 
 ;;; Code:
 
+(defvar boem-current-user
+  (getenv (if (equal system-type 'windows-nt) "USERNAME" "USER")))
+
 (defconst boem-version-string
   (mapconcat 'identity
              (mapcar
@@ -102,13 +105,7 @@ is true refresh is skipped"
           (list
            (buffer-file-name)
            list-buffers-directory
-           default-directory))
-  ;; (and (fboundp 'tramp-tramp-file-p) (-any? 'tramp-tramp-file-p
-  ;; (list
-  ;; (buffer-file-name)
-  ;; list-buffers-directory
-  ;; default-directory)))
-  )
+           default-directory)))
 
 (defun boem-insert-line-above ()
   "Insert and indent line above current point."
@@ -179,7 +176,11 @@ Code from: http://emacsredux.com/blog/2013/04/28/switch-to-previous-buffer/"
     (switch-to-buffer $buf)
     (restclient-mode)))
 
-(defvar boem-org-tags '(("Project" . ?p) ("Article" . ?a) ("Book" . ?b) ("Code" . ?c) ("Encrypt". ?e))
+(defvar boem-org-tags '(("Project" . ?p)
+                        ("Article" . ?a)
+                        ("Book" . ?b)
+                        ("Code" . ?c)
+                        ("Encrypt". ?e))
   "Override this value by creating .boem-org-tags.el file in your home directory.")
 
 (defun boem-change-to-writable-mode ()
@@ -188,29 +189,62 @@ Code from: http://emacsredux.com/blog/2013/04/28/switch-to-previous-buffer/"
       (wgrep-change-to-wgrep-mode)
     (wdired-change-to-wdired-mode)))
 
-;;; Edit file in Docker container.
-;;; This was "stolen" from:
-;;; https://willschenk.com/articles/2020/tramp_tricks/
-;; (push
-;;  (cons
-;;   "docker"
-;;   '((tramp-login-program "docker")
-;;     (tramp-login-args (("exec" "-it") ("%h") ("/bin/bash")))
-;;     (tramp-remote-shell "/bin/sh")
-;;     (tramp-remote-shell-args ("-i") ("-c"))))
-;;  tramp-methods)
-
-;; (defadvice tramp-completion-handle-file-name-all-completions
-;;     (around dotemacs-completion-docker activate)
-;;   "(tramp-completion-handle-file-name-all-completions \"\" \"/docker:\" returns
-;;     a list of active Docker container names, followed by colons."
-;;   (if (equal (ad-get-arg 1) "/docker:")
-;;       (let* ((dockernames-raw (shell-command-to-string "docker ps | awk '$NF != \"NAMES\" { print $NF \":\" }'"))
-;;              (dockernames (cl-remove-if-not
-;;                            #'(lambda (dockerline) (string-match ":$" dockerline))
-;;                            (split-string dockernames-raw "\n"))))
-;;         (setq ad-return-value dockernames))
-;;     ad-do-it))
+(defvar boem-custom-daily-agenda
+  ;; NOTE 2021-12-08: Specifying a match like the following does not
+  ;; work.
+  ;;
+  ;; tags-todo "+PRIORITY=\"A\""
+  ;;
+  ;; So we match everything and then skip entries with
+  ;; `org-agenda-skip-function'.
+  `((tags-todo "*"
+               ((org-agenda-skip-function
+                 `(org-agenda-skip-entry-if
+                   'notregexp ,(format "\\[#%s\\]" (char-to-string org-priority-highest))))
+                (org-agenda-block-separator nil)
+                (org-agenda-overriding-header "Важни задаци\n")))
+    (agenda "" ((org-agenda-time-grid nil)
+                (org-agenda-start-on-weekday nil)
+                (org-agenda-span 1)
+                (org-agenda-show-all-dates nil)
+                (org-scheduled-past-days 365)
+                ;; Excludes today's scheduled items
+                (org-scheduled-delay-days 1)
+                (org-agenda-block-separator nil)
+                (org-agenda-entry-types '(:scheduled))
+                (org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))
+                (org-agenda-day-face-function (lambda (date) 'org-agenda-date))
+                (org-agenda-format-date "")
+                (org-agenda-overriding-header "\nПрошли неурађени задаци")))
+    (agenda "" ((org-agenda-span 1)
+                (org-deadline-warning-days 0)
+                (org-agenda-block-separator nil)
+                (org-scheduled-past-days 0)
+                ;; We don't need the `org-agenda-date-today'
+                ;; highlight because that only has a practical
+                ;; utility in multi-day views.
+                (org-agenda-day-face-function (lambda (date) 'org-agenda-date))
+                (org-agenda-overriding-header "\nДанашњи распоред\n")))
+    (agenda "" ((org-agenda-start-on-weekday nil)
+                (org-agenda-start-day "+1d")
+                (org-agenda-span 5)
+                (org-deadline-warning-days 0)
+                (org-agenda-block-separator nil)
+                (org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))
+                (org-agenda-overriding-header "\nНаредних пет дана\n")))
+    (agenda "" ((org-agenda-time-grid nil)
+                (org-agenda-start-on-weekday nil)
+                ;; We don't want to replicate the previous section's
+                ;; three days, so we start counting from the day after.
+                (org-agenda-start-day "+4d")
+                (org-agenda-span 14)
+                (org-agenda-show-all-dates nil)
+                (org-deadline-warning-days 0)
+                (org-agenda-block-separator nil)
+                (org-agenda-entry-types '(:deadline))
+                (org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))
+                (org-agenda-overriding-header "\nПредстојећи рокови (+14д)\n"))))
+  "Custom agenda for use in `org-agenda-custom-commands'.")
 
 (provide 'init-basic)
 
