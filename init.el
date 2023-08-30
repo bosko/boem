@@ -163,7 +163,17 @@
 (put 'downcase-region 'disabled nil)
 (put 'upcase-region 'disabled nil)
 
-(dolist (hook '(eshell-mode-hook term-mode-hook eww-mode-hook erc-mode-hook))
+(dolist (hook '(eshell-mode-hook
+                term-mode-hook
+                eww-mode-hook
+                erc-mode-hook
+                shell-mode-hook
+                magit-diff-mode-hook
+                ibuffer-mode-hook
+                dired-mode-hook
+                occur-mode-hook
+                docker-cli-mode-hook
+                help-mode-hook))
   (add-hook hook '(lambda() (setq show-trailing-whitespace nil))))
 
 (add-hook 'sql-interactive-mode-hook
