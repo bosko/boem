@@ -222,9 +222,9 @@
   (setq consult-narrow-key "<") ;; (kbd "C-+")
 
   (setq consult-project-root-function #'vc-root-dir)
-  (setq consult-config `((consult-ripgrep :preview-key ,(kbd "M-."))
-                         (consult-grep :preview-key ,(kbd "M-."))
-                         (consult-git-grep :preview-key ,(kbd "M-.")))))
+  (consult-customize
+   consult-ripgrep consult-grep consult-git-grep
+   :preview-key "M-."))
 
 ;; Optionally add the `consult-flycheck' command.
 (use-package consult-flycheck
