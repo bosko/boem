@@ -464,8 +464,7 @@
 ;;;; magit
 (use-package magit
   :ensure t
-  :commands (magit-log magit-run-gitk magit-run-git-gui magit-blame
-                       magit-status magit-git-repo-p magit-list-repos)
+  :commands (magit-log magit-blame magit-status magit-git-repo-p magit-list-repos)
   :bind (("C-x g" . magit-status))
   :init
   (progn
@@ -474,8 +473,7 @@
      magit-status-buffer-switch-function 'switch-to-buffer
      magit-save-some-buffers t
      magit-log-author-date-max-length 25
-     magit-log-auto-more t
-     magit-last-seen-setup-instructions "1.4.0")
+     magit-log-auto-more t)
     (use-package magit-blame
       :commands magit-blame-mode)
     (add-hook 'git-commit-mode-hook
