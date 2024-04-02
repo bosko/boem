@@ -765,6 +765,10 @@
   :commands sass-mode
   :mode "\\.sass\\'")
 
+;; Fires up a separate buffer where you can navigate JSON (buffer or region)
+(use-package json-navigator
+  :ensure t)
+
 ;;;; HTML
 
 ;;;; web-mode
