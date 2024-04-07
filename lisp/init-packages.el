@@ -79,6 +79,11 @@
 (use-package vertico
   :ensure t
   :init
+  (setq vertico-multiform-categories
+      '((file grid)
+        (consult-grep buffer)
+        (embark-keybinding grid)))
+  (vertico-multiform-mode)
   (vertico-mode)
 
   ;; Optionally enable cycling for `vertico-next' and `vertico-previous'.
@@ -136,11 +141,11 @@
   :ensure t
   :after (which-key)
   :init
-  (setq embark-action-indicator
-        (lambda (map _target)
-          (which-key--show-keymap "Embark" map nil nil 'no-paging)
-          #'which-key--hide-popup-ignore-command)
-        embark-become-indicator embark-action-indicator)
+  (setq embark-indicators
+      '(embark-minimal-indicator  ; default is embark-mixed-indicator
+        embark-highlight-indicator
+        embark-isearch-highlight-indicator)
+      embark-prompter 'embark-completing-read-prompter)
   :bind (("C-c ." . embark-act)
          ("C-c ," . embark-act-noexit))
   :config
