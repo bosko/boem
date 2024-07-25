@@ -178,6 +178,7 @@ Code from: http://emacsredux.com/blog/2013/04/28/switch-to-previous-buffer/"
 
 (defvar boem-org-tags '(("Project" . ?p)
                         ("Article" . ?a)
+                        ("Video" . ?v)
                         ("Book" . ?b)
                         ("Code" . ?c)
                         ("Encrypt". ?e))
