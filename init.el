@@ -294,6 +294,8 @@
 (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
 (add-to-list 'default-frame-alist '(ns-appearance . dark))
 
+(set-input-method 'cyrillic-serbian)
+
 (provide 'init)
 
 ;;; init.el ends here
