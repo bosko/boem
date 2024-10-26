@@ -484,7 +484,7 @@
     (add-hook 'git-commit-mode-hook
               #'(lambda ()
                   (auto-fill-mode)
-                  (git-commit-turn-on-flyspell))))
+                  )))
   :config
   (progn
     (require 'json)
@@ -892,16 +892,29 @@
                '(typescriptreact-mode . tsx)))
 
 (use-package eglot
-  :ensure t
-  :after (:any elixir-mode elixir-ts-mode)
+  :after (:any elixir-mode elixir-ts-mode heex-ts-mode)
   :config
-  (dolist (mode '(elixir-ts-mode heex-ts-mode elixir-mode))
-    (add-to-list 'eglot-server-programs
-                 `(,mode . ("~/Code/elixir/elixir-ls/release/language_server.sh"))))
+  ;; (add-to-list 'eglot-server-programs
+  ;;              '((elixir-ts-mode heex-ts-mode elixir-mode) . ("~/Code/elixir/elixir-ls/release/language_server.sh")))
+  (add-to-list 'eglot-server-programs
+               '((elixir-ts-mode heex-ts-mode elixir-mode) . ("~/Code/elixir/lexical/_build/dev/package/lexical/bin/start_lexical.sh")))
+  ;; (add-to-list 'eglot-server-programs
+  ;;              '((elixir-ts-mode heex-ts-mode elixir-mode) .
+  ;;                ("/Users/bosko/programs/nextls" "--stdio=true" :initializationOptions (:experimental (:completions (:enable t))))))
   :init
   (add-hook 'elixir-ts-mode-hook 'eglot-ensure)
   (add-hook 'heex-ts-mode-hook 'eglot-ensure)
   (add-hook 'elixir-mode-hook 'eglot-ensure))
+
+;; (with-eval-after-load 'eglot
+;;   (setf (alist-get '(elixir-mode elixir-ts-mode heex-ts-mode)
+;;                    eglot-server-programs
+;;                    nil nil #'equal)
+;;         (if (and (fboundp 'w32-shell-dos-semantics)
+;;                  (w32-shell-dos-semantics))
+;;             '("language_server.bat")
+;;           (eglot-alternatives
+;;            '("language_server.sh" "~/Code/elixir/lexical/_build/dev/package/lexical/bin/start_lexical.sh")))))
 
 ;;;; yasnippet
 (use-package yasnippet
@@ -1666,7 +1679,6 @@
 
 (use-package which-key
   :commands (which-key)
-  :ensure t
   :init
   (add-hook 'after-init-hook 'which-key-mode)
   (setq which-key-idle-delay 0.5))
