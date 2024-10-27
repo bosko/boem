@@ -85,6 +85,18 @@ is true refresh is skipped"
      '(defadvice ,mode (after boem-rename-modeline activate)
         (setq mode-name ,new-name))))
 
+;; Stop hl-line interfering with default face suggested by
+;; customize-face (taken
+;; from https://sachachua.com/blog/2024/09/highlight-the-current-line-while-still-being-able-to-easily-customize-describe-underlying-faces/)
+(defun boem-suggest-other-faces (func &rest args)
+  (if global-hl-line-mode
+      (progn
+        (global-hl-line-mode -1)
+        (prog1 (apply func args)
+          (global-hl-line-mode 1)))
+    (apply func args)))
+(advice-add #'face-at-point :around #'boem-suggest-other-faces)
+
 ;;;; Modes and mode groupings
 (defmacro boem-hook-into-modes (func modes)
   "Add hook `FUNC' to multiple `MODES'."
