@@ -17,3 +17,7 @@ smex-items
 emms/
 experiments/copilot.el/
 tree-sitter
+eln-cache/
+multisession/
+snippets/
+transient/
