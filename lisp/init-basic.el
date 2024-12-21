@@ -30,18 +30,6 @@
 (make-directory boem-user-themes-directory t)
 (make-directory boem-user-org-directory t)
 
-(defun boem-install-package-if-needed (package &optional min-version no-refresh)
-  "Install required PACKAGE, optionally requiring MIN-VERSION.
-If package is not found in the available package list or NO-REFRESH
-is true refresh is skipped"
-  (if (package-installed-p package)
-      t
-    (if (or (assoc package package-archive-contents) no-refresh)
-        (package-install package)
-      (progn
-        (package-refresh-contents)
-        (boem-install-package-if-needed package min-version t)))))
-
 (defun boem-get-buffer-project-folder (buffer)
   "Returns folder for Git project"
   (let ((proj-folder (locate-dominating-file (buffer-file-name buffer) ".git")))

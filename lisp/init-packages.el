@@ -264,12 +264,7 @@
   :bind ("<f8>" . neotree-toggle))
 
 (use-package nerd-icons
-  :ensure t
-  :custom
-  ;; The Nerd Font you want to use in GUI
-  ;; "Symbols Nerd Font Mono" is the default and is recommended
-  ;; but you can use any other Nerd Font if you want
-  (nerd-icons-font-family "Symbols Nerd Font Mono"))
+  :ensure t)
 
 (use-package nerd-icons-ibuffer
   :ensure t
@@ -279,6 +274,18 @@
   :ensure t
   :hook
   (dired-mode . nerd-icons-dired-mode))
+
+(use-package nerd-icons-completion
+  :ensure t
+  :after marginalia
+  :config
+  (add-hook 'marginalia-mode-hook #'nerd-icons-completion-marginalia-setup))
+
+(use-package nerd-icons-corfu
+  :ensure t
+  :after corfu
+  :config
+  (add-to-list 'corfu-margin-formatters #'nerd-icons-corfu-formatter))
 
 (use-package discover-my-major
   :ensure t
@@ -308,11 +315,22 @@
 (use-package tramp
   :defer t
   :config
-  (progn
-    (setq vc-ignore-dir-regexp
-          (format "\\(%s\\)\\|\\(%s\\)"
-                  vc-ignore-dir-regexp
-                  tramp-file-name-regexp))))
+  (setq vc-ignore-dir-regexp
+        (format "\\(%s\\)\\|\\(%s\\)"
+                vc-ignore-dir-regexp
+                tramp-file-name-regexp))
+  (tramp-set-completion-function
+   "ssh" (append (tramp-get-completion-function "ssh")
+                 (mapcar (lambda (file) `(tramp-parse-sconfig ,file))
+                         (directory-files
+                          "~/.ssh"
+                          'full directory-files-no-dot-files-regexp))))
+  (tramp-set-completion-function
+   "scp" (append (tramp-get-completion-function "scp")
+                 (mapcar (lambda (file) `(tramp-parse-sconfig ,file))
+                         (directory-files
+                          "~/.ssh"
+                          'full directory-files-no-dot-files-regexp)))))
 
 ;;;; savehist
 (use-package savehist
@@ -611,35 +629,28 @@
   )
 
 (use-package corfu
-  :custom
-  (corfu-cycle t)           ;; Enable cycling for `corfu-next/previous'
-  (corfu-preselect 'prompt) ;; Always preselect the prompt
-
+  :ensure t
+  :hook (after-init . global-corfu-mode)
+  :bind (:map corfu-map ("<tab>" . corfu-complete))
   :config
-  (defun corfu-move-to-minibuffer ()
-    (interactive)
-    (let ((completion-extra-properties corfu--extra)
-          completion-cycle-threshold completion-cycling)
-      (apply #'consult-completion-in-region completion-in-region--data)))
+  (setq tab-always-indent 'complete)
+  (setq corfu-preview-current nil)
+  (setq corfu-min-width 20)
 
-  ;; Use TAB for cycling, default is `corfu-complete'.
-  :bind
-  (:map corfu-map
-        ("TAB" . corfu-next)
-        ([tab] . corfu-next)
-        ("S-TAB" . corfu-previous)
-        ([backtab] . corfu-previous)
-        ("<escape>" . corfu-quit)
-        ("M-m" . corfu-move-to-minibuffer))
+  (setq corfu-popupinfo-delay '(1.25 . 0.5))
+  (corfu-popupinfo-mode 1) ; shows documentation after `corfu-popupinfo-delay'
+
+  ;; Sort by input history (no need to modify `corfu-sort-function').
+  (with-eval-after-load 'savehist
+    (corfu-history-mode 1)
+    (add-to-list 'savehist-additional-variables 'corfu-history))
 
   :init
   (use-package corfu-terminal
     :ensure t)
 
   (unless (display-graphic-p)
-    (corfu-terminal-mode +1))
-
-  (global-corfu-mode))
+    (corfu-terminal-mode +1)))
 
 ;;;; which-func
 (use-package which-func
@@ -823,9 +834,9 @@
   (let ((asdf-erl (shell-command-to-string "asdf which erl")))
     (if (cl-search "command not found" asdf-erl)
         (progn
-          (add-to-list 'load-path "/Users/bosko/.asdf/installs/erlang/25.0.4/lib/tools-3.5.3/emacs/")
-          (setq erlang-root-dir "/Users/bosko/.asdf/installs/erlang/25.0.4/")
-          (setq exec-path (cons "/Users/bosko/.asdf/installs/erlang/25.0.4/bin" exec-path))
+          (add-to-list 'load-path "/Users/bosko/.asdf/installs/erlang/27.1.1/lib/tools-4.1/emacs/")
+          (setq erlang-root-dir "/Users/bosko/.asdf/installs/erlang/27.1.1/")
+          (setq exec-path (cons "/Users/bosko/.asdf/installs/erlang/27.1.1/bin" exec-path))
           (require 'erlang-start))
       (progn
         (setq erlang-root-dir (substring asdf-erl 0 (cl-search "/bin/erl" asdf-erl)))

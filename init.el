@@ -17,8 +17,6 @@
 
 (message "%s, starting up Emacs" boem-current-user)
 
-(boem-install-package-if-needed 'use-package)
-
 (add-to-list 'treesit-extra-load-path (expand-file-name "tree-sitter" boem-user-data-directory))
 
 (setq-default ;; xdisp.c
@@ -255,6 +253,38 @@
 (package-initialize)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 
+;; Do not let warning and compile error buffers to pop-up
+(add-to-list 'display-buffer-alist
+             '("\\`\\*\\(Warnings\\|Compile-Log\\)\\*\\'"
+               (display-buffer-no-window)
+               (allow-no-window . t)))
+
+(defun prot/keyboard-quit-dwim ()
+  "Do-What-I-Mean behaviour for a general `keyboard-quit'.
+
+The generic `keyboard-quit' does not do the expected thing when
+the minibuffer is open.  Whereas we want it to close the
+minibuffer, even without explicitly focusing it.
+
+The DWIM behaviour of this command is as follows:
+
+- When the region is active, disable it.
+- When a minibuffer is open, but not focused, close the minibuffer.
+- When the Completions buffer is selected, close it.
+- In every other case use the regular `keyboard-quit'."
+  (interactive)
+  (cond
+   ((region-active-p)
+    (keyboard-quit))
+   ((derived-mode-p 'completion-list-mode)
+    (delete-completion-window))
+   ((> (minibuffer-depth) 0)
+    (abort-recursive-edit))
+   (t
+    (keyboard-quit))))
+
+(define-key global-map (kbd "C-g") #'prot/keyboard-quit-dwim)
+
 ;;; Theme
 (if (eq nil (display-graphic-p))
     (load-theme 'modus-operandi t)
@@ -266,7 +296,7 @@
 
 (require 'use-package)
 
-(if (find-font (font-spec :name "DejaVuSansMono Nerd Font Mono 12"))
+(if (find-font (font-spec :name "DejaVuSansMono Nerd Font Mono"))
     (set-frame-font "DejaVuSansMono Nerd Font Mono 12" t t))
 
 (load "init-packages")
