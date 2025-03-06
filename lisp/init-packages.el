@@ -831,15 +831,15 @@
 ;;; Erlang
 (cond
  ((string-equal system-type "darwin")
-  (let ((asdf-erl (shell-command-to-string "asdf which erl")))
-    (if (cl-search "command not found" asdf-erl)
+  (let ((mise-erl (shell-command-to-string "mise which erl")))
+    (if (cl-search "command not found" mise-erl)
         (progn
           (add-to-list 'load-path "/Users/bosko/.asdf/installs/erlang/27.1.1/lib/tools-4.1/emacs/")
           (setq erlang-root-dir "/Users/bosko/.asdf/installs/erlang/27.1.1/")
           (setq exec-path (cons "/Users/bosko/.asdf/installs/erlang/27.1.1/bin" exec-path))
           (require 'erlang-start))
       (progn
-        (setq erlang-root-dir (substring asdf-erl 0 (cl-search "/bin/erl" asdf-erl)))
+        (setq erlang-root-dir (substring mise-erl 0 (cl-search "/bin/erl" mise-erl)))
         (setq exec-path (cons (concat erlang-root-dir "/bin") exec-path))
         (let ((tools-dir (file-expand-wildcards (concat erlang-root-dir "/lib/tools-*"))))
           (if tools-dir
@@ -1500,7 +1500,8 @@
      org-startup-folded t
      org-directory boem-user-org-directory
      org-src-fontify-natively t
-     org-preview-latex-default-process 'dvisvgm)
+     org-preview-latex-default-process 'dvisvgm
+     org-insert-heading-respect-content t)
     ;; (setq org-refile-targets
     ;;       '((org-agenda-files :regexp . "Tasks")))
     (setq org-refile-targets
