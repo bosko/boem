@@ -246,6 +246,7 @@
 (column-number-mode t)
 (global-hl-line-mode 1)
 (global-so-long-mode 1)
+(global-completion-preview-mode)
 (delete-selection-mode)
 
 (defalias 'yes-or-no-p 'y-or-n-p)
