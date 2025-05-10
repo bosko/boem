@@ -355,17 +355,6 @@ Code from: http://emacsredux.com/blog/2013/04/28/switch-to-previous-buffer/"
      (get-buffer-create name)
      `("git" "--no-pager" "diff" "--ext-diff" ,@(when arg (list arg))))))
 
-(transient-define-prefix th/magit-aux-commands ()
-  "My personal auxiliary magit commands."
-  ["Auxiliary commands"
-   ("d" "Difftastic Diff (dwim)" th/magit-diff-with-difftastic)
-   ("s" "Difftastic Show" th/magit-show-with-difftastic)])
-
-(transient-append-suffix 'magit-dispatch "!"
-  '("#" "My Magit Cmds" th/magit-aux-commands))
-
-(define-key magit-status-mode-map (kbd "#") #'th/magit-aux-commands)
-
 (provide 'init-basic)
 
 ;;; init-basic.el ends here

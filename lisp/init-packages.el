@@ -521,7 +521,19 @@
       (interactive)
       (setq magit-diff-options (remove "-w" magit-diff-options))
       (magit-refresh))
-    (bind-key "W" 'magit-toggle-whitespace magit-status-mode-map)))
+    (bind-key "W" 'magit-toggle-whitespace magit-status-mode-map)
+
+    (transient-define-prefix th/magit-aux-commands
+      ()
+      "My personal auxiliary magit commands."
+      ["Auxiliary commands"
+       ("d" "Difftastic Diff (dwim)" th/magit-diff-with-difftastic)
+       ("s" "Difftastic Show" th/magit-show-with-difftastic)])
+
+    (transient-append-suffix 'magit-dispatch "!"
+      '("#" "My Magit Cmds" th/magit-aux-commands))
+
+    (define-key magit-status-mode-map (kbd "#") #'th/magit-aux-commands)))
 
 ;;;; diff-hl
 (use-package diff-hl
