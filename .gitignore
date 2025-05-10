@@ -15,9 +15,10 @@ smex-items
 .lsp-session-v1
 .emacs.desktop
 emms/
-experiments/copilot.el/
+experiments/
 tree-sitter
 eln-cache/
 multisession/
 snippets/
 transient/
+ielm-history.eld
