@@ -599,19 +599,10 @@
 
     ;; TODO undo-tree-save-history must not write to messages buffer
     ;; (unless (string< emacs-version "24.3")
-    ;; (setq undo-tree-auto-save-history t))
+    (setq undo-tree-auto-save-history t)
 
     (global-undo-tree-mode)
-
-    (defadvice undo-tree-insert (around pretty activate)
-      (ad-set-arg 0 (cond
-                     ((equal ?| (ad-get-arg 0)) ?│)
-                     ((equal ?\\ (ad-get-arg 0)) ?╲)
-                     ((equal ?/ (ad-get-arg 0)) ?╱)
-                     ((equal ?- (ad-get-arg 0)) ?─)
-                     (t (ad-get-arg 0)))())
-      ad-do-it))
-  )
+    ))
 
 ;;;; volatile-highlights
 (use-package volatile-highlights
@@ -1130,14 +1121,7 @@
       :ensure t
       :commands (ibuffer-tramp-generate-filter-groups-by-tramp-connection
                  ibuffer-tramp-set-filter-groups-by-tramp-connection))
-    ;; Switching to ibuffer puts the cursor on the most recent buffer
-    (defadvice ibuffer (around ibuffer-point-to-most-recent activate)
-      "Open ibuffer with cursor pointed to most recent buffer name"
-      (let ((recent-buffer-name (buffer-name)))
-        ad-do-it
-        (ibuffer-update nil t)
-        (unless (string= recent-buffer-name "*Ibuffer*")
-          (ibuffer-jump-to-buffer recent-buffer-name)))))
+    )
   :config
   (progn
     (unbind-key "M-o" ibuffer-mode-map)
@@ -1202,18 +1186,6 @@
        (t
         (format "%8d" (buffer-size)))))
 
-    (require 'ibuf-ext)
-    (define-ibuffer-filter filename2
-        "Toggle current view to buffers with filename matching QUALIFIER."
-      (:description "filename2"
-                    :reader (read-from-minibuffer "Filter by filename (regexp): "))
-      ;; (ibuffer-awhen (buffer-local-value 'buffer-file-name buf)
-      (ibuffer-awhen (with-current-buffer buf
-                       (or buffer-file-name
-                           default-directory))
-        (string-match qualifier it)))
-
-
     (defvar ibuffer-magit-filter-groups nil)
     (defun ibuffer-magit-define-filter-groups ()
       (when (and (not ibuffer-magit-filter-groups)
@@ -1276,26 +1248,6 @@
               (ibuffer-jump-to-buffer (buffer-name selected-buffer )))))))
 
     (bind-key "H" 'set-categorized-ibuffer-filter-group ibuffer-mode-map)
-
-
-    (defadvice ibuffer-invert-sorting (around ibuffer-point-to-same activate)
-      "TODO"
-      (let ((ibuf (get-buffer "*Ibuffer*")))
-        (when ibuf
-          (with-current-buffer ibuf
-            (let ((selected-buffer (ibuffer-current-buffer)))
-              ad-do-it
-              (ibuffer-jump-to-buffer (buffer-name selected-buffer )))))))
-
-    (defadvice ibuffer-toggle-sorting-mode (around ibuffer-point-to-same activate)
-      "TODO"
-      (let ((ibuf (get-buffer "*Ibuffer*")))
-        (when ibuf
-          (with-current-buffer ibuf
-            (let ((selected-buffer (ibuffer-current-buffer)))
-              ad-do-it
-              (ibuffer-jump-to-buffer (buffer-name selected-buffer )))))))
-
 
     (setq
      ibuffer-default-sorting-mode 'recency
