@@ -243,11 +243,12 @@
 ;; Treat clipboard input as UTF-8 string first; compound text next, etc.
 (setq x-select-request-type '(UTF8_STRING COMPOUND_TEXT TEXT STRING))
 
-(column-number-mode t)
+(column-number-mode 1)
 (global-hl-line-mode 1)
 (global-so-long-mode 1)
-(global-completion-preview-mode)
-(delete-selection-mode)
+(global-completion-preview-mode 1)
+(delete-selection-mode 1)
+(desktop-save-mode 1)
 
 (defalias 'yes-or-no-p 'y-or-n-p)
 
