@@ -125,12 +125,13 @@
  ;; gpgconf --reload gpg-agent
  epa-pinentry-mode 'loopback
  ;; modus-themes configuration
- modus-themes-slanted-constructs t
- modus-themes-hl-line '(accented intense)
- modus-themes-mode-line '(3d accented)
- modus-themes-prompts '(background intense bold)
- modus-themes-paren-match '(intense bold)
- modus-themes-bold-constructs nil
+ modus-themes-bold-constructs t
+ modus-themes-prompts '(extrabold italic)
+ modus-themes-common-palette-overrides
+ '(
+   (bg-paren-match olive)
+   (fg-paren-match fg-term-black)
+   )
  ansi-color-for-comint-mode t
  locale-coding-system 'utf-8
  default-file-name-coding-system 'utf-8
@@ -248,7 +249,6 @@
 (global-so-long-mode 1)
 (global-completion-preview-mode 1)
 (delete-selection-mode 1)
-(desktop-save-mode 1)
 
 (defalias 'yes-or-no-p 'y-or-n-p)
 
