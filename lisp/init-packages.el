@@ -85,9 +85,8 @@
         (embark-keybinding grid)))
   (vertico-multiform-mode)
   (vertico-mode)
-
-  ;; Optionally enable cycling for `vertico-next' and `vertico-previous'.
-  ;; (setq vertico-cycle t)
+  :custom
+  (vertico-sort-function 'vertico-sort-history-alpha)
   )
 
 ;; A few more useful configurations...
@@ -104,7 +103,7 @@
   (advice-add #'completing-read-multiple :filter-args #'crm-indicator)
 
   ;; Grow and shrink minibuffer
-  ;;(setq resize-mini-windows t)
+  (setq resize-mini-windows t)
 
   ;; Do not allow the cursor in the minibuffer prompt
   (setq minibuffer-prompt-properties
