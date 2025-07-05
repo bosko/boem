@@ -72,6 +72,7 @@
   :ensure t
   :init
   (setq dash-docs-enable-debugging nil)
+  (setq dash-docs-browser-func #'eww)
   :config
   (mapc #'(lambda (doc) (dash-docs-activate-docset doc)) (dash-docs-installed-docsets)))
 
