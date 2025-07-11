@@ -1642,17 +1642,6 @@
   :ensure t
   :commands (websocket-open))
 
-(use-package mcp
-  :ensure t
-  :vc (:url "https://github.com/lizqwerscott/mcp.el" :rev :newest)
-  :init
-  (progn
-    (setq mcp-hub-servers
-          '(("tidewave-elixir" . (:url "http://localhost:4000/tidewave/mcp"))
-            ("tidewave-rails" . (:url "http://localhost:3000/tidewave/mcp"))))
-    )
-  )
-
 (use-package gptel
   :ensure t
   :defer t
@@ -1663,6 +1652,15 @@
   ("M-o w m" . gptel-menu)
   ("M-o w t" . gptel-tools)
   ("M-o w h" . mcp-hub)
+  )
+
+(use-package mcp
+  :ensure t
+  :after gptel
+  :custom (mcp-hub-servers
+           '(("tidewave-elixir" . (:url "http://localhost:4000/tidewave/mcp"))
+             ("tidewave-rails" . (:url "http://localhost:3000/tidewave/mcp"))))
+  :config (require 'mcp-hub)
   )
 
 (provide 'init-packages)
