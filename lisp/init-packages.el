@@ -81,8 +81,7 @@
   :ensure t
   :init
   (setq vertico-multiform-categories
-      '((file grid)
-        (consult-grep buffer)
+      '((consult-grep buffer)
         (embark-keybinding grid)))
   (vertico-multiform-mode)
   (vertico-mode)
@@ -133,7 +132,12 @@
 
 (use-package marginalia
   :ensure t
-  :config
+  ;; Bind `marginalia-cycle' locally in the minibuffer.  To make the binding
+  ;; available in the *Completions* buffer, add it to the
+  ;; `completion-list-mode-map'.
+  :bind (:map minibuffer-local-map
+         ("M-A" . marginalia-cycle))
+  :init
   (marginalia-mode))
 
 ;;;; embark
@@ -941,6 +945,7 @@
   :config
   ;; (add-to-list 'eglot-server-programs
   ;;              '((elixir-ts-mode heex-ts-mode elixir-mode) . ("~/Code/elixir/elixir-ls/release/language_server.sh")))
+  (setq eglot-code-action-indications '(mode-line))
   (add-to-list 'eglot-server-programs
                '((elixir-ts-mode heex-ts-mode elixir-mode) . ("~/Code/elixir/lexical/_build/dev/package/lexical/bin/start_lexical.sh")))
   ;; (add-to-list 'eglot-server-programs
