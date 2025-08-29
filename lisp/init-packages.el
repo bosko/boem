@@ -946,8 +946,8 @@
   ;; (add-to-list 'eglot-server-programs
   ;;              '((elixir-ts-mode heex-ts-mode elixir-mode) . ("~/Code/elixir/elixir-ls/release/language_server.sh")))
   (setq eglot-code-action-indications '(mode-line))
-  (add-to-list 'eglot-server-programs
-               '((elixir-ts-mode heex-ts-mode elixir-mode) . ("~/Code/elixir/lexical/_build/dev/package/lexical/bin/start_lexical.sh")))
+  ;; (add-to-list 'eglot-server-programs
+  ;;              '((elixir-ts-mode heex-ts-mode elixir-mode) . ("~/Code/elixir/lexical/_build/dev/package/lexical/bin/start_lexical.sh")))
   ;; (add-to-list 'eglot-server-programs
   ;;              '((elixir-ts-mode heex-ts-mode elixir-mode) .
   ;;                ("/Users/bosko/programs/nextls" "--stdio=true" :initializationOptions (:experimental (:completions (:enable t))))))
@@ -956,15 +956,19 @@
   (add-hook 'heex-ts-mode-hook 'eglot-ensure)
   (add-hook 'elixir-mode-hook 'eglot-ensure))
 
-;; (with-eval-after-load 'eglot
-;;   (setf (alist-get '(elixir-mode elixir-ts-mode heex-ts-mode)
-;;                    eglot-server-programs
-;;                    nil nil #'equal)
-;;         (if (and (fboundp 'w32-shell-dos-semantics)
-;;                  (w32-shell-dos-semantics))
-;;             '("language_server.bat")
-;;           (eglot-alternatives
-;;            '("language_server.sh" "~/Code/elixir/lexical/_build/dev/package/lexical/bin/start_lexical.sh")))))
+;; Instructions. Manually download expert_darwin_arm64 from
+;; GitHub and place it in ~/programs. If it does not exist
+;; create symbolic link to it in /usr/local/bin or anywhere
+;; else in the path.
+(with-eval-after-load 'eglot
+  (setf (alist-get '(elixir-mode elixir-ts-mode heex-ts-mode)
+                   eglot-server-programs
+                   nil nil #'equal)
+        (if (and (fboundp 'w32-shell-dos-semantics)
+                 (w32-shell-dos-semantics))
+            '("expert_windows_amd64")
+          (eglot-alternatives
+           '("expert_linux_amd64" "expert_darwin_arm64")))))
 
 ;;;; yasnippet
 (use-package yasnippet
