@@ -1477,6 +1477,8 @@
                              ((daily today require-timed)
                               (0700 0900 1100 1300 1500 1700 1900 2100)
                               " ....." "-----------------"))
+       org-agenda-prefix-format '((agenda . " %i %-20:c%?-12t% s") (todo . " %i %-20:c")
+                                  (tags . " %i %-20:c") (search . " %i %-20:c"))
        org-agenda-custom-commands `(("A" "Daily agenda and top priority tasks"
                                      ,boem-custom-daily-agenda))))
 
