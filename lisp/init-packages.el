@@ -941,20 +941,7 @@
                '(typescriptreact-mode . tsx)))
 
 (use-package eglot
-  :after (:any elixir-mode elixir-ts-mode heex-ts-mode)
-  :config
-  ;; (add-to-list 'eglot-server-programs
-  ;;              '((elixir-ts-mode heex-ts-mode elixir-mode) . ("~/Code/elixir/elixir-ls/release/language_server.sh")))
-  (setq eglot-code-action-indications '(mode-line))
-  ;; (add-to-list 'eglot-server-programs
-  ;;              '((elixir-ts-mode heex-ts-mode elixir-mode) . ("~/Code/elixir/lexical/_build/dev/package/lexical/bin/start_lexical.sh")))
-  ;; (add-to-list 'eglot-server-programs
-  ;;              '((elixir-ts-mode heex-ts-mode elixir-mode) .
-  ;;                ("/Users/bosko/programs/nextls" "--stdio=true" :initializationOptions (:experimental (:completions (:enable t))))))
-  :init
-  (add-hook 'elixir-ts-mode-hook 'eglot-ensure)
-  (add-hook 'heex-ts-mode-hook 'eglot-ensure)
-  (add-hook 'elixir-mode-hook 'eglot-ensure))
+  :hook (prog-mode . eglot-ensure))
 
 ;; Instructions. Manually download expert_darwin_arm64 from
 ;; GitHub and place it in ~/programs. If it does not exist
