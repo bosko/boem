@@ -1413,16 +1413,9 @@
   :mode ("\\.textile\\'" . textile-mode))
 
 ;;;; markdown-mode
-;; Instructions from https://github.com/LionyxML/markdown-ts-mode
-;; Before using it, be sure you have BOTH markdown and markdown-inline grammars installed.
-;; M-x treesit-install-language-grammar RET markdown RET
-;; M-x treesit-install-language-grammar RET markdown-inline RET
-(use-package markdown-ts-mode
+(use-package markdown-mode
   :mode ("\\.md\\'" . markdown-ts-mode)
-  :defer 't
-  :config
-  (add-to-list 'treesit-language-source-alist '(markdown "https://github.com/tree-sitter-grammars/tree-sitter-markdown" "split_parser" "tree-sitter-markdown/src"))
-  (add-to-list 'treesit-language-source-alist '(markdown-inline "https://github.com/tree-sitter-grammars/tree-sitter-markdown" "split_parser" "tree-sitter-markdown-inline/src")))
+  :defer t)
 
 ;;;; org
 (use-package org
