@@ -43,19 +43,19 @@
 
 (defconst boem-weather--current-param
   '(
-    ("current" "weather_code,temperature_2m,apparent_temperature,is_day,wind_speed_10m,wind_direction_10m,wind_gusts_10m,precipitation,rain,showers,snowfall,pressure_msl,relative_humidity_2m")
+    ("current" "weather_code,temperature_2m,apparent_temperature,wind_speed_10m,wind_direction_10m,precipitation_probability,precipitation,pressure_msl,relative_humidity_2m")
     ("forecast_days" 1)
     ))
 
 (defconst boem-weather--hourly-param
   '(
-    ("hourly" "temperature_2m,relative_humidity_2m,apparent_temperature,precipitation_probability,precipitation,rain,showers,snowfall,weather_code,pressure_msl,wind_speed_10m,wind_direction_10m,wind_gusts_10m")
+    ("hourly" "temperature_2m,apparent_temperature,precipitation_probability,precipitation,rain,weather_code,wind_speed_10m,wind_direction_10m")
     ("forecast_days" 1)
     ))
 
 (defconst boem-weather--daily-param
   '(
-    ("daily" "weather_code,temperature_2m_max,temperature_2m_min,apparent_temperature_max,apparent_temperature_min,wind_speed_10m_max,wind_gusts_10m_max,wind_direction_10m_dominant,sunrise,sunset,precipitation_probability_max")
+    ("daily" "weather_code,temperature_2m_max,temperature_2m_min,wind_speed_10m_max,wind_direction_10m_dominant,sunrise,sunset,precipitation_probability_max")
     ("forecatst_days" 7)
     ))
 
@@ -142,19 +142,36 @@
 ;;; ----------------------------------------------------------------
 (defun boem-weather--fmt-current (data)
   (let* ((current_weather (gethash "current" data))
-         (weather_code (gethash "weather_code" current_weather)))
+         (weather_code (gethash "weather_code" current_weather))
+         (current_units (gethash "current_units" data)))
     (format
-     "%s  %s (%s)\n\
-%s  %.1f °C\n\
-%s  %.1f m/s  (%d°)\n"
-     (boem-weather--code-icon weather_code)
-     (boem-weather--code-desc weather_code)
-     (gethash "time" current_weather)
+"%s %2d%s (%2d%s)\n\
+%s %s\n\
+%s %d %s\n\
+%s %d%s (%d %s)\n\
+%d %s\n\
+%s %d %s"
      (boem-weather--wi "nf-weather-thermometer")
      (gethash "temperature_2m" current_weather)
+     (gethash "temperature_2m" current_units)
+     (gethash "apparent_temperature" current_weather)
+     (gethash "temperature_2m" current_units)
+     (boem-weather--code-icon weather_code)
+     (boem-weather--code-desc weather_code)
      (boem-weather--wind-icon (gethash "wind_direction_10m" current_weather))
      (gethash "wind_speed_10m" current_weather)
-     (gethash "wind_direction_10m" current_weather))
+     (gethash "wind_speed_10m" current_units)
+     (boem-weather--wi "nf-weather-rain")
+     (gethash "precipitation_probability" current_weather)
+     (gethash "precipitation_probability" current_units)
+     (gethash "precipitation" current_weather)
+     (gethash "precipitation" current_units)
+     (gethash "pressure_msl" current_weather)
+     (gethash "pressure_msl" current_units)
+     (boem-weather--wi "nf-weather-humidity")
+     (gethash "relative_humidity_2m" current_weather)
+     (gethash "relative_humidity_2m" current_units)
+     )
     )
   )
 
@@ -197,18 +214,37 @@
     (string-join (nreverse result-lines) "\n")))
 
 (defun boem-weather--fmt-hourly (data)
-  (let* ((hr (gethash "hourly" data))
-         (times (gethash "time" hr))
-         (temperature_2m (gethash "temperature_2m" hr))
-         (today (format-time-string "%Y-%m-%d"))
-         (rows (cl-loop for tm in times
-                        for tp in temperature_2m
-                        when (string-prefix-p today tm)
-                        collect (format "%s %s %4.1f °C"
-                                        (substring tm 11 16)
-                                        (boem-weather--wi "nf-weather-thermometer")
-                                        tp))))
-    (concat "Hourly (today)\n" (string-join rows "\n"))))
+  (let* ((hourly (gethash "hourly" data))
+         (times (gethash "time" hourly))
+         (temperature (gethash "temperature_2m" hourly))
+         (apparent_temperature (gethash "apparent_temperature" hourly))
+         (wcode (gethash "weather_code" hourly))
+         (wind-speed (gethash "wind_speed_10m" hourly))
+         (wind-direction (gethash "wind_direction_10m" hourly))
+         (precip (gethash "precipitation_probability" hourly))
+         (units (gethash "hourly_units" data))
+         (temp-unit (gethash "temperature_2m" units))
+         (precip-unit (gethash "precipitation_probability" units))
+         (wind-speed-unit (gethash "wind_speed_10m" units))
+         (result-lines nil))
+    (dotimes (i (length times))
+             (push (format "%s  %s %s%2d%s (%2d%s)   %s %s%2d %s  %2d%s"
+                           (substring (nth i times) 11 16)
+                           (boem-weather--code-icon (nth i wcode))
+                           (boem-weather--wi "nf-weather-thermometer")
+                           (nth i temperature)
+                           temp-unit
+                           (nth i apparent_temperature)
+                           temp-unit
+                           (nerd-icons-mdicon "nf-md-weather_windy")
+                           (boem-weather--wind-icon (nth i wind-direction))
+                           (nth i wind-speed)
+                           (gethash "wind_speed_10m" units)
+                           (nth i precip)
+                           precip-unit
+                           ) result-lines)
+             )
+    (string-join (nreverse result-lines) "\n")))
 
 (defun boem-weather--fmt-daily-sunrise-line (data)
   (let* ((daily (gethash "daily" data))
