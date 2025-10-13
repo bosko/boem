@@ -61,6 +61,7 @@
 
 (defvar boem-weather--data nil)
 (defvar boem-weather--display-interval 'current)
+(defvar boem-weather--frame nil)
 
 ;;; ----------------------------------------------------------------
 ;;; Icons and descriptions
@@ -320,8 +321,6 @@ Closes on any key press."
   (let* ((parent-frame (selected-frame))
          (parent-width (frame-pixel-width parent-frame))
          (parent-height (frame-pixel-height parent-frame))
-
-         child-frame
          pos-left pos-top)
     ;; Calculate size of text in lines and columns
     (with-current-buffer display-buffer
@@ -339,7 +338,8 @@ Closes on any key press."
                (frame-pixel-height (* line-count char-height)))
           (setq pos-left (/ (- parent-width frame-pixel-width) 2))
           (setq pos-top (/ (- parent-height frame-pixel-height) 2))
-          (setq child-frame
+          (if (not (frame-live-p boem-weather--frame))
+            (setq boem-weather--frame
                 (make-frame `((parent-frame . ,parent-frame)
                               (minibuffer . nil)
                               (left . ,pos-left)
@@ -360,8 +360,10 @@ Closes on any key press."
                               (user-position . t)
                               (drag-internal-border . nil)
                               (border-color . "white")
-                              (background-color . ,(face-background 'default nil t))))))
-        (with-selected-frame child-frame
+                              (background-color . ,(face-background 'default nil t)))))
+            )
+          )
+        (with-selected-frame boem-weather--frame
           (switch-to-buffer display-buffer)
           (goto-char (point-min))
           (setq-local cursor-type nil)
@@ -373,8 +375,8 @@ Closes on any key press."
             (define-key map [t]
                         (lambda ()
                           (interactive)
-                          (when (frame-live-p child-frame)
-                            (delete-frame child-frame))
+                          (when (frame-live-p boem-weather--frame)
+                            (delete-frame boem-weather--frame))
                           (when (buffer-live-p display-buffer)
                             (kill-buffer display-buffer))))
             (use-local-map map))
