@@ -898,7 +898,8 @@
 (use-package elixir-ts-mode
   :ensure t
   :mode (("\\.ex\\'" . elixir-ts-mode)
-         ("\\.exs\\'" . elixir-ts-mode))
+         ("\\.exs\\'" . elixir-ts-mode)
+         ("\\.heex\\'" . elixir-ts-mode))
   :init
   (eval-after-load "hideshow"
     '(add-to-list 'hs-special-modes-alist
@@ -912,12 +913,11 @@
               (hs-minor-mode)
               (add-hook 'before-save-hook #'eglot-format nil t))))
 
-(use-package heex-ts-mode
+(use-package exunit
   :ensure t
-  :mode (("\\.heex\\'" . heex-ts-mode))
-  :init
-  (add-hook 'heex-ts-mode-hook
-            (lambda () (add-hook 'before-save-hook #'eglot-format nil t))))
+  :config
+  (add-hook 'elixir-mode-hook 'exunit-mode)
+  (setq transient-default-level 5))
 
 ;;; Typescript
 (use-package typescript-ts-mode
