@@ -361,7 +361,18 @@ Closes on any key press."
                               (drag-internal-border . nil)
                               (border-color . "white")
                               (background-color . ,(face-background 'default nil t)))))
-            )
+            (progn
+              (fit-frame-to-buffer boem-weather--frame)
+              (let* ((parent (frame-parent boem-weather--frame))
+                     (char-width (frame-char-width parent-frame))
+                     (char-height (frame-char-height parent-frame))
+                     (left-pos (* (/ (- (frame-width parent) (frame-width boem-weather--frame)) 2) char-width))
+                     (top-pos (* (/ (- (frame-height parent) (frame-height boem-weather--frame)) 2) char-height)))
+                (print (format "Parent width %d, child width: %d" (frame-width parent) (frame-width boem-weather--frame)))
+                (print (format "Left: %d, top: %d" left-pos top-pos))
+                (set-frame-position boem-weather--frame left-pos top-pos)
+                )
+              ))
           )
         (with-selected-frame boem-weather--frame
           (switch-to-buffer display-buffer)
@@ -421,7 +432,7 @@ Closes on any key press."
 (define-derived-mode weather-view-mode special-mode "Weather"
   "Major mode for displaying weather from boem-weather.com.")
 
-;;;###autoload
+;;; autoload
 (defun boem-weather ()
   "Show current weather in a child frame."
   (interactive)
