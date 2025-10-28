@@ -1654,6 +1654,9 @@
   :config (require 'mcp-hub)
   )
 
+(use-package boem-weather
+  :vc (:url "https://gitlab.com/boskoivanisevic/boem-weather"))
+
 (provide 'init-packages)
 
 ;;; init-packages.el ends here
