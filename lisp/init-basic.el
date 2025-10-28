@@ -355,33 +355,6 @@ Code from: http://emacsredux.com/blog/2013/04/28/switch-to-previous-buffer/"
      (get-buffer-create name)
      `("git" "--no-pager" "diff" "--ext-diff" ,@(when arg (list arg))))))
 
-;;; Tidewave
-;; (add-to-list 'load-path (expand-file-name "experiments/mcp" boem-init-root))
-
-;; (require 'mcp-hub)
-
-;; (setq mcp-hub-servers
-;;       '(("tidewave-elixir" . (:url "http://localhost:4000/tidewave/mcp"))
-;;          ("tidewave-rails" . (:url "http://localhost:3000/tidewave/mcp"))))
-
-;; (defun gptel-mcp-register-tool ()
-;;   (interactive)
-;;   (let ((tools (mcp-hub-get-all-tool :asyncp t :categoryp t)))
-;;     (mapcar #'(lambda (tool)
-;;                 (apply #'gptel-make-tool
-;;                        tool))
-;;             tools)))
-
-;; (defun gptel-mcp-use-tool ()
-;;   (interactive)
-;;   (let ((tools (mcp-hub-get-all-tool :asyncp t :categoryp t)))
-;;     (mapcar #'(lambda (tool)
-;;                 (let ((path (list (plist-get tool :category)
-;;                                   (plist-get tool :name))))
-;;                   (push (gptel-get-tool path)
-;;                         gptel-tools)))
-;;             tools)))
-
 (provide 'init-basic)
 
 ;;; init-basic.el ends here
