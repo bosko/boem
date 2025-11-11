@@ -1655,7 +1655,10 @@
   )
 
 (use-package boem-weather
-  :vc (:url "https://gitlab.com/boskoivanisevic/boem-weather"))
+  :vc (:url "https://gitlab.com/boskoivanisevic/boem-weather")
+  :bind
+  ("M-o w h" . boem-weather)
+)
 
 (provide 'init-packages)
 
