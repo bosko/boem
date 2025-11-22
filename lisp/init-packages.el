@@ -955,7 +955,7 @@
                  (w32-shell-dos-semantics))
             '("expert_windows_amd64")
           (eglot-alternatives
-           '("expert_linux_amd64" "expert_darwin_arm64")))))
+           '("expert_linux_amd64" ("expert_darwin_arm64" "--stdio"))))))
 
 ;;;; yasnippet
 (use-package yasnippet
