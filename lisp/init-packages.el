@@ -1414,7 +1414,7 @@
 
 ;;;; markdown-mode
 (use-package markdown-mode
-  :mode ("\\.md\\'" . markdown-ts-mode)
+  :mode ("\\.md\\'" . markdown-mode)
   :defer t)
 
 ;;;; org
@@ -1643,6 +1643,14 @@
   ("M-o w m" . gptel-menu)
   ("M-o w t" . gptel-tools)
   ("M-o w h" . mcp-hub)
+  :config
+  ;; Mistral offers an OpenAI compatible API
+  (gptel-make-openai "MistralLeChat"  ;Any name you want
+    :host "api.mistral.ai"
+    :endpoint "/v1/chat/completions"
+    :protocol "https"
+    :key 'gptel--get-api-key
+    :models '("mistral-small-latest" "codestral-latest" "devstral-medium-latest"))
   )
 
 (use-package mcp
