@@ -1633,6 +1633,8 @@
   :ensure t
   :commands (websocket-open))
 
+;;; AI tools
+
 (use-package gptel
   :ensure t
   :defer t
@@ -1660,6 +1662,28 @@
            '(("tidewave-elixir" . (:url "http://localhost:4000/tidewave/mcp"))
              ("tidewave-rails" . (:url "http://localhost:3000/tidewave/mcp"))))
   :config (require 'mcp-hub)
+  )
+
+(use-package agent-shell
+  :ensure t
+  :config
+  (setq agent-shell-anthropic-authentication
+        (agent-shell-anthropic-make-authentication
+         :api-key (lambda () (auth-source-pick-first-password :host "anthropic")))
+        agent-shell-openai-authentication
+        (agent-shell-openai-make-authentication
+         :api-key (lambda () (auth-source-pick-first-password :host "openai")))
+        agent-shell-google-authentication
+        (agent-shell-google-make-authentication :login t)
+        agent-shell-mcp-servers
+        '(((name . "tidewave-elixir")
+           (type . "http")
+           (headers . [])
+           (url . "http://localhost:4000/tidewave/mcp"))
+          ((name . "tidewave-rails")
+           (type . "http")
+           (headers . [])
+           (url . "http://localhost:3000/tidewave/mcp"))))
   )
 
 (use-package boem-weather
