@@ -55,7 +55,7 @@
 
 (use-package popper
   :ensure t
-  :bind (("M-§"   . popper-toggle-latest)
+  :bind (("M-§"   . popper-toggle)
          ("C-§"   . popper-cycle)
          ("C-M-§" . popper-toggle-type))
   :init
