@@ -430,12 +430,11 @@
   (progn
     (add-hook 'emacs-lisp-mode-hook (lambda () (elisp-slime-nav-mode t)))))
 
-;;;; expand-region
-(use-package expand-region
+;;;; expand region
+(use-package expreg
   :ensure t
-  :commands (er/expand-region
-             er/contract-region)
-  :bind (("C-=" . er/expand-region)))
+  :bind (("C-=" . expreg-expand)
+         ("C--" . expreg-contract)))
 
 ;;;; change-inner
 (use-package change-inner
