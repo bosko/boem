@@ -1665,6 +1665,8 @@
 
 (use-package agent-shell
   :ensure t
+  :bind
+  ("M-o w a" . agent-shell)
   :config
   (setq agent-shell-anthropic-authentication
         (agent-shell-anthropic-make-authentication
@@ -1674,6 +1676,8 @@
          :api-key (lambda () (auth-source-pick-first-password :host "openai")))
         agent-shell-google-authentication
         (agent-shell-google-make-authentication :login t)
+        agent-shell-session-strategy 'new
+        agent-shell-prefer-viewport-interaction t
         agent-shell-mcp-servers
         '(((name . "tidewave-elixir")
            (type . "http")
