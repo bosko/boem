@@ -897,8 +897,7 @@
 (use-package elixir-ts-mode
   :ensure t
   :mode (("\\.ex\\'" . elixir-ts-mode)
-         ("\\.exs\\'" . elixir-ts-mode)
-         ("\\.heex\\'" . elixir-ts-mode))
+         ("\\.exs\\'" . elixir-ts-mode))
   :init
   (eval-after-load "hideshow"
     '(add-to-list 'hs-special-modes-alist
@@ -911,6 +910,11 @@
             (lambda ()
               (hs-minor-mode)
               (add-hook 'before-save-hook #'eglot-format nil t))))
+
+(use-package heex-ts-mode
+  :ensure t
+  :mode "\\.heex\\'"
+  )
 
 (use-package exunit
   :ensure t
@@ -1413,6 +1417,7 @@
 
 ;;;; markdown-mode
 (use-package markdown-mode
+  :ensure t
   :mode ("\\.md\\'" . markdown-mode)
   :defer t)
 
