@@ -355,6 +355,19 @@ Code from: http://emacsredux.com/blog/2013/04/28/switch-to-previous-buffer/"
      (get-buffer-create name)
      `("git" "--no-pager" "diff" "--ext-diff" ,@(when arg (list arg))))))
 
+;; From Purcell's configuration
+(winner-mode +1)
+
+(defun toggle-delete-other-windows ()
+  "Delete other windows in frame if any, or restore previous window config."
+  (interactive)
+  (if (and winner-mode
+           (equal (selected-window) (next-window)))
+      (winner-undo)
+    (delete-other-windows)))
+
+(global-set-key (kbd "C-x 1") #'toggle-delete-other-windows)
+
 (provide 'init-basic)
 
 ;;; init-basic.el ends here

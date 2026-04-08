@@ -35,6 +35,10 @@
  scroll-preserve-screen-position 1
  delete-by-moving-to-trash t
  eshell-prompt-regexp "^> "
+ ;; always using left-to-right languages
+ bidi-display-reordering t
+ bidi-paragraph-direction t
+ cursor-in-non-selected-windows nil
  completion-ignored-extensions
  '(".rbc" ".o" "~" ".bin" ".lbin" ".so" ".a" ".ln" ".blg"
    ".bbl" ".elc" ".lof" ".glo" ".idx" ".lot" ".svn/" ".hg/"
@@ -117,7 +121,7 @@
  ediff-window-setup-function #'ediff-setup-windows-plain
  load-prefer-newer t
  ;; Improve lsp-mode performances
- read-process-output-max (* 1024 1024)
+ read-process-output-max (* 4 1024 1024)
  ;; Add following two lines in ~/.gnupg/gpg-agent.conf
  ;; allow-emacs-pinentry
  ;; allow-loopback-pinentry
@@ -136,7 +140,20 @@
  locale-coding-system 'utf-8
  default-file-name-coding-system 'utf-8
  ;; Treat clipboard input as UTF-8 string first; compound text next, etc.
- x-select-request-type '(UTF8_STRING COMPOUND_TEXT TEXT STRING))
+ x-select-request-type '(UTF8_STRING COMPOUND_TEXT TEXT STRING)
+ ;; always using left-to-right languages
+ bidi-inhibit-bpa t
+ ;; don't fontify during typing
+ redisplay-skip-fontification-on-input t
+ highlight-nonselected-windows nil
+ kill-do-not-save-duplicates t
+ reb-re-syntax 'string
+ window-combination-resize t
+ ;; C-u C-SPC jumps back to previous mark
+ ;; and with this no need for C-u every time
+ ;; except the first one - after that just
+ ;; use C-SPC
+ set-mark-command-repeat-pop t)
 
 (setq ring-bell-function
       (lambda ()
@@ -202,17 +219,17 @@
 (global-set-key (kbd "M-o e") 'boem-pop-eshell-bottom)
 (global-set-key (kbd "M-o t") 'eat)
 (global-set-key (kbd "M-o r") 'boem-restclient)
-(global-set-key (kbd "M-o k a") 'boem-kill-user-buffers)
+(global-set-key (kbd "M-o a") 'boem-kill-user-buffers)
 (global-set-key (kbd "C-x C-m") 'execute-extended-command)
 (global-set-key (kbd "C-x C-b") 'ibuffer)
 (global-set-key (kbd "C-S-<return>") 'boem-insert-line-above)
 (global-set-key (kbd "S-<return>") 'boem-insert-line)
 (global-set-key (kbd "M-Z") 'zap-up-to-char)
 (global-set-key (kbd "C-x /") 'boem-comment-uncomment)
-(global-set-key (kbd "C-c <left>") 'windmove-left)
-(global-set-key (kbd "C-c <up>") 'windmove-up)
-(global-set-key (kbd "C-c <right>") 'windmove-right)
-(global-set-key (kbd "C-c <down>") 'windmove-down)
+(global-set-key (kbd "M-o h") 'windmove-left)
+(global-set-key (kbd "M-o k") 'windmove-up)
+(global-set-key (kbd "M-o l") 'windmove-right)
+(global-set-key (kbd "M-o j") 'windmove-down)
 (global-set-key (kbd "M-l") 'scroll-down-line)
 (global-set-key (kbd "M-k") 'scroll-up-line)
 (global-set-key (kbd "C-c r a") 'inf-ruby-console-auto)
