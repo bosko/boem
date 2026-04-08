@@ -1681,7 +1681,7 @@
          :api-key (lambda () (auth-source-pick-first-password :host "anthropic")))
         agent-shell-openai-authentication
         (agent-shell-openai-make-authentication
-         :api-key (lambda () (auth-source-pick-first-password :host "openai")))
+         :api-key (lambda () (auth-source-pick-first-password :host "api.openai.com")))
         agent-shell-google-authentication
         (agent-shell-google-make-authentication :login t)
         agent-shell-session-strategy 'new
