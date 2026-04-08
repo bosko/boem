@@ -914,7 +914,10 @@
 (use-package heex-ts-mode
   :ensure t
   :mode "\\.heex\\'"
-  )
+  :init
+  (add-hook 'elixir-ts-mode-hook
+            (lambda ()
+              (add-hook 'before-save-hook #'eglot-format-buffer nil t))))
 
 (use-package exunit
   :ensure t
