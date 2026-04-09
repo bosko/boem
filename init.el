@@ -36,8 +36,8 @@
  delete-by-moving-to-trash t
  eshell-prompt-regexp "^> "
  ;; always using left-to-right languages
- bidi-display-reordering t
- bidi-paragraph-direction t
+ bidi-display-reordering 'left-to-right
+ bidi-paragraph-direction 'left-to-right
  cursor-in-non-selected-windows nil
  completion-ignored-extensions
  '(".rbc" ".o" "~" ".bin" ".lbin" ".so" ".a" ".ln" ".blg"
