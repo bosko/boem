@@ -1424,6 +1424,11 @@
   :mode ("\\.md\\'" . markdown-mode)
   :defer t)
 
+;;;; json
+(use-package json-ts-mode
+  :mode ("\\.json\\'" . json-ts-mode)
+  )
+
 ;;;; org
 (use-package org
   :commands (org-mode
