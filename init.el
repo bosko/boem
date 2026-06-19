@@ -81,6 +81,7 @@
  newsticker-dir (expand-file-name "newsticker" boem-user-data-directory)
 
  package-enable-at-startup nil
+ use-package-compute-statistics t
  inhibit-splash-screen t
  inhibit-startup-message t
  backup-directory-alist `((".*" . ,temporary-file-directory))
