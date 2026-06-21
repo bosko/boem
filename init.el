@@ -154,7 +154,8 @@
  ;; and with this no need for C-u every time
  ;; except the first one - after that just
  ;; use C-SPC
- set-mark-command-repeat-pop t)
+ set-mark-command-repeat-pop t
+ treesit-enabled-modes t)
 
 (setq ring-bell-function
       (lambda ()
@@ -218,7 +219,7 @@
 (global-set-key (kbd "M-o d") 'duplicate-dwim)
 (global-set-key (kbd "M-o b") 'boem-switch-to-previous-buffer)
 (global-set-key (kbd "M-o e") 'boem-pop-eshell-bottom)
-(global-set-key (kbd "M-o t") 'eat)
+(global-set-key (kbd "M-o g") 'ghostel)
 (global-set-key (kbd "M-o r") 'boem-restclient)
 (global-set-key (kbd "M-o a") 'boem-kill-user-buffers)
 (global-set-key (kbd "C-x C-m") 'execute-extended-command)

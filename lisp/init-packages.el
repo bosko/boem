@@ -21,13 +21,6 @@
 
 ;;; Code:
 
-(use-package treesit-auto
-  :ensure t
-  :demand t
-  :config
-  (setq treesit-auto-install 'prompt)
-  (global-treesit-auto-mode))
-
 (use-package exec-path-from-shell
   :ensure t
   :commands (exec-path-from-shell-initialize)
@@ -36,14 +29,11 @@
     (when (memq window-system '(mac ns x))
       (exec-path-from-shell-initialize))))
 
-(use-package eat
-  :ensure t
-  :config
-  (progn
-    (add-hook 'eshell-load-hook #'eat-eshell-mode)
-    (add-hook 'eshell-load-hook #'eat-eshell-visual-command-mode)
-    (add-hook 'eat-mode-hook (lambda() (setq show-trailing-whitespace nil)))
-    (eat-eshell-mode 1)))
+(use-package ghostel
+  :ensure t)
+
+(use-package ghostel-eshell
+  :hook (eshell-load . ghostel-eshell-visual-command-mode))
 
 (use-package docker-cli
   :commands (docker-cli)
@@ -61,7 +51,7 @@
   :init
   (setq popper-reference-buffers
         '("\\*Messages\\*"
-          "\\*eat\\*"
+          "ghostel.*\\*$"
           "\\*emacs-eshell\\*"
           "^\\*eshell.*\\*$" eshell-mode
           help-mode))
