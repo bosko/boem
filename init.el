@@ -207,8 +207,9 @@
 
 (add-hook 'json-ts-mode-hook
           '(lambda()
-             (setq-local js-indent-level 2)
-             (hs-minor-mode)))
+             (setq-local js-indent-level 2)))
+
+(add-hook 'prog-mode-hook #'hs-minor-mode)
 
 ;; "Kill up to, but not including ARGth occurrence of CHAR. (fn arg char)"
 (autoload 'zap-up-to-char "misc" 'interactive)
@@ -254,11 +255,7 @@
 (setq locale-coding-system 'utf-8)
 (setq default-file-name-coding-system 'utf-8)
 (set-default-coding-systems 'utf-8)
-;; backwards compatibility as default-buffer-file-coding-system
-;; is deprecated in 23.2.
-(if (boundp buffer-file-coding-system)
-    (setq buffer-file-coding-system 'utf-8)
-  (setq default-buffer-file-coding-system 'utf-8))
+(setq buffer-file-coding-system 'utf-8)
 
 ;; Treat clipboard input as UTF-8 string first; compound text next, etc.
 (setq x-select-request-type '(UTF8_STRING COMPOUND_TEXT TEXT STRING))

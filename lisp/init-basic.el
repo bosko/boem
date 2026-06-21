@@ -70,8 +70,9 @@
 ;;;; rename-modeline
 (defmacro boem-rename-modeline (package-name mode new-name)
   `(eval-after-load ,package-name
-     '(defadvice ,mode (after boem-rename-modeline activate)
-        (setq mode-name ,new-name))))
+     `(advice-add #',',mode :after
+                  (lambda (&rest _)
+                    (setq mode-name ,,new-name)))))
 
 ;; Stop hl-line interfering with default face suggested by
 ;; customize-face (taken

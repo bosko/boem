@@ -703,7 +703,6 @@
                       ,(rx (or "}" "]" "end"))                       ; Block end
                       ,(rx (or "#" "=begin"))                        ; Comment start
                       forward-sexp nil)))
-    (add-hook 'ruby-ts-mode-hook (lambda() (hs-minor-mode)))))
 
 (use-package inf-ruby
   :ensure t
@@ -898,7 +897,6 @@
                     )))
   (add-hook 'elixir-ts-mode-hook
             (lambda ()
-              (hs-minor-mode)
               (add-hook 'before-save-hook #'eglot-format nil t))))
 
 (use-package heex-ts-mode
