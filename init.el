@@ -183,6 +183,7 @@
 
 (dolist (hook '(eshell-mode-hook
                 term-mode-hook
+                ghostel-mode-hook
                 eww-mode-hook
                 erc-mode-hook
                 shell-mode-hook
