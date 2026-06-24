@@ -132,11 +132,6 @@
  ;; modus-themes configuration
  modus-themes-bold-constructs t
  modus-themes-prompts '(extrabold italic)
- modus-themes-common-palette-overrides
- '(
-   (bg-paren-match olive)
-   (fg-paren-match fg-term-black)
-   )
  ansi-color-for-comint-mode t
  locale-coding-system 'utf-8
  default-file-name-coding-system 'utf-8
@@ -307,9 +302,8 @@ The DWIM behaviour of this command is as follows:
 ;;; Theme
 (if (eq nil (display-graphic-p))
     (load-theme 'modus-operandi t)
-  (progn
     (load-theme 'modus-vivendi t)
-    (set-face-attribute 'modus-themes-completion-selected nil :background "gray34")))
+    )
 
 (define-key global-map (kbd "<f5>") #'modus-themes-toggle)
 
