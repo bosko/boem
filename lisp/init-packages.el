@@ -702,7 +702,7 @@
                       ,(rx (or "def" "class" "module" "do" "{" "[" "if" "else" "unless")) ; Block start
                       ,(rx (or "}" "]" "end"))                       ; Block end
                       ,(rx (or "#" "=begin"))                        ; Comment start
-                      forward-sexp nil)))
+                      forward-sexp nil)))))
 
 (use-package inf-ruby
   :ensure t
