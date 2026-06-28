@@ -300,10 +300,8 @@ The DWIM behaviour of this command is as follows:
 (define-key global-map (kbd "C-g") #'prot/keyboard-quit-dwim)
 
 ;;; Theme
-(if (eq nil (display-graphic-p))
-    (load-theme 'modus-operandi t)
-    (load-theme 'modus-vivendi t)
-    )
+(if (display-graphic-p)
+    (load-theme 'modus-vivendi t))
 
 (define-key global-map (kbd "<f5>") #'modus-themes-toggle)
 
