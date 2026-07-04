@@ -265,7 +265,7 @@
 (defalias 'yes-or-no-p 'y-or-n-p)
 
 (package-initialize)
-(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
+(add-to-list 'package-archives '("melpa" . "https://releases.melpa.org/packages/") t)
 
 ;; Do not let warning and compile error buffers to pop-up
 (add-to-list 'display-buffer-alist
