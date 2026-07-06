@@ -5,30 +5,33 @@
 
 ;;; Code:
 
-(defvar boem-current-user
-  (getenv (if (equal system-type 'windows-nt) "USERNAME" "USER")))
+(defun boem/setup-font ()
+  (let* ((has-default-font
+          (find-font (font-spec :family boem-preferred-font-name)))
+         (size (nth (if (eq system-type 'darwin) 0 1)
+                    boem-preferred-font-sizes)))
+    (set-face-attribute 'default nil
+                        :family (when has-default-font
+                                  boem-preferred-font-name)
+                        :height size)))
 
-(defconst boem-version-string
-  (mapconcat 'identity
-             (mapcar
-              #'(lambda(x) (number-to-string x))
-              (version-to-list emacs-version))
-             ".")
-  "Emacs version as string.")
+(defun boem/data-path (key)
+  "Return the absolute path for KEY in `boem-data-paths'."
+  (let ((rel (cdr (assq key boem-data-paths))))
+    (unless rel
+      (error "boem/data-path: Unknown key %S" key))
+    (expand-file-name rel boem-data-directory)))
 
-(defconst boem-user-package-directory
-  (expand-file-name (format "packages/%s" boem-version-string) boem-init-root))
-(defconst boem-user-data-directory
-  (expand-file-name "data" boem-init-root))
-(defconst boem-user-themes-directory
-  (expand-file-name "themes" boem-init-root))
-(defconst boem-user-org-directory
-  (expand-file-name "~/org-files"))
-
-(make-directory boem-user-package-directory t)
-(make-directory boem-user-data-directory t)
-(make-directory boem-user-themes-directory t)
-(make-directory boem-user-org-directory t)
+(defun boem/ensure-data-dirs ()
+  "Create every directory referenced by `boem-data-paths'.
+Entries ending in `/' are created directly; other entries have their
+parent directory created."
+  (dolist (entry boem-data-paths)
+    (let* ((abs (boem/data-path (car entry)))
+           (dir (if (directory-name-p abs)
+                    abs
+                  (file-name-directory abs))))
+      (make-directory dir t))))
 
 (defun boem-get-buffer-project-folder (buffer)
   "Returns folder for Git project"
@@ -53,19 +56,6 @@
         (eshell-emit-prompt)
         (eshell/clear-scrollback)
         (eshell-emit-prompt)))))
-
-(defun boem-add-subdirs-to-load-path (root-dir)
-  "Add all first lever sub directories of ROOT-DIR to load path."
-  (dolist (entry (directory-files root-dir t "\\w+"))
-    (when (file-directory-p entry)
-      (if (string-match "theme" entry)
-          (add-to-list 'custom-theme-load-path entry)
-        (add-to-list 'load-path entry)))))
-
-(boem-add-subdirs-to-load-path boem-user-package-directory)
-
-;; My themes
-(add-to-list 'custom-theme-load-path boem-user-themes-directory)
 
 ;; Stop hl-line interfering with default face suggested by
 ;; customize-face (taken

@@ -3,17 +3,96 @@
 ;;; Commentary:
 ;;
 
+(defcustom boem-preferred-font-name "DejaVuSansMono Nerd Font Mono"
+  "The name of the font that will be used.
+Examples: `JetBrainsMono Nert Font' or FiraCode Nerd Font Mono"
+  :type 'string
+  :group 'boem
+  )
+
+(defcustom boem-preferred-font-sizes '(130 105)
+  "List of default font sizes (first for macOS, second for GNU/Linux)."
+  :type '(repeat integer)
+  :group 'boem)
+
+(defcustom boem-data-directory
+  (expand-file-name "data/" user-emacs-directory)
+  "Base directory for boem data files.
+All entries in `boem-data-paths' are resolved relative to this
+directory."
+  :type 'string
+  :group 'boem)
+
 (defvar boem-init-root
   (expand-file-name (file-name-directory load-file-name)))
 
-(add-to-list 'load-path (expand-file-name "lisp" boem-init-root))
-(add-to-list 'load-path (expand-file-name "experiments" boem-init-root))
+(defvar boem-current-user
+  (getenv (if (equal system-type 'windows-nt) "USERNAME" "USER")))
 
-(load "init-basic")
+(defvar boem-data-paths
+  '(;; Files:
+    (bookmark-file               . "bookmarks")
+    (ielm-history-file-name      . "ielm-history.eld")
+    (project-list-file           . "projects")
+    (recentf-save-file           . "recentf")
+    (savehist-file               . "history")
+    (save-place-file             . "saveplace")
+    (transient-history-file      . "transient/history.el")
+    (transient-levels-file       . "transient/levels.el")
+    (transient-values-file       . "transient/values.el")
+    (tramp-persistency-file-name . "tramp")
+    (nsm-settings-file           . "network-security.data")
+    ;; Directories:
+    (auto-saves                  . "auto-saves/")
+    (auto-saves-sessions         . "auto-saves/sessions/")
+    (shared-game-score-directory . "games/")
+    (multisession-directory      . "multisession/")
+    (url-configuration-directory . "url/")
+    (rcirc-log-directory         . "rcirc/logs/")
+    (erc-log-channels-directory  . "erc/logs/")
+    (erc-image-cache-directory   . "erc/images/")
+    (image-dired-dir             . "image-dired/")
+    (newsticker-dir              . "newsticker/")
+    (yt-subs                     . "yt-subs")
+    (tree-sitter-dir             . "tree-sitter/"))
+  "Alist of (KEY . RELATIVE-PATH) for Emacs Solo cache locations.
+RELATIVE-PATH is resolved against `boem-cache-directory'.
+A trailing slash on RELATIVE-PATH marks the entry as a directory.")
+
+(defconst boem-version-string
+  (mapconcat 'identity
+             (mapcar
+              #'(lambda(x) (number-to-string x))
+              (version-to-list emacs-version))
+             ".")
+  "Emacs version as string.")
+
+(defconst boem-user-package-directory
+  (expand-file-name
+   (format "packages/%s" boem-version-string) user-emacs-directory))
+(defconst boem-user-data-directory (expand-file-name "data" user-emacs-directory))
+(defconst boem-user-themes-directory (expand-file-name "themes" user-emacs-directory))
+(defconst boem-user-org-directory (expand-file-name "~/org-files"))
+
+(add-to-list 'custom-theme-load-path boem-user-themes-directory)
+(add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
+(add-to-list 'load-path (expand-file-name "experiments" user-emacs-directory))
+
+;;; Load function definitions
+(require 'init-basic)
+
+;;; Ensure all directories are present
+(boem/ensure-data-dirs)
+(make-directory boem-user-package-directory t)
+(make-directory boem-user-data-directory t)
+(make-directory boem-user-themes-directory t)
+(make-directory boem-user-org-directory t)
+
+(boem/setup-font)
+
+(add-to-list 'treesit-extra-load-path (boem/data-path 'tree-sitter-dir))
 
 (message "%s, starting up Emacs" boem-current-user)
-
-(add-to-list 'treesit-extra-load-path (expand-file-name "tree-sitter" boem-user-data-directory))
 
 (setq-default ;; xdisp.c
  cursor-type 'box
@@ -296,9 +375,6 @@ The DWIM behaviour of this command is as follows:
 (define-key global-map (kbd "<f5>") #'modus-themes-toggle)
 
 (require 'use-package)
-
-(if (find-font (font-spec :name "DejaVuSansMono Nerd Font Mono"))
-    (set-frame-font "DejaVuSansMono Nerd Font Mono 12" t t))
 
 (load "init-packages")
 
