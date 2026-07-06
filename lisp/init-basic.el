@@ -67,13 +67,6 @@
 ;; My themes
 (add-to-list 'custom-theme-load-path boem-user-themes-directory)
 
-;;;; rename-modeline
-(defmacro boem-rename-modeline (package-name mode new-name)
-  `(eval-after-load ,package-name
-     `(advice-add #',',mode :after
-                  (lambda (&rest _)
-                    (setq mode-name ,,new-name)))))
-
 ;; Stop hl-line interfering with default face suggested by
 ;; customize-face (taken
 ;; from https://sachachua.com/blog/2024/09/highlight-the-current-line-while-still-being-able-to-easily-customize-describe-underlying-faces/)
@@ -223,19 +216,6 @@ Code from: http://emacsredux.com/blog/2013/04/28/switch-to-previous-buffer/"
                 (org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))
                 (org-agenda-overriding-header "\nПредстојећи рокови (+14д)\n"))))
   "Custom agenda for use in `org-agenda-custom-commands'.")
-
-;; This allows using describe-face or customize=face without
-;; hl-line interfering.
-;;
-;; Source: https://sachachua.com/blog/2024/09/highlight-the-current-line-while-still-being-able-to-easily-customize-describe-underlying-faces/
-(defun my-suggest-other-faces (func &rest args)
-  (if global-hl-line-mode
-      (progn
-        (global-hl-line-mode -1)
-        (prog1 (apply func args)
-          (global-hl-line-mode 1)))
-    (apply func args)))
-(advice-add #'face-at-point :around #'my-suggest-other-faces)
 
 ;; Difftastic diff and difftastic show options on '#' in magit buffer
 ;; Source: https://tsdh.org/posts/2022-08-01-difftastic-diffing-with-magit.html
