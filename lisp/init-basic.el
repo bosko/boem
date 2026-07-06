@@ -108,11 +108,6 @@
   (newline)
   (indent-according-to-mode))
 
-(defun boem-open-term ()
-  "Open 'ansi-term' with default shell."
-  (interactive)
-  (ansi-term (getenv "SHELL")))
-
 (defun boem-kill-user-buffers ()
   "Kills all opened buffers except *scratch* and *Messages*"
   (interactive)

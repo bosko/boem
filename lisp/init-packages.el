@@ -1584,14 +1584,6 @@
   (progn
     (setq csv-separators '("," ";" "|" " "))))
 
-(use-package term
-  :defer 1
-  :bind (("C-c t" . boem-open-term))
-  :init
-  (progn
-    (add-hook 'term-mode-hook #'(lambda ()
-                                  (setq show-trailing-whitespace nil)))))
-
 (use-package server
   :commands server-start-maybe
   :init
