@@ -186,12 +186,6 @@
                 help-mode-hook))
   (add-hook hook '(lambda() (setq show-trailing-whitespace nil))))
 
-(add-hook 'sql-interactive-mode-hook
-          '(lambda()
-             (boem-set-proper-sql-prompt-regex)
-             (setq-local show-trailing-whitespace nil)
-             (toggle-truncate-lines)))
-
 (add-hook 'dired-mode-hook #'dired-hide-details-mode)
 
 (add-hook 'js-ts-mode-hook

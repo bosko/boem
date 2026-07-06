@@ -140,10 +140,6 @@ Code from: http://emacsredux.com/blog/2013/04/28/switch-to-previous-buffer/"
   (interactive)
   (switch-to-buffer (other-buffer (current-buffer) 1)))
 
-(defun boem-set-proper-sql-prompt-regex ()
-  (if (string= sql-product "postgres")
-      (setq sql-prompt-regexp "[_[:alpha:]]*[=][#]")))
-
 (defun boem-reopen-file-as-sudo ()
   (interactive)
   (when-let* ((p (point)))
