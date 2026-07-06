@@ -628,18 +628,6 @@
     (global-undo-tree-mode)
     ))
 
-;;;; volatile-highlights
-(use-package volatile-highlights
-  :ensure t
-  :commands volatile-highlights-mode
-  :diminish volatile-highlights-mode
-  :init
-  (progn
-    (defun turn-on-volatile-highlights-mode ()
-      (volatile-highlights-mode 1))
-    (boem-hook-into-modes #'turn-on-volatile-highlights-mode
-                          boem-prog-mode-hooks)))
-
 ;;;; recentf
 (use-package recentf
   :commands (recentf-mode recentf recentf-save-list recentf-load-list)

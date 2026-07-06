@@ -86,21 +86,6 @@
     (apply func args)))
 (advice-add #'face-at-point :around #'boem-suggest-other-faces)
 
-;;;; Modes and mode groupings
-(defmacro boem-hook-into-modes (func modes)
-  "Add hook `FUNC' to multiple `MODES'."
-  `(dolist (mode-hook ,modes)
-     (add-hook mode-hook ,func)))
-
-(defvar boem-prog-mode-hooks
-  '(prog-mode-hook
-    emacs-lisp-mode-hook
-    pyhon-mode-hook
-    js-mode-hook
-    ruby-mode-hook
-    elixir-mode-hook
-    sass-mode-hook))
-
 (defun boem-current-buffer-remote-p ()
   (--any? (and it (file-remote-p it))
           (list
