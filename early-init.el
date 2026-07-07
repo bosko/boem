@@ -1,3 +1,8 @@
+(setq custom-file (locate-user-emacs-file "custom-vars.el"))
+(load custom-file 'noerror 'nomessage)
+
+(setq package-enable-at-startup nil)
+
 ;; Set eln-cache dir
 (when (boundp 'native-comp-eln-load-path)
   (startup-redirect-eln-cache

@@ -337,26 +337,6 @@
   :ensure t
   :commands (smex))
 
-(use-package tramp
-  :defer t
-  :config
-  (setq vc-ignore-dir-regexp
-        (format "\\(%s\\)\\|\\(%s\\)"
-                vc-ignore-dir-regexp
-                tramp-file-name-regexp))
-  (tramp-set-completion-function
-   "ssh" (append (tramp-get-completion-function "ssh")
-                 (mapcar (lambda (file) `(tramp-parse-sconfig ,file))
-                         (directory-files
-                          "~/.ssh"
-                          'full directory-files-no-dot-files-regexp))))
-  (tramp-set-completion-function
-   "scp" (append (tramp-get-completion-function "scp")
-                 (mapcar (lambda (file) `(tramp-parse-sconfig ,file))
-                         (directory-files
-                          "~/.ssh"
-                          'full directory-files-no-dot-files-regexp)))))
-
 ;;;; savehist
 (use-package savehist
   :hook (after-init . savehist-mode)

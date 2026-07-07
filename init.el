@@ -53,6 +53,7 @@ directory."
     (erc-image-cache-directory   . "erc/images/")
     (image-dired-dir             . "image-dired/")
     (newsticker-dir              . "newsticker/")
+    (org-persist-dir             . "org-persists/")
     (yt-subs                     . "yt-subs")
     (tree-sitter-dir             . "tree-sitter/"))
   "Alist of (KEY . RELATIVE-PATH) for Emacs Solo cache locations.
@@ -88,144 +89,55 @@ A trailing slash on RELATIVE-PATH marks the entry as a directory.")
 (make-directory boem-user-themes-directory t)
 (make-directory boem-user-org-directory t)
 
-(boem/setup-font)
-
 (add-to-list 'treesit-extra-load-path (boem/data-path 'tree-sitter-dir))
+
+(require 'internal-packages)
+(require 'external-packages)
 
 (message "%s, starting up Emacs" boem-current-user)
 
-(setq-default ;; xdisp.c
- cursor-type 'box
- tab-width 2
- indent-tabs-mode nil
- frame-title-format "emacs - %b"
- scroll-step 1
- scroll-margin 0
- scroll-conservatively 10000
- scroll-up-aggressively 0.01
- scroll-down-aggressively 0.01
- show-trailing-whitespace t
- auto-window-vscroll nil
- ;; scroll-preserve-screen-position t
- scroll-preserve-screen-position 1
- delete-by-moving-to-trash t
- eshell-prompt-regexp "^> "
- ;; always using left-to-right languages
- bidi-display-reordering 'left-to-right
- bidi-paragraph-direction 'left-to-right
- cursor-in-non-selected-windows nil
- completion-ignored-extensions
- '(".rbc" ".o" "~" ".bin" ".lbin" ".so" ".a" ".ln" ".blg"
-   ".bbl" ".elc" ".lof" ".glo" ".idx" ".lot" ".svn/" ".hg/"
-   ".git/" ".bzr/" "CVS/" "_darcs/" "_MTN/" ".fmt" ".tfm"
-   ".class" ".fas" ".lib" ".mem" ".x86f" ".sparcf" ".dfsl"
-   ".pfsl" ".d64fsl" ".p64fsl" ".lx64fsl" ".lx32fsl" ".dx64fsl"
-   ".dx32fsl" ".fx64fsl" ".fx32fsl" ".sx64fsl" ".sx32fsl"
-   ".wx64fsl" ".wx32fsl" ".fasl" ".ufsl" ".fsl" ".dxl" ".lo"
-   ".la" ".gmo" ".mo" ".toc" ".aux" ".cp" ".fn" ".ky" ".pg"
-   ".tp" ".vr" ".cps" ".fns" ".kys" ".pgs" ".tps" ".vrs" ".pyc"
-   ".pyo" ".idx" ".lof" ".lot" ".glo" ".blg" ".bbl" ".cp" ".cps"
-   ".fn" ".fns" ".ky" ".kys" ".pg" ".pgs" ".tp" ".tps" ".vr"
-   ".vrs" ".sass-cache" ".min.js" "-min.js" ".min.css" "-min.css"
-   ".hi" ".pyx" ".map")
- mode-line-format '("%e"
-                    mode-line-front-space
-                    mode-line-mule-info
-                    mode-line-client
-                    mode-line-modified
-                    mode-line-remote
-                    mode-line-frame-identification
-                    mode-line-buffer-identification
-                    "  "
-                    mode-line-position
-                    mode-line-modes
-                    "  "
-                    (vc-mode vc-mode)
-                    "  "
-                    mode-line-misc-info
-                    mode-line-end-spaces))
+;; (setq-default ;; xdisp.c
+;;  cursor-type 'box
+;;  frame-title-format "emacs - %b"
+;;  auto-window-vscroll nil
+;;  eshell-prompt-regexp "^> "
+;;  always using left-to-right languages
+;;  mode-line-format '("%e"
+;;                     mode-line-front-space
+;;                     mode-line-mule-info
+;;                     mode-line-client
+;;                     mode-line-modified
+;;                     mode-line-remote
+;;                     mode-line-frame-identification
+;;                     mode-line-buffer-identification
+;;                     "  "
+;;                     mode-line-position
+;;                     mode-line-modes
+;;                     "  "
+;;                     (vc-mode vc-mode)
+;;                     "  "
+;;                     mode-line-misc-info
+;;                     mode-line-end-spaces))
 
 (setq
- package-user-dir boem-user-package-directory
- custom-file (expand-file-name "custom.el" boem-user-data-directory)
- ;; Use data directory for storing some packages data
- transient-history-file (expand-file-name "transient/history.el" boem-user-data-directory)
- org-persist-directory (expand-file-name "org-persist" boem-user-data-directory)
- project-list-file (expand-file-name "projects" boem-user-data-directory)
- bookmark-default-file (expand-file-name "bookmarks" boem-user-data-directory)
- newsticker-dir (expand-file-name "newsticker" boem-user-data-directory)
-
- package-enable-at-startup nil
- use-package-compute-statistics t
- inhibit-splash-screen t
- inhibit-startup-message t
- backup-directory-alist `((".*" . ,temporary-file-directory))
- auto-save-file-name-transforms `((".*" ,temporary-file-directory t))
- tags-revert-without-query t
- ;; Set standard indent to 2 rather then 4
- standard-indent 2
- ;; Prevent Emacs from extending file when
- ;; pressing down arrow at end of buffer.
- next-line-add-newlines nil
- grep-command "grep -n -r --exclude=\\*{.git,TAGS,sqlite3,log,tmp/\\*,vendor/bundle/\\*,.bundle/\\*} -e "
- use-package-idle-interval 1.5
- fill-column 80
- echo-keystrokes 0.1
- calendar-week-start-day 1
- eshell-hist-ignoredups t
- eshell-destroy-buffer-when-process-dies t
- epa-armor t
- dired-listing-switches "-alh"
- dired-dwim-target t
- use-package-compute-statistics t
- scroll-preserve-screen-position t
- calendar-latitude 44.787197
- calendar-longitude 20.457273
- calendar-location-name "Београд, Србија"
- calendar-day-name-array ["недеља" "понедељак" "уторак" "среда" "четвртак" "петак" "субота"]
- calendar-day-abbrev-array ["не" "по" "ут" "ср" "че" "пе" "су"]
- calendar-day-header-array ["не" "по" "ут" "ср" "че" "пе" "су"]
- calendar-month-name-array ["Јануар" "Фебруар" "Март" "Април" "Мај" "Јун" "Јул"
-                            "Август" "Септембар" "Октобар" "Новембар" "Децембар"]
- view-read-only t
- isearch-allow-scroll t
- isearch-lazy-count t
- lazy-count-prefix-format nil
- lazy-count-suffix-format "   (%s/%s)"
- ediff-keep-variants nil
- ediff-split-window-function #'split-window-horizontally
- ediff-window-setup-function #'ediff-setup-windows-plain
- load-prefer-newer t
- ;; Improve lsp-mode performances
- read-process-output-max (* 4 1024 1024)
- ;; Add following two lines in ~/.gnupg/gpg-agent.conf
- ;; allow-emacs-pinentry
- ;; allow-loopback-pinentry
- ;; and run:
- ;; gpgconf --reload gpg-agent
- epa-pinentry-mode 'loopback
+ ;; auto-save-file-name-transforms `((".*" ,temporary-file-directory t))
+ ;; tags-revert-without-query t
+ ;; eshell-hist-ignoredups t
+ ;; eshell-destroy-buffer-when-process-dies t
+ ;; dired-listing-switches "-alh"
+ ;; dired-dwim-target t
+ ;; isearch-allow-scroll t
+ ;; isearch-lazy-count t
+ ;; lazy-count-prefix-format nil
+ ;; lazy-count-suffix-format "   (%s/%s)"
+ ;; ediff-keep-variants nil
+ ;; ediff-split-window-function #'split-window-horizontally
+ ;; ediff-window-setup-function #'ediff-setup-windows-plain
  ;; modus-themes configuration
- modus-themes-bold-constructs t
- modus-themes-prompts '(extrabold italic)
- ansi-color-for-comint-mode t
- locale-coding-system 'utf-8
- default-file-name-coding-system 'utf-8
- ;; Treat clipboard input as UTF-8 string first; compound text next, etc.
- x-select-request-type '(UTF8_STRING COMPOUND_TEXT TEXT STRING)
- ;; always using left-to-right languages
- bidi-inhibit-bpa t
- ;; don't fontify during typing
- redisplay-skip-fontification-on-input t
- highlight-nonselected-windows nil
- kill-do-not-save-duplicates t
- reb-re-syntax 'string
- window-combination-resize t
- ;; C-u C-SPC jumps back to previous mark
- ;; and with this no need for C-u every time
- ;; except the first one - after that just
- ;; use C-SPC
- set-mark-command-repeat-pop t
- treesit-enabled-modes t)
+ ;; modus-themes-bold-constructs t
+ ;; modus-themes-prompts '(extrabold italic)
+ ;; locale-coding-system 'utf-8
+)
 
 (setq ring-bell-function
       (lambda ()
@@ -282,26 +194,6 @@ A trailing slash on RELATIVE-PATH marks the entry as a directory.")
 (autoload 'inf-ruby-minor-mode "inf-ruby" "Run an inferior Ruby process" t)
 (add-hook 'ruby-mode-hook 'inf-ruby-minor-mode)
 
-(global-set-key (kbd "M-o d") 'duplicate-dwim)
-(global-set-key (kbd "M-o b") 'boem-switch-to-previous-buffer)
-(global-set-key (kbd "M-o e") 'boem-pop-eshell-bottom)
-(global-set-key (kbd "M-o g") 'ghostel)
-(global-set-key (kbd "M-o r") 'boem-restclient)
-(global-set-key (kbd "M-o a") 'boem-kill-user-buffers)
-(global-set-key (kbd "C-x C-m") 'execute-extended-command)
-(global-set-key (kbd "C-x C-b") 'ibuffer)
-(global-set-key (kbd "C-S-<return>") 'boem-insert-line-above)
-(global-set-key (kbd "S-<return>") 'boem-insert-line)
-(global-set-key (kbd "M-Z") 'zap-up-to-char)
-(global-set-key (kbd "C-x /") 'boem-comment-uncomment)
-(global-set-key (kbd "M-o h") 'windmove-left)
-(global-set-key (kbd "M-o k") 'windmove-up)
-(global-set-key (kbd "M-o l") 'windmove-right)
-(global-set-key (kbd "M-o j") 'windmove-down)
-(global-set-key (kbd "M-l") 'scroll-down-line)
-(global-set-key (kbd "M-k") 'scroll-up-line)
-(global-set-key (kbd "C-c r a") 'inf-ruby-console-auto)
-
 ;; Keep syntax highlighting in current line.
 (set-face-foreground 'highlight nil)
 
@@ -325,7 +217,6 @@ A trailing slash on RELATIVE-PATH marks the entry as a directory.")
 ;; Treat clipboard input as UTF-8 string first; compound text next, etc.
 (setq x-select-request-type '(UTF8_STRING COMPOUND_TEXT TEXT STRING))
 
-(column-number-mode 1)
 (global-hl-line-mode 1)
 (global-so-long-mode 1)
 (global-completion-preview-mode 1)
@@ -374,9 +265,9 @@ The DWIM behaviour of this command is as follows:
 
 (define-key global-map (kbd "<f5>") #'modus-themes-toggle)
 
-(require 'use-package)
+;; (require 'use-package)
 
-(load "init-packages")
+;; (load "init-packages")
 
 (if (string-equal system-type "darwin")
     (pinentry-start))

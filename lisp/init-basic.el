@@ -5,16 +5,6 @@
 
 ;;; Code:
 
-(defun boem/setup-font ()
-  (let* ((has-default-font
-          (find-font (font-spec :family boem-preferred-font-name)))
-         (size (nth (if (eq system-type 'darwin) 0 1)
-                    boem-preferred-font-sizes)))
-    (set-face-attribute 'default nil
-                        :family (when has-default-font
-                                  boem-preferred-font-name)
-                        :height size)))
-
 (defun boem/data-path (key)
   "Return the absolute path for KEY in `boem-data-paths'."
   (let ((rel (cdr (assq key boem-data-paths))))
