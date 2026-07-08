@@ -1,4 +1,4 @@
-;;; init.el --- Bosko's Emacs initialization file
+;;; init.el --- Bosko's Emacs initialization file -*- lexical-binding: t; -*-
 
 ;;; Commentary:
 ;;
@@ -21,6 +21,16 @@ Examples: `JetBrainsMono Nert Font' or FiraCode Nerd Font Mono"
 All entries in `boem-data-paths' are resolved relative to this
 directory."
   :type 'string
+  :group 'boem)
+
+(defcustom boem-gui-theme 'modus-vivendi
+  "Emacs theme to load when GUI is started"
+  :type 'symbol
+  :group 'boem)
+
+(defcustom boem-tui-theme nil
+  "Emacs theme to load when started in terminal"
+  :type 'symbol
   :group 'boem)
 
 (defvar boem-init-root
@@ -94,8 +104,6 @@ A trailing slash on RELATIVE-PATH marks the entry as a directory.")
 (require 'internal-packages)
 (require 'external-packages)
 
-(message "%s, starting up Emacs" boem-current-user)
-
 ;; (setq-default ;; xdisp.c
 ;;  cursor-type 'box
 ;;  frame-title-format "emacs - %b"
@@ -139,45 +147,13 @@ A trailing slash on RELATIVE-PATH marks the entry as a directory.")
  ;; locale-coding-system 'utf-8
 )
 
-(setq ring-bell-function
-      (lambda ()
-        (let ((orig-bg (face-background 'mode-line)))
-          (set-face-background 'mode-line "#F2804F")
-          (run-with-idle-timer 0.1 nil
-                               (lambda (fg) (set-face-background 'mode-line fg))
-                               orig-bg))))
-
-(setq eshell-prompt-function
-      (lambda nil
-        (let ((path (abbreviate-file-name (eshell/pwd))))
-          (concat
-           (format
-            (propertize "(%s@%s)[%s]\n>" 'face '(:weight bold))
-            (propertize (user-login-name) 'face '(:foreground "cyan"))
-            (propertize (system-name) 'face '(:foreground "cyan"))
-            (propertize path 'face
-                        `(:foreground ,(if (= (user-uid) 0) "red" "green") :weight bold)))
-           " "))))
-
+;; This enables, otherwise disabled commands so Emacs does not ask the
+;; question:
+;; "Do you want to use this comand anyway?"
 (put 'dired-find-alternate-file 'disabled nil)
 (put 'downcase-region 'disabled nil)
 (put 'upcase-region 'disabled nil)
-
-(dolist (hook '(eshell-mode-hook
-                term-mode-hook
-                ghostel-mode-hook
-                eww-mode-hook
-                erc-mode-hook
-                shell-mode-hook
-                magit-diff-mode-hook
-                ibuffer-mode-hook
-                dired-mode-hook
-                occur-mode-hook
-                docker-cli-mode-hook
-                help-mode-hook))
-  (add-hook hook '(lambda() (setq show-trailing-whitespace nil))))
-
-(add-hook 'dired-mode-hook #'dired-hide-details-mode)
+(put 'narrow-to-region 'disabled nil)
 
 (add-hook 'js-ts-mode-hook
           '(lambda() (setq-local js-indent-level 2)))
@@ -186,111 +162,19 @@ A trailing slash on RELATIVE-PATH marks the entry as a directory.")
           '(lambda()
              (setq-local js-indent-level 2)))
 
-(add-hook 'prog-mode-hook #'hs-minor-mode)
-
-;; "Kill up to, but not including ARGth occurrence of CHAR. (fn arg char)"
-(autoload 'zap-up-to-char "misc" 'interactive)
-
-(autoload 'inf-ruby-minor-mode "inf-ruby" "Run an inferior Ruby process" t)
-(add-hook 'ruby-mode-hook 'inf-ruby-minor-mode)
-
-;; Keep syntax highlighting in current line.
-(set-face-foreground 'highlight nil)
-
-(if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
-(if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
-
-(setq ansi-color-for-comint-mode t)
-
-;;;; mule / conding.c
-(set-terminal-coding-system 'utf-8)
-(set-keyboard-coding-system 'utf-8)
-(set-selection-coding-system 'utf-8)
-(set-language-environment 'utf-8)
-(prefer-coding-system 'utf-8-unix)
-
-(setq locale-coding-system 'utf-8)
-(setq default-file-name-coding-system 'utf-8)
-(set-default-coding-systems 'utf-8)
-(setq buffer-file-coding-system 'utf-8)
-
-;; Treat clipboard input as UTF-8 string first; compound text next, etc.
-(setq x-select-request-type '(UTF8_STRING COMPOUND_TEXT TEXT STRING))
-
-(global-hl-line-mode 1)
-(global-so-long-mode 1)
-(global-completion-preview-mode 1)
-(delete-selection-mode 1)
-
-(defalias 'yes-or-no-p 'y-or-n-p)
-
 (package-initialize)
 (add-to-list 'package-archives '("melpa" . "https://releases.melpa.org/packages/") t)
 
-;; Do not let warning and compile error buffers to pop-up
-(add-to-list 'display-buffer-alist
-             '("\\`\\*\\(Warnings\\|Compile-Log\\)\\*\\'"
-               (display-buffer-no-window)
-               (allow-no-window . t)))
-
-(defun prot/keyboard-quit-dwim ()
-  "Do-What-I-Mean behaviour for a general `keyboard-quit'.
-
-The generic `keyboard-quit' does not do the expected thing when
-the minibuffer is open.  Whereas we want it to close the
-minibuffer, even without explicitly focusing it.
-
-The DWIM behaviour of this command is as follows:
-
-- When the region is active, disable it.
-- When a minibuffer is open, but not focused, close the minibuffer.
-- When the Completions buffer is selected, close it.
-- In every other case use the regular `keyboard-quit'."
-  (interactive)
-  (cond
-   ((region-active-p)
-    (keyboard-quit))
-   ((derived-mode-p 'completion-list-mode)
-    (delete-completion-window))
-   ((> (minibuffer-depth) 0)
-    (abort-recursive-edit))
-   (t
-    (keyboard-quit))))
-
-(define-key global-map (kbd "C-g") #'prot/keyboard-quit-dwim)
-
-;;; Theme
-(if (display-graphic-p)
-    (load-theme 'modus-vivendi t))
-
-(define-key global-map (kbd "<f5>") #'modus-themes-toggle)
-
-;; (require 'use-package)
-
 ;; (load "init-packages")
 
-(if (string-equal system-type "darwin")
-    (pinentry-start))
+(load custom-file 'no-error 'nomessage)
 
-(load custom-file 'no-error)
-
-(if (fboundp 'fringe-mode)
-    (fringe-mode 9))
-
-(message "%s, Emacs started in %s with %d garbage collections."
+(message ">>> %s, Emacs started in %s with %d garbage collections."
          boem-current-user
          (format "%.2f seconds"
                  (float-time
                   (time-subtract (current-time) before-init-time)))
          gcs-done)
-
-(put 'narrow-to-region 'disabled nil)
-
-;; Make gc pauses faster by decreasing the threshold.
-(setq gc-cons-threshold (* 2 1000 1000))
-
-(add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
-(add-to-list 'default-frame-alist '(ns-appearance . dark))
 
 (set-input-method 'cyrillic-serbian)
 

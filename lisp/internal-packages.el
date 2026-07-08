@@ -1,3 +1,17 @@
+;;; internal-packages.el --- Internal Emacs packages -*- lexical-binding: t; -*-
+;;
+;; Author: Boško Ivanišević
+;; URL: https://github.com/bosko/boem
+;; Package-Requires: ((emacs "30.1"))
+;; Keywords: config
+;; SPDX-License-Identifier: GPL-3.0-or-later
+;;
+
+;;; Commentary:
+;;  Enabling and configuring internal packages
+;;
+
+;;; Code:
 (use-package emacs
   :ensure nil
   :bind
@@ -18,6 +32,7 @@
    ("C-S-<return>" . boem-insert-line-above)
    ("S-<return>" . boem-insert-line)
    ("M-Z" . zap-up-to-char)
+   ("C-g" . boem/keyboard-quit-dwim)
    ("C-x /" . boem-comment-uncomment)
    ("M-l" . scroll-down-line)
    ("M-k" . scroll-up-line)
@@ -35,6 +50,7 @@
   (bidi-inhibit-bpa t)
   (bidi-paragraph-direction 'left-to-right)
   (bookmark-file (boem/data-path 'bookmark-file))
+  (buffer-file-coding-system 'utf-8)
   ; FIXME: is this even working?
   (shared-game-score-directory (boem/data-path 'shared-game-score-directory))
   (calendar-latitude 44.787197)
@@ -54,6 +70,7 @@
   (fill-column 80)
   (line-number-mode t)
   (line-spacing nil)
+  (locale-coding-system 'utf-8)
   (completion-ignore-case t)
   (completion-ignored-extensions
    '(".rbc" ".o" "~" ".bin" ".lbin" ".so" ".a" ".ln" ".blg"
@@ -74,6 +91,7 @@
   (delete-pair-blink-delay 0)
   ; Emacs-31 for easy subsequent C-x C-x
   (delete-pair-push-mark t)
+  (delete-selection-mode 1)
   (display-line-numbers-width 4)
   (display-line-numbers-widen t)
   ;; Emacs-31
@@ -87,6 +105,9 @@
   (frame-resize-pixelwise t)
   ;; C-c RET on URLs open in default browser
   (global-goto-address-mode t)
+  (global-hl-line-mode 1)
+  (global-so-long-mode 1)
+  (global-completion-preview-mode 1)
   ;; C-u C-c RET on URLs open in EWW
   (browse-url-secondary-browser-function 'eww-browse-url)
   (help-window-select t)
@@ -113,6 +134,7 @@
   (package-user-dir boem-user-package-directory)
   (pixel-scroll-precision-mode t)
   (pixel-scroll-precision-use-momentum nil)
+  (prefer-coding-system 'utf-8-unix)
   (project-list-file (boem/data-path 'project-list-file))
   ;; Excelent for mono repos with multiple langs, makes Eglot happy
   (project-vc-extra-root-markers '("Cargo.toml" "package.json" "go.mod" "*.asd"))
@@ -139,6 +161,13 @@
   (tramp-use-scp-direct-remote-copying t)
   (tramp-verbose 1)
   (resize-mini-windows 'grow-only)
+  ;; Keep syntax highlighting in current line.
+  (set-face-foreground 'highlight nil)
+  (set-terminal-coding-system 'utf-8)
+  (set-keyboard-coding-system 'utf-8)
+  (set-selection-coding-system 'utf-8)
+  (set-language-environment 'utf-8)
+  (set-default-coding-systems 'utf-8)
   (scroll-conservatively 10000)
   (scroll-up-aggressively 0.01)
   (scroll-down-aggressively 0.01)
@@ -162,7 +191,7 @@
   ;; use C-SPC
   (set-mark-command-repeat-pop t)
   (show-trailing-whitespace t)
-  ; So vertical splits are preferred
+  ;; So vertical splits are preferred
   (split-width-threshold 170)
   (split-height-threshold nil)
   (shr-use-colors nil)
@@ -202,14 +231,20 @@
   ;; Emacs-31
   (zone-all-windows-in-frame t)
   (zone-programs '[zone-pgm-rat-race])
-  ; used by M-x grep
+  ;; used by M-x grep
   (grep-command "rg -nS --no-heading ")
-  ; used if M-x rgrep uses find (default in grep-find-template)
+  ;; used if M-x rgrep uses find (default in grep-find-template)
   (grep-find-ignored-directories
    '("SCCS" "RCS" "CVS" "MCVS" ".src" ".svn" ".jj" ".git" ".hg" ".bzr" "_MTN" "_darcs" "{arch}" "node_modules" "build" "dist"))
   ; used by M-x rgrep (dropping find when using rg)
   (grep-find-template "rg <C> --null -nH -e <R> <D>")
+  (pinentry-start)
   :config
+  (add-hook 'dired-mode-hook #'dired-hide-details-mode)
+  (add-hook 'prog-mode-hook #'hs-minor-mode)
+  (add-hook 'ruby-mode-hook 'inf-ruby-minor-mode)
+  (add-hook 'ruby-ts-mode-hook 'inf-ruby-minor-mode)
+
   ;; Make C-x 5 o repeatable
   (defvar-keymap frame-repeat-map
     :repeat t
@@ -218,9 +253,50 @@
     "d" #'delete-frame)
   (put 'other-frame 'repeat-map 'frame-repeat-map)
 
+  ;; Source:
+  ;; https://protesilaos.com/codelog/2024-11-28-basic-emacs-configuration/#h:1e468b2a-9bee-4571-8454-e3f5462d9321
+  (defun boem/keyboard-quit-dwim ()
+    "Do-What-I-Mean behaviour for a general `keyboard-quit'.
+
+The generic `keyboard-quit' does not do the expected thing when
+the minibuffer is open.  Whereas we want it to close the
+minibuffer, even without explicitly focusing it.
+
+The DWIM behaviour of this command is as follows:
+
+- When the region is active, disable it.
+- When a minibuffer is open, but not focused, close the minibuffer.
+- When the Completions buffer is selected, close it.
+- In every other case use the regular `keyboard-quit'."
+    (interactive)
+    (cond
+     ((region-active-p)
+      (keyboard-quit))
+     ((derived-mode-p 'completion-list-mode)
+      (delete-completion-window))
+     ((> (minibuffer-depth) 0)
+      (abort-recursive-edit))
+     (t
+      (keyboard-quit))))
+
   ;; Makes everything accept utf-8 as default, so buffers with tsx and so
   ;; won't ask for encoding (because undecided-unix) every single keystroke
   (modify-coding-system-alist 'file "" 'utf-8)
+
+  (defun boem/load-theme ()
+    "Loads `boem-gui-theme' or `boem-tui-theme' respectively if Emacs GUI or
+in terminal is started"
+    (interactive)
+    (message "Loading theme")
+    (cond
+     ((and (bare-symbol-p boem-gui-theme) (display-graphic-p))
+      (load-theme boem-gui-theme t))
+     ((and boem-tui-theme (bare-symbol-p boem-tui-theme))
+      (load-theme boem-tui-theme t))))
+
+  (boem/load-theme)
+
+  (define-key global-map (kbd "<f5>") #'modus-themes-toggle)
 
   ;; Configure preferred font if it exists
   (defun boem/configure-font ()
@@ -269,6 +345,20 @@
     (tramp-set-completion-function "scp" '((tramp-parse-sconfig "~/.ssh/config"))))
 
   (setopt tramp-persistency-file-name (boem/data-path 'tramp-persistency-file-name))
+
+  (dolist (hook '(eshell-mode-hook
+                  term-mode-hook
+                  ghostel-mode-hook
+                  eww-mode-hook
+                  erc-mode-hook
+                  shell-mode-hook
+                  magit-diff-mode-hook
+                  ibuffer-mode-hook
+                  dired-mode-hook
+                  occur-mode-hook
+                  docker-cli-mode-hook
+                  help-mode-hook))
+    (add-hook hook '(lambda() (setq show-trailing-whitespace nil))))
 
   (with-current-buffer (get-buffer-create "*scratch*")
     (insert (format ";;
