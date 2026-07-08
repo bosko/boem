@@ -1,3 +1,17 @@
+;;; early-init.el --- Boem Configuration --- Early Init  -*- lexical-binding: t; -*-
+;;
+;; Author: Boško Ivanišević
+;; URL: https://github.com/bosko/boem
+;; Package-Requires: ((emacs "30.1"))
+;; Keywords: config
+;; SPDX-License-Identifier: GPL-3.0-or-later
+;;
+
+;;; Commentary:
+;;  Early init configuration for Emacs Boem
+;;
+
+;;; Code:
 (setq custom-file (locate-user-emacs-file "custom-vars.el"))
 (load custom-file 'noerror 'nomessage)
 
@@ -21,6 +35,13 @@
 
 ;; Single VC backend inscreases booting speed
 (setq vc-handled-backends '(Git))
+
+;; Always start Emacs and new frames maximized
+(add-to-list 'default-frame-alist '(fullscreen . maximized))
+
+(if (eq system-type 'darwin)
+  (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
+  (add-to-list 'default-frame-alist '(ns-appearance . dark)))
 
 ;; Better Window Management handling
 (setq frame-resize-pixelwise t
