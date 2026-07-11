@@ -39,13 +39,19 @@
 ;; Always start Emacs and new frames maximized
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
 
+;; Mac OS specific setting
 (if (eq system-type 'darwin)
-  (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
   (add-to-list 'default-frame-alist '(ns-appearance . dark)))
 
 ;; Better Window Management handling
 (setq frame-resize-pixelwise t
-      frame-inhibit-implied-resize t)
+      frame-inhibit-implied-resize t
+      frame-title-format
+      '(:eval
+        (let ((project (project-current)))
+          (if project
+              (concat "Emacs - [p] " (project-name project))
+            (concat "Emacs - " (buffer-name))))))
 
 ;; Disables unused UI Elements
 (if (fboundp 'menu-bar-mode) (menu-bar-mode -1))

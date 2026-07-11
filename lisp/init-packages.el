@@ -654,34 +654,6 @@
   (progn
     (which-function-mode 1)))
 
-;;;; Ruby
-
-;;;; ruby-mode
-(use-package ruby-ts-mode
-  :commands ruby-ts-mode
-  :init
-  (progn
-    (setq
-     ;; Avoid default, ugly, Ruby indentation
-     ruby-deep-indent-paren nil)
-    (eval-after-load "hideshow"
-      '(add-to-list 'hs-special-modes-alist
-                    `(ruby-ts-mode
-                      ,(rx (or "def" "class" "module" "do" "{" "[" "if" "else" "unless")) ; Block start
-                      ,(rx (or "}" "]" "end"))                       ; Block end
-                      ,(rx (or "#" "=begin"))                        ; Comment start
-                      forward-sexp nil)))))
-
-(use-package inf-ruby
-  :ensure t
-  :commands ruby-ts-mode
-  :config
-  (progn
-    (inf-ruby-minor-mode +1))
-  :init
-  (progn
-    (add-hook 'inf-ruby-mode-hook (lambda() (setq show-trailing-whitespace nil)))))
-
 (use-package ruby-electric
   :disabled t
   :ensure t
@@ -713,22 +685,6 @@
   :commands rainbow-delimiters-mode
   :bind (("M-o m r" . rainbow-delimiters-mode)))
 
-;;;; lisp-mode
-(use-package lisp-mode
-  :commands (lisp-mode)
-  :init
-  (progn
-    (defun emacs-lisp-remove-elc-on-save ()
-      "If you're saving an elisp file, likely the .elc is no longer valid."
-      (make-local-variable 'after-save-hook)
-      (add-hook 'after-save-hook
-                (lambda ()
-                  (when (and
-                         buffer-file-name
-                         (file-exists-p (concat buffer-file-name "c")))
-                    (delete-file (concat buffer-file-name "c"))))))
-    (add-hook 'emacs-lisp-mode-hook 'emacs-lisp-remove-elc-on-save)))
-
 ;;;; Julia
 (use-package julia-mode
   :commands (julia-mode)
@@ -737,14 +693,6 @@
 (use-package julia-shell
   :commands (julia-mode)
   :ensure t)
-
-;;;; litable
-(use-package litable
-  :ensure t
-  :commands (litable-mode)
-  :init
-  (progn
-    (setq litable-list-file (expand-file-name ".litable-lists.el" boem-user-data-directory))))
 
 ;;;; CSS
 
@@ -849,75 +797,6 @@
     (setq erlang-root-dir "/usr/local/otp")
     (setq exec-path (cons "/usr/local/otp/bin" exec-path))
     (require 'erlang-start))))
-
-;;; Elixir
-(use-package elixir-ts-mode
-  :ensure t
-  :mode (("\\.ex\\'" . elixir-ts-mode)
-         ("\\.exs\\'" . elixir-ts-mode))
-  :init
-  (eval-after-load "hideshow"
-    '(add-to-list 'hs-special-modes-alist
-                  `(elixir-ts-mode
-                    ,(rx (or "def" "defp" "defmodule" "do" "{" "[" "if" "else" "unless" "describe" "setup" "test")) ; Block start
-                    ,(rx (or "}" "]" "end"))                       ; Block end
-                    ,(rx (or "#"))                        ; Comment start
-                    )))
-  (add-hook 'elixir-ts-mode-hook
-            (lambda ()
-              (add-hook 'before-save-hook #'eglot-format nil t))))
-
-(use-package heex-ts-mode
-  :ensure t
-  :mode "\\.heex\\'"
-  :init
-  (add-hook 'elixir-ts-mode-hook
-            (lambda ()
-              (add-hook 'before-save-hook #'eglot-format-buffer nil t))))
-
-(use-package exunit
-  :ensure t
-  :config
-  (add-hook 'elixir-mode-hook 'exunit-mode)
-  (setq transient-default-level 5))
-
-;;; Typescript
-(use-package typescript-ts-mode
-  ;; This is not needed for other modes but this one
-  ;; needs this 'after' section
-  :after tree-sitter
-  :config
-  ;; we choose this instead of tsx-mode so that eglot can
-  ;; automatically figure out language for server see
-  ;; https://github.com/joaotavora/eglot/issues/624 and
-  ;; https://github.com/joaotavora/eglot#handling-quirky-servers
-  (define-derived-mode typescriptreact-mode typescript-mode
-    "TypeScript TSX")
-
-  ;; use our derived mode for tsx files
-  (add-to-list 'auto-mode-alist '("\\.tsx?\\'" . typescriptreact-mode))
-  ;; by default, typescript-mode is mapped to the treesitter
-  ;; typescript parser use our derived mode to map both .tsx AND .ts
-  ;; -> typescriptreact-mode -> treesitter tsx
-  (add-to-list 'tree-sitter-major-mode-language-alist
-               '(typescriptreact-mode . tsx)))
-
-(use-package eglot
-  :hook (prog-mode . eglot-ensure))
-
-;; Instructions. Manually download expert_darwin_arm64 from
-;; GitHub and place it in ~/programs. If it does not exist
-;; create symbolic link to it in /usr/local/bin or anywhere
-;; else in the path.
-(with-eval-after-load 'eglot
-  (setf (alist-get '(elixir-mode elixir-ts-mode heex-ts-mode)
-                   eglot-server-programs
-                   nil nil #'equal)
-        (if (and (fboundp 'w32-shell-dos-semantics)
-                 (w32-shell-dos-semantics))
-            '("expert_windows_amd64")
-          (eglot-alternatives
-           '("expert_linux_amd64" ("expert_darwin_arm64" "--stdio"))))))
 
 ;;;; yasnippet
 (use-package yasnippet
@@ -1351,17 +1230,6 @@
          (ido-find-file-in-dir default-directory))))
     (bind-key "C-x C-f" 'ibuffer-ido-find-file ibuffer-mode-map)))
 
-;;;; uniquify
-(use-package uniquify
-  :init
-  (progn
-    (setq
-     uniquify-buffer-name-style 'post-forward
-     uniquify-separator " • "
-     uniquify-min-dir-content 3
-     uniquify-after-kill-buffer-p t
-     uniquify-ignore-buffers-re "^\\*")))
-
 ;;;; AsciiDoc
 (use-package adoc-mode
   :ensure t
@@ -1380,152 +1248,6 @@
   :mode ("\\.md\\'" . markdown-mode)
   :defer t)
 
-;;;; json
-(use-package json-ts-mode
-  :mode ("\\.json\\'" . json-ts-mode)
-  )
-
-;;;; org
-(use-package org
-  :commands (org-mode
-             org-store-link
-             org-agenda)
-  :mode (("\\.org_archive\\'" . org-mode)
-         ("\\.org\\'" . org-mode))
-  :config
-  (setq org-format-latex-options (plist-put org-format-latex-options :scale 1.7))
-  :init
-  (progn
-    (setq
-     org-startup-folded t
-     org-directory boem-user-org-directory
-     org-src-fontify-natively t
-     org-preview-latex-default-process 'dvisvgm
-     org-insert-heading-respect-content t)
-    ;; (setq org-refile-targets
-    ;;       '((org-agenda-files :regexp . "Tasks")))
-    (setq org-refile-targets
-          '((org-agenda-files :level . 1)))
-
-    (use-package org-habit
-      :after (org)
-      :config
-      (progn
-        (setq org-habit-graph-column 90)))
-
-    (use-package org-agenda
-      :commands (org-agenda)
-      :bind ("C-c o a" . org-agenda)
-      :config
-      (setq
-       org-agenda-files (directory-files boem-user-org-directory t "org$")
-       org-agenda-include-diary nil
-       org-agenda-time-leading-zero t
-       org-agenda-time-grid (quote
-                             ((daily today require-timed)
-                              (0700 0900 1100 1300 1500 1700 1900 2100)
-                              " ....." "-----------------"))
-       org-agenda-prefix-format '((agenda . " %i %-20:c%?-12t% s") (todo . " %i %-20:c")
-                                  (tags . " %i %-20:c") (search . " %i %-20:c"))
-       org-agenda-custom-commands `(("A" "Daily agenda and top priority tasks"
-                                     ,boem-custom-daily-agenda))))
-
-    ;; After loading this package pinentry must be started
-    ;; with (pinentry-start) and line
-    ;; allow-emacs-pinentry
-    ;; must be added to ~/.gnupg/gpg-agent.conf file
-    (use-package pinentry
-      :after (org)
-      :ensure t)
-
-    (use-package org-crypt
-      :after (org)
-      :config
-      (progn
-        (org-crypt-use-before-save-magic)
-        (setq org-tags-exclude-from-inheritance (quote ("Encrypt")))
-        (setq org-crypt-tag-matcher "Encrypt")
-        ;; GPG key to use for encryption
-        ;; Either the Key ID or set to nil to use symmetric encryption.
-        (setq org-crypt-key nil)))
-
-    (use-package org-capture
-      :commands (org-capture)
-      :bind ("C-c o c" . org-capture)
-      :init
-      (progn
-        (setq org-capture-templates
-              `(("t" "Todo" entry (file+headline ,(expand-file-name "todos.org" boem-user-org-directory) "Tasks")
-                 "* TODO %?\n  %i\n  %a")
-                ("j" "Journal" entry (file+datetree ,(expand-file-name "journal.org" boem-user-org-directory))
-                 "* %?\Zapisano  %U\n  %i\n  %a")
-                ("l" "Link" plain (file+headline ,(expand-file-name "za-citanje.org" boem-user-org-directory) "Nepročitani tabovi")
-                 "  - %c %U")))))
-
-    (use-package ob
-      :after (org)
-      :init
-      (progn
-        (org-babel-do-load-languages
-         'org-babel-load-languages
-         '((shell . t)
-           (ditaa . t)
-           (plantuml . t)
-           (dot . t)
-           (ruby . t)
-           (emacs-lisp . t)
-           (css . t)
-           (sql . t)
-           (js . t)
-           (restclient . t)
-           (graphql . t)))))
-
-    (use-package ob-restclient
-      :ensure t
-      :after (ob))
-
-    (use-package ob-graphql
-      :ensure t
-      :after (ob))
-
-    (use-package org-superstar
-      :after (org)
-      :ensure t
-      :init
-      (add-hook 'org-mode-hook (lambda() (org-superstar-mode)))
-      :config
-      (setq org-superstar-special-todo-items t))
-    )
-
-  :config
-  (progn
-    (setq
-     org-log-done 'time
-     org-global-properties '(("Effort_ALL". "0 0:30 1:00 2:00 3:00 4:00 6:00 8:00"))
-     org-columns-default-format "%50ITEM(Task) %6Effort{:} %10CLOCKSUM %SCHEDULED"
-     org-tag-alist boem-org-tags
-     org-ellipsis "…"
-     org-clock-sound t
-     org-enforce-todo-dependencies t
-     org-enforce-todo-checkbox-dependencies t
-     org-archive-location (concat (expand-file-name "archive.org" boem-user-org-directory) "::* From %s")
-     org-imenu-depth 3)
-
-    (setq
-     org-todo-keywords
-     '((sequence "TODO(t)" "|" "DONE(d)")
-       (sequence "REPORT(r)" "BUG(b)" "FEATURE(e)" "|" "FIXED(x)")
-       (sequence "DEFFERED(f)" "|" "CANCELED(c)"))
-     org-todo-keyword-faces
-      '(("TODO" :foreground "blue" :weight bold)
-        ("BUG" :foreground "white" :weight bold)
-        ("DONE" :foreground "red" :weight bold)
-        ("DEFFERED" :foreground "orange" :weight bold)
-        ("FEATURE" :foreground "magenta" :weight normal)
-        ("CANCELLED" :foreground "red" :weight bold)
-        ("FIXED" :foreground "yellow" :weight bold)
-        ("REPORT" :foreground "yellow" :weight bold)))))
-
 (use-package ox-md
   :commands (org-md-export-as-markdown
              org-md-export-to-markdown
@@ -1541,20 +1263,6 @@
       :ensure t
       :bind (("C-c i" . imenu-anywhere))
       :commands (imenu-anywhere))))
-
-;;;; auto-revert-mode
-(use-package autorevert
-  :defer 1
-  :init
-  (progn
-    (setq auto-revert-check-vc-info nil
-          auto-revert-verbose nil)
-    (setq auto-revert-mode-text " ♻"
-          auto-revert-tail-mode-text " ♻~")
-    (defun auto-revert-turn-on-maybe ()
-      (unless (boem-current-buffer-remote-p)
-        (auto-revert-mode)))
-    (add-hook 'find-file-hook 'auto-revert-turn-on-maybe)))
 
 ;;;; csv-mode
 (use-package csv-mode
@@ -1582,12 +1290,6 @@
 (use-package mwe-log-commands
   :ensure t
   :disabled t)
-
-(use-package which-key
-  :commands (which-key)
-  :init
-  (add-hook 'after-init-hook 'which-key-mode)
-  (setq which-key-idle-delay 0.5))
 
 (use-package websocket
   :ensure t

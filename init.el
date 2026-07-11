@@ -3,6 +3,7 @@
 ;;; Commentary:
 ;;
 
+;;; Code:
 (defcustom boem-preferred-font-name "DejaVuSansMono Nerd Font Mono"
   "The name of the font that will be used.
 Examples: `JetBrainsMono Nert Font' or FiraCode Nerd Font Mono"
@@ -23,14 +24,14 @@ directory."
   :type 'string
   :group 'boem)
 
-(defcustom boem-gui-theme 'modus-vivendi
-  "Emacs theme to load when GUI is started"
-  :type 'symbol
+(defcustom boem-gui-theme "modus-vivendi"
+  "Emacs theme to load when GUI is started."
+  :type 'string
   :group 'boem)
 
 (defcustom boem-tui-theme nil
-  "Emacs theme to load when started in terminal"
-  :type 'symbol
+  "Emacs theme to load when started in terminal."
+  :type 'string
   :group 'boem)
 
 (defvar boem-init-root
@@ -102,14 +103,18 @@ A trailing slash on RELATIVE-PATH marks the entry as a directory.")
 (add-to-list 'treesit-extra-load-path (boem/data-path 'tree-sitter-dir))
 
 (require 'internal-packages)
+
+;; In "emacs" package we set package-user-dir and after that we have
+;; to initialize package so Emacs properly adds all subdirs to the
+;; load path.
+(package-initialize)
+(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
+
 (require 'external-packages)
 
 ;; (setq-default ;; xdisp.c
 ;;  cursor-type 'box
-;;  frame-title-format "emacs - %b"
 ;;  auto-window-vscroll nil
-;;  eshell-prompt-regexp "^> "
-;;  always using left-to-right languages
 ;;  mode-line-format '("%e"
 ;;                     mode-line-front-space
 ;;                     mode-line-mule-info
@@ -127,45 +132,12 @@ A trailing slash on RELATIVE-PATH marks the entry as a directory.")
 ;;                     mode-line-misc-info
 ;;                     mode-line-end-spaces))
 
-(setq
- ;; auto-save-file-name-transforms `((".*" ,temporary-file-directory t))
- ;; tags-revert-without-query t
- ;; eshell-hist-ignoredups t
- ;; eshell-destroy-buffer-when-process-dies t
- ;; dired-listing-switches "-alh"
- ;; dired-dwim-target t
- ;; isearch-allow-scroll t
- ;; isearch-lazy-count t
- ;; lazy-count-prefix-format nil
- ;; lazy-count-suffix-format "   (%s/%s)"
- ;; ediff-keep-variants nil
- ;; ediff-split-window-function #'split-window-horizontally
- ;; ediff-window-setup-function #'ediff-setup-windows-plain
- ;; modus-themes configuration
- ;; modus-themes-bold-constructs t
- ;; modus-themes-prompts '(extrabold italic)
- ;; locale-coding-system 'utf-8
-)
-
 ;; This enables, otherwise disabled commands so Emacs does not ask the
-;; question:
-;; "Do you want to use this comand anyway?"
+;; question: "Do you want to use this comand anyway?"
 (put 'dired-find-alternate-file 'disabled nil)
 (put 'downcase-region 'disabled nil)
 (put 'upcase-region 'disabled nil)
 (put 'narrow-to-region 'disabled nil)
-
-(add-hook 'js-ts-mode-hook
-          '(lambda() (setq-local js-indent-level 2)))
-
-(add-hook 'json-ts-mode-hook
-          '(lambda()
-             (setq-local js-indent-level 2)))
-
-(package-initialize)
-(add-to-list 'package-archives '("melpa" . "https://releases.melpa.org/packages/") t)
-
-;; (load "init-packages")
 
 (load custom-file 'no-error 'nomessage)
 
