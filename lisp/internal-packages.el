@@ -225,7 +225,6 @@
   (use-dialog-box nil)
   (use-file-dialog nil)
   (use-package-compute-statistics t)
-  (use-package-hook-name-suffix nil)
   (use-short-answers t)
   (view-read-only t)
   (visible-bell nil)

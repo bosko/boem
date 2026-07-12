@@ -43,7 +43,7 @@
   :ensure t)
 
 (use-package ghostel-eshell
-  :hook (eshell-load . ghostel-eshell-visual-command-mode))
+  :hook (eshell-mode . ghostel-eshell-visual-command-mode))
 
 (use-package docker-cli
   :commands (docker-cli)
