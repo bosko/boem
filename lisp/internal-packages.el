@@ -36,7 +36,17 @@
    ("C-x /" . boem-comment-uncomment)
    ("M-l" . scroll-down-line)
    ("M-k" . scroll-up-line)
-   ("C-c r a" . inf-ruby-console-auto))
+   ("C-c r a" . inf-ruby-console-auto)
+   ;; Emacs-31
+   ("C-x w t"  . window-layout-transpose)
+   ;; Emacs-31
+   ("C-x w r"  . window-layout-rotate-clockwise)
+   ;; Emacs-31
+   ("C-x w f h"  . window-layout-flip-leftright)
+   ;; Emacs-31
+   ("C-x w f v"  . window-layout-flip-topdown)
+   ("C-x 5 l"  . select-frame-by-name)
+   ("C-x 5 s"  . set-frame-name))
   :custom
   (ad-redefinition-action 'accept)
   (ansi-color-for-comint-mode t)
@@ -365,6 +375,13 @@ in terminal is started"
                   help-mode-hook))
     (add-hook hook '(lambda() (setq show-trailing-whitespace nil))))
 
+  ;; A Protesilaos life savier HACK
+  ;; Add option "d" to whenever using C-x s or C-x C-c, allowing a quick preview
+  ;; of the diff (if you choose `d') of what you're asked to save.
+  (add-to-list 'save-some-buffers-action-alist
+               (list "d"
+                     (lambda (buffer) (diff-buffer-with-file (buffer-file-name buffer)))
+                     "show diff between the buffer and its file"))
   (with-current-buffer (get-buffer-create "*scratch*")
     (insert (format ";;
 ;; ██████▓▒░    █████▓▒░   ███████▓▒░  ██▓▒░   ██▓▒░
@@ -1006,18 +1023,6 @@ and restart Flymake to apply the changes."
     (keymap-set minibuffer-visible-completions-up-down-map "C-p"
                 #'minibuffer-previous-completion))
 
-  ;; There's a bug with C-x p p when you have both
-  ;; completion-eager-update and completion-eager-display set to t
-  (define-advice project-switch-project
-      (:around (orig &rest args) emacs-solo/project-no-eager-display)
-    "Disable `completion-eager-display' during project switching.
-  The eager *Completions* from the project-selection `completing-read'
-  leaks a synthetic key into the dispatch menu's `read-key-sequence',
-  auto-firing the first command (`project-find-file') instead of
-  waiting for the user to press e/d/f."
-    (let ((completion-eager-display nil))
-      (apply orig args)))
-
   (defun boem/flex-noinsert-try-completion (string table pred point)
     "Flex `try-completion' that never auto-extends the input on TAB.
 
@@ -1460,6 +1465,20 @@ and restart Flymake to apply the changes."
 
 ;; =========================
 
+(use-package server
+  :commands server-start-maybe
+  :init
+  (progn
+    (add-hook 'after-init-hook
+              'server-start-maybe))
+  :config
+  (progn
+    (defun server-start-maybe ()
+      (and (not (server-running-p))
+         (server-start nil t)))))
+
+;; =========================
+
 (use-package which-key
   :defer t
   :ensure nil
@@ -1665,6 +1684,13 @@ and restart Flymake to apply the changes."
   (add-hook 'elixir-ts-mode-hook
             (lambda ()
               (add-hook 'before-save-hook #'eglot-format-buffer nil t))))
+
+(use-package css-ts-mode
+  :ensure nil
+  :mode ("\\.css\\'" . css-mode)
+  :init
+  (progn
+    (setq css-indent-offset 2)))
 
 (use-package js-ts-mode
   ;; js-ts-mode is autoloaded; js.el (and its js-base-mode parent)
