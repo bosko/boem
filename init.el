@@ -151,6 +151,17 @@ A trailing slash on RELATIVE-PATH marks the entry as a directory.")
 (set-input-method 'cyrillic-serbian)
 
 (require 'boem-weather)
+(require 'emacs-solo-ace-window)
+(require 'emacs-solo-container)
+(require 'emacs-solo-dired-mpv)
+(require 'emacs-solo-exec-path-from-shell)
+(require 'emacs-solo-highlight-keywords)
+(require 'emacs-solo-m3u)
+(require 'emacs-solo-mode-line)
+(require 'emacs-solo-project-select)
+(require 'emacs-solo-rainbow-delimiters)
+(require 'emacs-solo-weather)
+
 (provide 'init)
 
 ;;; init.el ends here
