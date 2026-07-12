@@ -122,7 +122,7 @@ buffer.
 
 If neither of those is set for BUF, return nil."
   (with-current-buffer buf
-    (when-let ((file-name (or buffer-file-name
+    (when-let* ((file-name (or buffer-file-name
                               list-buffers-directory)))
       (file-truename file-name))))
 
@@ -145,7 +145,7 @@ If neither of those is set for BUF, return nil."
 If the file is not under version control, nil is returned instead."
   (let ((file-name (funcall ibuffer-vc-buffer-file-name-function buf)))
     (when (ibuffer-vc--include-file-p file-name)
-      (when-let ((backend (ibuffer-vc--deduce-backend file-name)))
+      (when-let* ((backend (ibuffer-vc--deduce-backend file-name)))
         (let* ((root-fn-name (intern (format "vc-%s-root" (downcase (symbol-name backend)))))
                (root-dir
                 (cond
@@ -173,7 +173,7 @@ If the file is not under version control, nil is returned instead."
     "Toggle current view to buffers with vc root dir QUALIFIER."
   (:description "vc root dir"
                 :reader (ibuffer-vc-read-filter))
-  (when-let ((it (ibuffer-vc-root buf)))
+  (when-let* ((it (ibuffer-vc-root buf)))
     (equal qualifier it)))
 
 ;;;###autoload
@@ -192,7 +192,7 @@ If the file is not under version control, nil is returned instead."
   (interactive)
   (setq ibuffer-filter-groups (ibuffer-vc-generate-filter-groups-by-vc-root))
   (message "ibuffer-vc: groups set")
-  (when-let ((ibuf (get-buffer "*Ibuffer*")))
+  (when-let* ((ibuf (get-buffer "*Ibuffer*")))
     (with-current-buffer ibuf
       (pop-to-buffer ibuf)
       (ibuffer-update nil t))))
