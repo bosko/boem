@@ -16,7 +16,6 @@
 ;;; Code:
 
 (use-package emacs-solo-highlight-keywords-mode
-  :if emacs-solo-enable-highlight-keywords
   :ensure nil
   :no-require t
   :defer t

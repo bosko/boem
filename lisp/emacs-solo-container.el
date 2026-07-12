@@ -21,7 +21,7 @@
   :init
   (require 'project)
 
-  (defvar container-backend 'podman
+  (defvar container-backend 'docker
     "Container backend: \\='docker or \\='podman.")
 
   (defvar container-profile 'dev

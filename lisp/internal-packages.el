@@ -372,7 +372,9 @@ in terminal is started"
                   dired-mode-hook
                   occur-mode-hook
                   docker-cli-mode-hook
-                  help-mode-hook))
+                  help-mode-hook
+                  ;; From emacs-solo-container package
+                  container-list-mode-hook))
     (add-hook hook '(lambda() (setq show-trailing-whitespace nil))))
 
   ;; A Protesilaos life savier HACK

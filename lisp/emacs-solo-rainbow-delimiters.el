@@ -16,7 +16,6 @@
 ;;; Code:
 
 (use-package emacs-solo-rainbow-delimiters
-  :if emacs-solo-enable-rainbown-delimiters
   :ensure nil
   :no-require t
   :defer t
