@@ -384,6 +384,108 @@ in terminal is started"
                (list "d"
                      (lambda (buffer) (diff-buffer-with-file (buffer-file-name buffer)))
                      "show diff between the buffer and its file"))
+
+  ;; Ibuffer filters
+  (setq
+   ibuffer-show-empty-filter-groups nil
+   ibuffer-formats
+   '(
+     (
+      mark
+      (size 9 -1 :right)
+      " "
+      (mode 4 4 :right :elide)
+      " "
+      read-only
+      modified
+      " "
+      (name 25 25 :left :elide)
+      " "
+      (vc-status-mini 1 1)
+      " "
+      filename-and-process)
+     (mark " " (name 16 -1) " " filename))
+   ibuffer-saved-filter-groups
+   '(("default"
+      ("org"     (or
+                  (mode  . org-mode)
+                  (name  . "^\\*Org Src")
+                  (name  . "^\\*Org Agenda\\*$")))
+      ("tramp"   (name   . "^\\*tramp.*"))
+      ("emacs"   (or
+                  (name  . "^\\*scratch\\*$")
+                  (name  . "^\\*Messages\\*$")
+                  (name  . "^\\*Warnings\\*$")
+                  (name  . "^\\*Shell Command Output\\*$")
+                  (name  . "^\\*Async-native-compile-log\\*$")))
+      ("ediff"   (name   . "^\\*[Ee]diff.*"))
+      ("scm" (or
+              (mode . magit-status-mode)
+              (mode . magit-log-mode)
+              (mode . vc-annotate-mode)))
+      ("dired"   (mode   . dired-mode))
+      ("terminal" (or
+                   (mode . term-mode)
+                   (mode . shell-mode)
+                   (mode . eshell-mode)))
+      ("help"    (or
+                  (name  . "^\\*Help\\*$")
+                  (name  . "^\\*info\\*$")))
+      ("news"    (name   . "^\\*Newsticker.*"))
+      ("chat"    (or
+                  (mode  . rcirc-mode)
+                  (mode  . erc-mode)
+                  (name  . "^\\*rcirc.*")
+                  (name  . "^\\*ERC.*"))))))
+
+  (add-hook 'ibuffer-mode-hook
+            (lambda ()
+              (ibuffer-switch-to-saved-filter-groups "default")
+              (ibuffer-vc-set-filter-groups-by-vc-root)
+              (unless (eq ibuffer-sorting-mode 'alphabetic)
+                (ibuffer-do-sort-by-alphabetic))))
+
+  ;; Colorize the '*Messages*' buffer
+  (defun boem/messages-font-lock-setup ()
+    (unless font-lock-defaults
+      (setq-local font-lock-defaults '(nil nil nil nil nil)))
+    (font-lock-add-keywords
+     nil
+     '(("^Loading .*"                      0 'shadow prepend)
+       ("^Package .*"                      0 'shadow prepend)
+       ("^line-move.*"                     0 'shadow prepend)
+       ("^For information abou.*"          0 'shadow prepend)
+       ("^Importing package-keyring.gpg.*" 0 'shadow prepend)
+       ("^.*[Ee]rror:? .*"                 0 'compilation-error prepend)
+       ("\\[.* times\\]"                   0 'font-lock-regexp-face prepend)
+       ("done$"                            0 'font-lock-regexp-face prepend)
+       ("^>>>.*"                           0 'font-lock-function-name-face prepend)))
+    (font-lock-mode 1)
+    (font-lock-flush)
+    (font-lock-ensure))
+
+  (add-hook 'messages-buffer-mode-hook #'boem/messages-font-lock-setup)
+
+  (with-current-buffer (messages-buffer)
+    (boem/messages-font-lock-setup))
+
+  :init
+  (when (>= emacs-major-version 31)
+    ;; Emacs-31
+    (tty-tip-mode nil))
+  (tooltip-mode nil)
+
+  (select-frame-set-input-focus (selected-frame))
+  (blink-cursor-mode 0)
+  (recentf-mode 1)
+  (repeat-mode 1)
+  (savehist-mode 1)
+  (save-place-mode 1)
+  (winner-mode)
+  (xterm-mouse-mode 1)
+  ;; allows us to type a new path without having to delete the current one
+  (file-name-shadow-mode 1)
+
   (with-current-buffer (get-buffer-create "*scratch*")
     (insert (format ";;
 ;; ██████▓▒░    █████▓▒░   ███████▓▒░  ██▓▒░   ██▓▒░
