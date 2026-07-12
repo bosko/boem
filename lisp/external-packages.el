@@ -27,8 +27,8 @@
 (use-package dash-docs
   :ensure t
   :init
-  (setq dash-docs-enable-debugging nil)
-  (setq dash-docs-browser-func #'eww)
+  (setq dash-docs-enable-debugging nil
+        dash-docs-browser-func #'eww)
   :config
   (mapc #'(lambda (doc) (dash-docs-activate-docset doc)) (dash-docs-installed-docsets)))
 
@@ -248,11 +248,11 @@
   :hook (after-init . global-corfu-mode)
   :bind (:map corfu-map ("<tab>" . corfu-complete))
   :config
-  (setq tab-always-indent 'complete)
-  (setq corfu-preview-current nil)
-  (setq corfu-min-width 20)
+  (setq tab-always-indent 'complete
+        corfu-preview-current nil
+        corfu-min-width 20
+        corfu-popupinfo-delay '(1.25 . 0.5))
 
-  (setq corfu-popupinfo-delay '(1.25 . 0.5))
   (corfu-popupinfo-mode 1) ; shows documentation after `corfu-popupinfo-delay'
 
   ;; Sort by input history (no need to modify `corfu-sort-function').
