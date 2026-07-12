@@ -46,8 +46,8 @@
   :hook (eshell-mode . ghostel-eshell-visual-command-mode))
 
 (use-package docker-cli
-  :commands (docker-cli)
-  :ensure t)
+  :ensure t
+  :commands (docker-cli))
 
 (use-package popper
   :ensure t
@@ -276,6 +276,7 @@
   :ensure t
   :commands (magit-log magit-blame magit-status magit-git-repo-p magit-list-repos)
   :bind (("C-x g" . magit-status))
+  :hook (git-commit-mode . (lambda () ((auto-fill-mode))))
   :init
   (progn
     (setq
@@ -284,12 +285,7 @@
      magit-save-some-buffers t
      magit-log-author-date-max-length 25
      magit-log-auto-more t)
-    (use-package magit-blame
-      :commands magit-blame-mode)
-    (add-hook 'git-commit-mode-hook
-              #'(lambda ()
-                  (auto-fill-mode)
-                  )))
+    (use-package magit-blame :commands magit-blame-mode))
   :config
   (progn
     (require 'json)
@@ -325,11 +321,12 @@
 ;;;; diff-hl
 (use-package diff-hl
   :ensure t
+  :hook
+  (dired-mode . diff-hl-dired-mode)
+  (magit-pre-refresh . diff-hl-magit-pre-refresh)
+  (magit-post-refresh-hook . diff-hl-magit-post-refresh)
   :config
   (global-diff-hl-mode)
-  (add-hook 'dired-mode-hook 'diff-hl-dired-mode)
-  (add-hook 'magit-pre-refresh-hook 'diff-hl-magit-pre-refresh)
-  (add-hook 'magit-post-refresh-hook 'diff-hl-magit-post-refresh)
   ;; Fall back to the display margin, if the fringe is unavailable
   (unless (display-graphic-p) (diff-hl-margin-mode)))
 
@@ -342,13 +339,13 @@
 
 (use-package nerd-icons-dired
   :ensure t
-  :hook
-  (dired-mode . nerd-icons-dired-mode))
+  :hook (dired-mode . nerd-icons-dired-mode))
 
 (use-package nerd-icons-completion
-  :ensure t
   :after marginalia
   :config
+  (nerd-icons-completion-mode)
+  ;; TODO:  Moving this to ":hook" didn't work. Check it later
   (add-hook 'marginalia-mode-hook #'nerd-icons-completion-marginalia-setup))
 
 (use-package ob-restclient
@@ -362,25 +359,21 @@
 (use-package org-superstar
   :after (org)
   :ensure t
-  :init
-  (add-hook 'org-mode-hook (lambda() (org-superstar-mode)))
+  :hook (org-mode . org-superstar-mode)
   :config
   (setq org-superstar-special-todo-items t))
 
 (use-package inf-ruby
   :ensure t
   :commands ruby-ts-mode
+  :hook (inf-ruby-mode . (lambda() (setq show-trailing-whitespace nil)))
   :config
-  (progn
-    (inf-ruby-minor-mode +1))
-  :init
-  (progn
-    (add-hook 'inf-ruby-mode-hook (lambda() (setq show-trailing-whitespace nil)))))
+  (inf-ruby-minor-mode +1))
 
 (use-package exunit
   :ensure t
+  :hook (elixir-mode . exunit-mode)
   :config
-  (add-hook 'elixir-mode-hook 'exunit-mode)
   (setq transient-default-level 5))
 
 ;;;; multiple-cursors
@@ -462,8 +455,7 @@
     ;; (unless (string< emacs-version "24.3")
     (setq undo-tree-auto-save-history t)
 
-    (global-undo-tree-mode)
-    ))
+    (global-undo-tree-mode)))
 
 (use-package restclient
   :ensure t
@@ -473,9 +465,7 @@
   :commands (vlf vlf-mode)
   :ensure t
   :config
-  (progn
-    (require 'json))
-  )
+  (require 'json))
 
 (use-package wgrep
   :ensure t
@@ -501,8 +491,7 @@
     :endpoint "/v1/chat/completions"
     :protocol "https"
     :key 'gptel--get-api-key
-    :models '("mistral-small-latest" "codestral-latest" "devstral-medium-latest"))
-  )
+    :models '("mistral-small-latest" "codestral-latest" "devstral-medium-latest")))
 
 (use-package mcp
   :ensure t
@@ -510,8 +499,7 @@
   :custom (mcp-hub-servers
            '(("tidewave-elixir" . (:url "http://localhost:4000/tidewave/mcp"))
              ("tidewave-rails" . (:url "http://localhost:3000/tidewave/mcp"))))
-  :config (require 'mcp-hub)
-  )
+  :config (require 'mcp-hub))
 
 (use-package agent-shell
   :ensure t
@@ -536,7 +524,6 @@
           ((name . "tidewave-rails")
            (type . "http")
            (headers . [])
-           (url . "http://localhost:3000/tidewave/mcp"))))
-  )
+           (url . "http://localhost:3000/tidewave/mcp")))))
 
 (provide 'external-packages)
