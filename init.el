@@ -150,6 +150,7 @@ A trailing slash on RELATIVE-PATH marks the entry as a directory.")
 
 (set-input-method 'cyrillic-serbian)
 
+(require 'boem-weather)
 (provide 'init)
 
 ;;; init.el ends here
