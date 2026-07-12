@@ -261,11 +261,10 @@
     (add-to-list 'savehist-additional-variables 'corfu-history))
 
   :init
-  (use-package corfu-terminal
-    :ensure t)
-
-  (unless (display-graphic-p)
-    (corfu-terminal-mode +1)))
+  (when (< emacs-major-version 31)
+    (use-package corfu-terminal :ensure t)
+    (unless (display-graphic-p)
+      (corfu-terminal-mode +1))))
 
 ;;;; git-timemachine
 (use-package git-timemachine
