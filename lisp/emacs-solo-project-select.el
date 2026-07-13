@@ -17,7 +17,7 @@
   :ensure nil
   :no-require t
   :init
-  (defvar emacs-solo-default-projects-folder "~/Projects"
+  (defvar emacs-solo-default-projects-folder "~/Code"
     "Default folder to search for projects.")
 
   (defvar emacs-solo-default-projects-input ""
