@@ -513,10 +513,8 @@ in terminal is started"
   :ensure nil
   :defer t
   :config
-  (setq epg-pinentry-mode 'loopback)
-  (setq auth-sources
-        (list (expand-file-name ".authinfo.gpg" user-emacs-directory)))
-  (setq user-full-name "User Name and Surnames"
+  (setq epg-pinentry-mode 'loopback
+        user-full-name "User Name and Surnames"
         user-mail-address "user@mail.com")
 
   ;; Use `pass` as an auth-source
