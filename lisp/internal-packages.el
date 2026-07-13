@@ -500,7 +500,14 @@ in terminal is started"
 ;;
 "
                     (emacs-init-time)
-                    (number-to-string (length package-activated-list)))))
+                    (number-to-string (length package-activated-list))))
+    (not-modified))
+
+  (add-hook 'emacs-startup-hook
+          (lambda ()
+            (when-let ((win (get-buffer-window "*scratch*")))
+              (select-window win)
+              (goto-char (point-max)))))
 
   (message ">>> boem: init time %s" (emacs-init-time)))
 
@@ -524,7 +531,7 @@ in terminal is started"
 
 (use-package autorevert
   :ensure nil
-  :hook (emacs-startup-hook . global-auto-revert-mode)
+  :hook (emacs-startup . global-auto-revert-mode)
   :custom
   (auto-revert-remote-files nil)   ;; t makes tramp slow
   (auto-revert-verbose t)
