@@ -26,6 +26,7 @@
    ("M-o l" . windmove-right)
    ("M-o r" . boem-restclient)
    ("M-g r" . recentf)
+   ("M-o w w" . boem-weather)
    ("M-s g" . grep)
    ("C-x C-m" . execute-extended-command)
    ("C-x C-b" . ibuffer)
@@ -36,7 +37,9 @@
    ("C-x /" . boem-comment-uncomment)
    ("M-l" . scroll-down-line)
    ("M-k" . scroll-up-line)
-   ("C-c r a" . inf-ruby-console-auto)
+   ("C-c o a" . org-agenda)
+   ("C-c o c" . org-capture)
+   ("C-c o i" . inf-ruby-console-auto)
    ;; Emacs-31
    ("C-x w t"  . window-layout-transpose)
    ;; Emacs-31
