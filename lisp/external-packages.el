@@ -153,7 +153,6 @@
          ;; M-s bindings in `search-map'
          ("M-s d" . consult-dash)                  ;; Alternative: consult-fd
          ("M-s c" . consult-locate)
-         ("M-s g" . consult-grep)
          ("M-s G" . consult-git-grep)
          ("M-s r" . consult-ripgrep)
          ("M-s l" . consult-line)
@@ -335,6 +334,20 @@
 
 (use-package nerd-icons-ibuffer
   :ensure t
+  :custom
+  (nerd-icons-ibuffer-formats
+   '((mark modified read-only vc-status-mini " "
+           (icon 2 2 :left :elide)
+           " "
+           (name 18 18 :left :elide)
+           " "
+           (size 9 -1 :right)
+           " "
+           (mode 16 16 :left :elide)
+           " "
+           (vc-status 16 16 :left)
+           " "
+           vc-relative-file)))
   :hook (ibuffer-mode . nerd-icons-ibuffer-mode))
 
 (use-package nerd-icons-dired

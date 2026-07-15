@@ -110,8 +110,6 @@ A trailing slash on RELATIVE-PATH marks the entry as a directory.")
 (package-initialize)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 
-(require 'external-packages)
-
 ;; (setq-default ;; xdisp.c
 ;;  cursor-type 'box
 ;;  auto-window-vscroll nil
@@ -162,6 +160,7 @@ A trailing slash on RELATIVE-PATH marks the entry as a directory.")
 (require 'emacs-solo-project-select)
 (require 'emacs-solo-rainbow-delimiters)
 (require 'emacs-solo-weather)
+(require 'external-packages)
 
 (provide 'init)
 
