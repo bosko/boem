@@ -1,34 +1,34 @@
-;;; init-basic.el --- Basic configurations
+;;; init-basic.el --- Basic configurations -*- lexical-binding: t; -*-
+;;
+;; Author: Boško Ivanišević
+;; URL: https://github.com/bosko/boem
+;; Package-Requires: ((emacs "30.1"))
+;; Keywords: config
+;; SPDX-License-Identifier: GPL-3.0-or-later
+;;
 
 ;;; Commentary:
+;;  Basic Emacs Boem functions
 ;;
 
 ;;; Code:
+(defun boem/data-path (key)
+  "Return the absolute path for KEY in `boem-data-paths'."
+  (let ((rel (cdr (assq key boem-data-paths))))
+    (unless rel
+      (error "boem/data-path: Unknown key %S" key))
+    (expand-file-name rel boem-data-directory)))
 
-(defvar boem-current-user
-  (getenv (if (equal system-type 'windows-nt) "USERNAME" "USER")))
-
-(defconst boem-version-string
-  (mapconcat 'identity
-             (mapcar
-              #'(lambda(x) (number-to-string x))
-              (version-to-list emacs-version))
-             ".")
-  "Emacs version as string.")
-
-(defconst boem-user-package-directory
-  (expand-file-name (format "packages/%s" boem-version-string) boem-init-root))
-(defconst boem-user-data-directory
-  (expand-file-name "data" boem-init-root))
-(defconst boem-user-themes-directory
-  (expand-file-name "themes" boem-init-root))
-(defconst boem-user-org-directory
-  (expand-file-name "~/org-files"))
-
-(make-directory boem-user-package-directory t)
-(make-directory boem-user-data-directory t)
-(make-directory boem-user-themes-directory t)
-(make-directory boem-user-org-directory t)
+(defun boem/ensure-data-dirs ()
+  "Create every directory referenced by `boem-data-paths'.
+Entries ending in `/' are created directly; other entries have their
+parent directory created."
+  (dolist (entry boem-data-paths)
+    (let* ((abs (boem/data-path (car entry)))
+           (dir (if (directory-name-p abs)
+                    abs
+                  (file-name-directory abs))))
+      (make-directory dir t))))
 
 (defun boem-get-buffer-project-folder (buffer)
   "Returns folder for Git project"
@@ -54,26 +54,6 @@
         (eshell/clear-scrollback)
         (eshell-emit-prompt)))))
 
-(defun boem-add-subdirs-to-load-path (root-dir)
-  "Add all first lever sub directories of ROOT-DIR to load path."
-  (dolist (entry (directory-files root-dir t "\\w+"))
-    (when (file-directory-p entry)
-      (if (string-match "theme" entry)
-          (add-to-list 'custom-theme-load-path entry)
-        (add-to-list 'load-path entry)))))
-
-(boem-add-subdirs-to-load-path boem-user-package-directory)
-
-;; My themes
-(add-to-list 'custom-theme-load-path boem-user-themes-directory)
-
-;;;; rename-modeline
-(defmacro boem-rename-modeline (package-name mode new-name)
-  `(eval-after-load ,package-name
-     `(advice-add #',',mode :after
-                  (lambda (&rest _)
-                    (setq mode-name ,,new-name)))))
-
 ;; Stop hl-line interfering with default face suggested by
 ;; customize-face (taken
 ;; from https://sachachua.com/blog/2024/09/highlight-the-current-line-while-still-being-able-to-easily-customize-describe-underlying-faces/)
@@ -85,21 +65,6 @@
           (global-hl-line-mode 1)))
     (apply func args)))
 (advice-add #'face-at-point :around #'boem-suggest-other-faces)
-
-;;;; Modes and mode groupings
-(defmacro boem-hook-into-modes (func modes)
-  "Add hook `FUNC' to multiple `MODES'."
-  `(dolist (mode-hook ,modes)
-     (add-hook mode-hook ,func)))
-
-(defvar boem-prog-mode-hooks
-  '(prog-mode-hook
-    emacs-lisp-mode-hook
-    pyhon-mode-hook
-    js-mode-hook
-    ruby-mode-hook
-    elixir-mode-hook
-    sass-mode-hook))
 
 (defun boem-current-buffer-remote-p ()
   (--any? (and it (file-remote-p it))
@@ -122,11 +87,6 @@
   (move-end-of-line nil)
   (newline)
   (indent-according-to-mode))
-
-(defun boem-open-term ()
-  "Open 'ansi-term' with default shell."
-  (interactive)
-  (ansi-term (getenv "SHELL")))
 
 (defun boem-kill-user-buffers ()
   "Kills all opened buffers except *scratch* and *Messages*"
@@ -159,10 +119,6 @@ Repeated invocations toggle between the two most recently open buffers.
 Code from: http://emacsredux.com/blog/2013/04/28/switch-to-previous-buffer/"
   (interactive)
   (switch-to-buffer (other-buffer (current-buffer) 1)))
-
-(defun boem-set-proper-sql-prompt-regex ()
-  (if (string= sql-product "postgres")
-      (setq sql-prompt-regexp "[_[:alpha:]]*[=][#]")))
 
 (defun boem-reopen-file-as-sudo ()
   (interactive)
@@ -247,19 +203,6 @@ Code from: http://emacsredux.com/blog/2013/04/28/switch-to-previous-buffer/"
                 (org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))
                 (org-agenda-overriding-header "\nПредстојећи рокови (+14д)\n"))))
   "Custom agenda for use in `org-agenda-custom-commands'.")
-
-;; This allows using describe-face or customize=face without
-;; hl-line interfering.
-;;
-;; Source: https://sachachua.com/blog/2024/09/highlight-the-current-line-while-still-being-able-to-easily-customize-describe-underlying-faces/
-(defun my-suggest-other-faces (func &rest args)
-  (if global-hl-line-mode
-      (progn
-        (global-hl-line-mode -1)
-        (prog1 (apply func args)
-          (global-hl-line-mode 1)))
-    (apply func args)))
-(advice-add #'face-at-point :around #'my-suggest-other-faces)
 
 ;; Difftastic diff and difftastic show options on '#' in magit buffer
 ;; Source: https://tsdh.org/posts/2022-08-01-difftastic-diffing-with-magit.html

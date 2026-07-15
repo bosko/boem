@@ -1,4 +1,5 @@
 *.elc
+custom-vars.el
 packages/
 data/
 auto-save-list/
