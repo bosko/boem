@@ -44,6 +44,7 @@ directory."
   '(;; Files:
     (bookmark-file               . "bookmarks")
     (ielm-history-file-name      . "ielm-history.eld")
+    (org-id-locations-file       . "org-id-locations")
     (project-list-file           . "projects")
     (recentf-save-file           . "recentf")
     (savehist-file               . "history")

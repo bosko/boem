@@ -143,6 +143,7 @@
   (multisession-directory (boem/data-path 'multisession-directory))
   (nsm-settings-file (boem/data-path 'nsm-settings-file))
   (next-line-add-newlines nil)
+  (org-id-locations-file (boem/data-path 'org-id-locations-file))
   (org-persist-directory (boem/data-path 'org-persist-dir))
   (package-user-dir boem-user-package-directory)
   (pixel-scroll-precision-mode t)
