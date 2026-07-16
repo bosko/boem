@@ -64,7 +64,7 @@
   (bidi-paragraph-direction 'left-to-right)
   (bookmark-file (boem/data-path 'bookmark-file))
   (buffer-file-coding-system 'utf-8)
-  ; FIXME: is this even working?
+  ;; FIXME: is this even working?
   (shared-game-score-directory (boem/data-path 'shared-game-score-directory))
   (calendar-latitude 44.787197)
   (calendar-longitude 20.457273)
@@ -73,7 +73,7 @@
   (calendar-day-abbrev-array ["не" "по" "ут" "ср" "че" "пе" "су"])
   (calendar-day-header-array ["не" "по" "ут" "ср" "че" "пе" "су"])
   (calendar-month-name-array ["Јануар" "Фебруар" "Март" "Април" "Мај" "Јун" "Јул"
-                             "Август" "Септембар" "Октобар" "Новембар" "Децембар"])
+                              "Август" "Септембар" "Октобар" "Новембар" "Децембар"])
   (calendar-week-start-day 1)
   (column-number-mode t)
   (cursor-in-non-selected-windows nil)
@@ -102,7 +102,7 @@
   (completions-detailed t)
   (delete-by-moving-to-trash t)
   (delete-pair-blink-delay 0)
-  ; Emacs-31 for easy subsequent C-x C-x
+  ;; Emacs-31 for easy subsequent C-x C-x
   (delete-pair-push-mark t)
   (delete-selection-mode 1)
   (display-line-numbers-width 4)
@@ -249,7 +249,7 @@
   ;; used if M-x rgrep uses find (default in grep-find-template)
   (grep-find-ignored-directories
    '("SCCS" "RCS" "CVS" "MCVS" ".src" ".svn" ".jj" ".git" ".hg" ".bzr" "_MTN" "_darcs" "{arch}" "node_modules" "build" "dist"))
-  ; used by M-x rgrep (dropping find when using rg)
+  ;; used by M-x rgrep (dropping find when using rg)
   (grep-find-template "rg <C> --null -nH -e <R> <D>")
   (pinentry-start)
   :config
@@ -301,17 +301,17 @@ The DWIM behaviour of this command is as follows:
 in terminal is started"
     (interactive)
     (let ((loaded-theme
-      (cond
-       ((and (display-graphic-p))
-        (load-theme (intern boem-gui-theme) t)
-        boem-gui-theme)
-       (boem-tui-theme
-        (load-theme (intern boem-tui-theme) t)
-        boem-tui-theme))))
+           (cond
+            ((and (display-graphic-p))
+             (load-theme (intern boem-gui-theme) t)
+             boem-gui-theme)
+            (boem-tui-theme
+             (load-theme (intern boem-tui-theme) t)
+             boem-tui-theme))))
       (when (string-search "modus" loaded-theme)
-          (setq modus-themes-bold-constructs t
-                modus-themes-prompts '(extrabold italic))
-          (define-key global-map (kbd "<f5>") #'modus-themes-toggle))
+        (setq modus-themes-bold-constructs t
+              modus-themes-prompts '(extrabold italic))
+        (define-key global-map (kbd "<f5>") #'modus-themes-toggle))
       (message ">>> boem: loaded theme: %s" loaded-theme)))
 
   (boem/load-theme)
@@ -508,10 +508,10 @@ in terminal is started"
     (not-modified))
 
   (add-hook 'emacs-startup-hook
-          (lambda ()
-            (when-let* ((win (get-buffer-window "*scratch*")))
-              (select-window win)
-              (goto-char (point-max)))))
+            (lambda ()
+              (when-let* ((win (get-buffer-window "*scratch*")))
+                (select-window win)
+                (goto-char (point-max)))))
 
   (message ">>> boem: init time %s" (emacs-init-time)))
 
@@ -1005,7 +1005,7 @@ Ex: mpv file1 file2 file3 file4..."
   (with-eval-after-load 'eglot
     (add-to-list
      'eglot-server-programs
-    '((elixir-mode elixir-ts-mode heex-ts-mode) "expert_darwin_arm64" "--stdio")))
+     '((elixir-mode elixir-ts-mode heex-ts-mode) "expert_darwin_arm64" "--stdio")))
 
   (with-eval-after-load 'eglot
     (add-to-list
@@ -1443,7 +1443,7 @@ and restart Flymake to apply the changes."
       "* %?\Zapisano  %U\n  %i\n  %a")
      ("l" "Link" plain
       (file+headline ,(expand-file-name "za-citanje.org" boem-user-org-directory)
-       "Nepročitani tabovi") "  - %c %U"))
+                     "Nepročitani tabovi") "  - %c %U"))
    )
 
   ;; Ellipsis styling
@@ -1587,7 +1587,7 @@ and restart Flymake to apply the changes."
   (progn
     (defun server-start-maybe ()
       (and (not (server-running-p))
-         (server-start nil t)))))
+           (server-start nil t)))))
 
 ;; =========================
 
@@ -1754,7 +1754,7 @@ and restart Flymake to apply the changes."
         ,(rx (or "def" "class" "module" "do" "{" "[" "if" "else" "unless"))
         ;; Block end
         ,(rx (or "}" "]" "end"))
-        ; Comment start
+        ;; Comment start
         ,(rx (or "#" "=begin"))
         forward-sexp nil))))
 
