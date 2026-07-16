@@ -307,7 +307,7 @@ in terminal is started"
        (boem-tui-theme
         (load-theme (intern boem-tui-theme) t)
         boem-tui-theme))))
-      (if (string-search "modus" loaded-theme)
+      (when (string-search "modus" loaded-theme)
           (setq modus-themes-bold-constructs t
                 modus-themes-prompts '(extrabold italic))
           (define-key global-map (kbd "<f5>") #'modus-themes-toggle))
