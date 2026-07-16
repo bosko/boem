@@ -109,7 +109,6 @@
   (display-line-numbers-widen t)
   ;; Emacs-31
   (display-fill-column-indicator-warning nil)
-  (delete-selection-mode t)
   (echo-keystrokes 0.1)
   (enable-recursive minibuffers t)
   (ffap-machine-p-known 'reject)
@@ -1227,7 +1226,7 @@ and restart Flymake to apply the changes."
   :hook (after-init-hook . show-paren-mode)
   :custom
   (show-paren-delay 0)
-  (show-paren-style 'mixed)
+  (show-paren-style 'parenthesis)
   ;; show matches within window splits
   (show-paren-context-when-offscreen t))
 
