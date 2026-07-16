@@ -355,6 +355,7 @@
   :hook (dired-mode . nerd-icons-dired-mode))
 
 (use-package nerd-icons-completion
+  :ensure t
   :after marginalia
   :config
   (nerd-icons-completion-mode)
