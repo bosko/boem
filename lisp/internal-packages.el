@@ -508,7 +508,7 @@ in terminal is started"
 
   (add-hook 'emacs-startup-hook
           (lambda ()
-            (when-let ((win (get-buffer-window "*scratch*")))
+            (when-let* ((win (get-buffer-window "*scratch*")))
               (select-window win)
               (goto-char (point-max)))))
 
