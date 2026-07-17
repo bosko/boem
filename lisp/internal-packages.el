@@ -1214,7 +1214,7 @@ and restart Flymake to apply the changes."
 ;; =========================
 
 ;;; │ ELECTRIC-PAIR
-(use-package electric-pair
+(use-package elec-pair
   :ensure nil
   :defer
   :hook (after-init-hook . electric-pair-mode))

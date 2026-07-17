@@ -423,34 +423,6 @@
     (bind-key "C-s" 'phi-search mc/keymap)
     (bind-key "C-r" 'phi-search-backward mc/keymap)))
 
-;;;; smartparens
-(use-package smartparens
-  :ensure t
-  :commands (smartparens-mode smartparens-global-mode turn-on-smartparens-mode
-                              turn-off-smartparens-mode show-smartparens-mode
-                              show-smartparens-global-mode
-                              smartparens-global-strict-mode
-                              smartparens-strict-mode
-                              turn-on-smartparens-strict-mode)
-  :diminish ""
-  :init
-  (progn
-    (require 'smartparens-config)
-    (setq
-     sp-show-pair-delay 0.125
-     sp-show-pair-from-inside nil))
-  :config
-  (progn
-    (bind-key "C-x C-r" 'sp-rewrap-sexp smartparens-mode-map)
-    (sp-pair "<%" "%>" :wrap "C-%")
-    (setq
-     sp-ignore-modes-list '(calc-mode dired-mode ibuffer-mode
-                                      minibuffer-inactive-mode sr-mode)
-     sp-autoescape-string-quote nil)
-    (sp-pair "'" nil :unless '(sp-point-after-word-p))
-    (smartparens-global-mode t)
-    (show-smartparens-global-mode t)))
-
 ;;;; undo-tree
 (use-package undo-tree
   :ensure t
