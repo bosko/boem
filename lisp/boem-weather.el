@@ -61,8 +61,8 @@
 ;;; ----------------------------------------------------------------
 ;;; Icons and descriptions
 ;;; ----------------------------------------------------------------
-(defun boem-weather--wi (name &optional face) (nerd-icons-wicon name :face face))
-(defun boem-weather--oct(name &optional face) (nerd-icons-octicon name :face face))
+(defun boem/weather--wi (name &optional face) (nerd-icons-wicon name :face face))
+(defun boem/weather--oct(name &optional face) (nerd-icons-octicon name :face face))
 
 (defconst boem-weather--code->icon
   '((0  . "nf-weather-day_sunny") (1  . "nf-weather-day_sunny_overcast")
@@ -91,27 +91,27 @@
     (82 . "Violent rain showers") (85 . "Snow showers") (86 . "Snow showers")
     (95 . "Thunderstorm") (96 . "Thunderstorm") (99 . "Thunderstorm")))
 
-(defun boem-weather--code-icon (code)
-  (boem-weather--wi (or (alist-get code boem-weather--code->icon) "na")))
+(defun boem/weather--code-icon (code)
+  (boem/weather--wi (or (alist-get code boem-weather--code->icon) "na")))
 
-(defun boem-weather--code-desc (code)
+(defun boem/weather--code-desc (code)
   (alist-get code boem-weather--code->desc "Unknown"))
 
-(defun boem-weather--wind-icon (deg)
+(defun boem/weather--wind-icon (deg)
   "Return arrow icon for wind direction DEG."
   (let* ((dir (mod (+ deg 22.5) 360))
          (idx (floor (/ dir 45)))
          )
     (nth idx '("↑" "↗" "→" "↘" "↓" "↙" "←" "↖"))))
 
-(defun boem-weather--fmt-temp (temp unit)
+(defun boem/weather--fmt-temp (temp unit)
   (if (< temp 0)
       (propertize (format "%3d%s" temp unit) 'face 'font-lock-string-face)
       (propertize (format "%3d%s" temp unit) 'face 'font-lock-negation-char-face)
     )
   )
 
-(defun boem-weather--bottom-line ()
+(defun boem/weather--bottom-line ()
   (concat
    "\n"
    (propertize "c" 'face 'help-key-binding)
@@ -124,7 +124,7 @@
    " quit"
    ))
 
-(defun boem-weather--fmt-hours (time)
+(defun boem/weather--fmt-hours (time)
   (let* ((cur-hour (format-time-string "%H"))
          (time-hour (substring time 11 13)))
     (if (string-equal cur-hour time-hour)
@@ -138,7 +138,7 @@
 ;;; Fetching
 ;;; ----------------------------------------------------------------
 
-(defun boem-weather--url (compression)
+(defun boem/weather--url (compression)
   (let* ((weather-param
           (cond ((eq 'current compression) boem-weather--current-param)
                 ((eq 'hourly compression) boem-weather--hourly-param)
@@ -150,8 +150,8 @@
             (url-build-query-string all-params))
     ))
 
-(defun boem-weather--fetch (compression)
-  (let ((buf (url-retrieve-synchronously (boem-weather--url compression) t t 10)))
+(defun boem/weather--fetch (compression)
+  (let ((buf (url-retrieve-synchronously (boem/weather--url compression) t t 10)))
     (unless buf (error "Could not fetch weather data"))
     (with-current-buffer buf
       (goto-char (point-min))
@@ -166,7 +166,7 @@
 ;;; ----------------------------------------------------------------
 ;;; Formatting
 ;;; ----------------------------------------------------------------
-(defun boem-weather--fmt-current (data)
+(defun boem/weather--fmt-current (data)
   (let* ((current_weather (gethash "current" data))
          (weather_code (gethash "weather_code" current_weather))
          (current_units (gethash "current_units" data)))
@@ -180,30 +180,30 @@
 %s %d%s\n\
 %s"
      (propertize "Current weather" 'face '(bold underline))
-     (boem-weather--wi "nf-weather-thermometer")
-     (boem-weather--fmt-temp (gethash "temperature_2m" current_weather) (gethash "temperature_2m" current_units))
-     (boem-weather--fmt-temp (gethash "apparent_temperature" current_weather) (gethash "temperature_2m" current_units))
-     (boem-weather--code-icon weather_code)
-     (boem-weather--code-desc weather_code)
-     (boem-weather--wind-icon (gethash "wind_direction_10m" current_weather))
+     (boem/weather--wi "nf-weather-thermometer")
+     (boem/weather--fmt-temp (gethash "temperature_2m" current_weather) (gethash "temperature_2m" current_units))
+     (boem/weather--fmt-temp (gethash "apparent_temperature" current_weather) (gethash "temperature_2m" current_units))
+     (boem/weather--code-icon weather_code)
+     (boem/weather--code-desc weather_code)
+     (boem/weather--wind-icon (gethash "wind_direction_10m" current_weather))
      (gethash "wind_speed_10m" current_weather)
      (gethash "wind_speed_10m" current_units)
-     (boem-weather--wi "nf-weather-rain")
+     (boem/weather--wi "nf-weather-rain")
      (gethash "precipitation_probability" current_weather)
      (gethash "precipitation_probability" current_units)
      (gethash "precipitation" current_weather)
      (gethash "precipitation" current_units)
      (gethash "pressure_msl" current_weather)
      (gethash "pressure_msl" current_units)
-     (boem-weather--wi "nf-weather-humidity")
+     (boem/weather--wi "nf-weather-humidity")
      (gethash "relative_humidity_2m" current_weather)
      (gethash "relative_humidity_2m" current_units)
-     (boem-weather--bottom-line)
+     (boem/weather--bottom-line)
      )
     )
   )
 
-(defun boem-weather--fmt-daily (data)
+(defun boem/weather--fmt-daily (data)
   "Format daily weather data into a list of rows, one row per day."
   (let* ((daily (gethash "daily" data))
          (dates (gethash "time" daily))
@@ -224,27 +224,27 @@
     (dotimes (i 7)
       (push (format "%s  %s%s - %s%s  %s%s - %s  %s %s%2d %s  %2d%s  %s %s"
                     (propertize (nth i dates) 'face 'bookmark-face)
-                    (boem-weather--wi "nf-weather-sunrise")
+                    (boem/weather--wi "nf-weather-sunrise")
                     (substring (nth i sunrise) -5)
-                    (boem-weather--wi "nf-weather-sunset")
+                    (boem/weather--wi "nf-weather-sunset")
                     (substring (nth i sunset) -5)
-                    (boem-weather--wi "nf-weather-thermometer")
-                    (boem-weather--fmt-temp (nth i temp-min) temp-unit)
-                    (boem-weather--fmt-temp (nth i temp-max) temp-unit)
+                    (boem/weather--wi "nf-weather-thermometer")
+                    (boem/weather--fmt-temp (nth i temp-min) temp-unit)
+                    (boem/weather--fmt-temp (nth i temp-max) temp-unit)
                     (nerd-icons-mdicon "nf-md-weather_windy")
-                    (boem-weather--wind-icon (nth i wind-direction))
+                    (boem/weather--wind-icon (nth i wind-direction))
                     (nth i wind-speed)
                     (gethash "wind_speed_10m_max" units)
                     (nth i precip)
                     precip-unit
-                    (boem-weather--code-icon (nth i wcode))
-                    (boem-weather--code-desc (nth i wcode))
+                    (boem/weather--code-icon (nth i wcode))
+                    (boem/weather--code-desc (nth i wcode))
                     ) result-lines)
       )
-    (push (boem-weather--bottom-line) result-lines)
+    (push (boem/weather--bottom-line) result-lines)
     (string-join (nreverse result-lines) "\n")))
 
-(defun boem-weather--fmt-hourly (data)
+(defun boem/weather--fmt-hourly (data)
   (let* ((hourly (gethash "hourly" data))
          (times (gethash "time" hourly))
          (temperature (gethash "temperature_2m" hourly))
@@ -262,24 +262,24 @@
     (push "" result-lines)
     (dotimes (i (length times))
       (push (format "%s  %s%s ~ %s   %s %s%2d %s  %2d%s  %s %s"
-                    (boem-weather--fmt-hours (nth i times))
-                    (boem-weather--wi "nf-weather-thermometer")
-                    (boem-weather--fmt-temp (nth i temperature) temp-unit)
-                    (boem-weather--fmt-temp (nth i apparent_temperature) temp-unit)
+                    (boem/weather--fmt-hours (nth i times))
+                    (boem/weather--wi "nf-weather-thermometer")
+                    (boem/weather--fmt-temp (nth i temperature) temp-unit)
+                    (boem/weather--fmt-temp (nth i apparent_temperature) temp-unit)
                     (nerd-icons-mdicon "nf-md-weather_windy")
-                    (boem-weather--wind-icon (nth i wind-direction))
+                    (boem/weather--wind-icon (nth i wind-direction))
                     (nth i wind-speed)
                     (gethash "wind_speed_10m" units)
                     (nth i precip)
                     precip-unit
-                    (boem-weather--code-icon (nth i wcode))
-                    (boem-weather--code-desc (nth i wcode))
+                    (boem/weather--code-icon (nth i wcode))
+                    (boem/weather--code-desc (nth i wcode))
                     ) result-lines)
       )
-    (push (boem-weather--bottom-line) result-lines)
+    (push (boem/weather--bottom-line) result-lines)
     (string-join (nreverse result-lines) "\n")))
 
-(defun boem-weather--fmt-daily-sunrise-line (data)
+(defun boem/weather--fmt-daily-sunrise-line (data)
   (let* ((daily (gethash "daily" data))
          (sunrise (gethash "sunrise" daily))
          (sunset (gethash "sunset" daily))
@@ -287,14 +287,14 @@
     (mapconcat
        (lambda (i)
          (format "%s%s - %s%s"
-                 (boem-weather--wi "nf-weather-sunrise")
+                 (boem/weather--wi "nf-weather-sunrise")
                  (substring (nth i sunrise) -5)
-                 (boem-weather--wi "nf-weather-sunset")
+                 (boem/weather--wi "nf-weather-sunset")
                  (substring (nth i sunset) -5))
          )
        (number-sequence 0 (1- (length temp-min))) "  ")))
 
-(defun boem-weather--fmt-daily-temp-line (data)
+(defun boem/weather--fmt-daily-temp-line (data)
   (let* ((daily (gethash "daily" data))
          (temp-min (gethash "temperature_2m_min" daily))
          (temp-max (gethash "temperature_2m_max" daily))
@@ -304,14 +304,14 @@
       (mapconcat
        (lambda (i)
          (format "%s %d/%d%s"
-                 (boem-weather--code-icon (nth i wcode))
+                 (boem/weather--code-icon (nth i wcode))
                  (nth i temp-min)
                  (nth i temp-max)
                  unit)
          )
        (number-sequence 0 (1- (length temp-min))) "")))
 
-(defun boem-weather--fmt-daily-wind-line (data)
+(defun boem/weather--fmt-daily-wind-line (data)
   (let* ((daily (gethash "daily" data))
          (speeds (gethash "wind_speed_10m_max" daily))
          (directions (gethash "wind_direction_10m_dominant" daily))
@@ -319,12 +319,12 @@
     (mapconcat
        (lambda (i)
          (format "%s%s"
-                 (boem-weather--wind-icon (nth i directions))
+                 (boem/weather--wind-icon (nth i directions))
                  (nth i speeds))
          )
        (number-sequence 0 (1- (length speeds))) "  ")))
 
-(defun boem-weather--fmt-daily-precipitation-line (data)
+(defun boem/weather--fmt-daily-precipitation-line (data)
   (let* ((daily (gethash "daily" data))
          (precipitations (gethash "precipitation_probability_max" daily))
          (unit (gethash "precipitation_probability_max" (gethash "daily_units" data)))
@@ -334,18 +334,18 @@
          (format "%s%s" (nth i precipitations) unit))
        (number-sequence 0 (1- (length precipitations))) "  ")))
 
-(defun boem-weather--section-string (compression)
-  (boem-weather--fetch compression)
+(defun boem/weather--section-string (compression)
+  (boem/weather--fetch compression)
   (pcase compression
-    ('current (boem-weather--fmt-current boem-weather--data))
-    ('daily   (boem-weather--fmt-daily   boem-weather--data))
-    ('hourly  (boem-weather--fmt-hourly  boem-weather--data))))
+    ('current (boem/weather--fmt-current boem-weather--data))
+    ('daily   (boem/weather--fmt-daily   boem-weather--data))
+    ('hourly  (boem/weather--fmt-hourly  boem-weather--data))))
 
 ;;; ----------------------------------------------------------------
 ;;; Display
 ;;; ----------------------------------------------------------------
 
-(defun boem-weather--display-in-child-frame (display-buffer)
+(defun boem/weather--display-in-child-frame (display-buffer)
   "Display buffer in a child frame centered over the parent frame.
 The child frame has no decorations except a 2-pixel white border.
 Closes on any key press."
@@ -424,9 +424,9 @@ Closes on any key press."
             (use-local-map map))
           (set-frame-parameter nil 'visibility t))))))
 
-(defun boem-weather--show (compression)
+(defun boem/weather--show (compression)
   (let* ((buf (get-buffer-create boem-weather--buffer-name))
-         (txt (boem-weather--section-string compression)))
+         (txt (boem/weather--section-string compression)))
     (with-current-buffer buf
       (read-only-mode -1)
       (erase-buffer)
@@ -436,14 +436,14 @@ Closes on any key press."
       (setq mode-line-format nil
             truncate-lines   t)
       (read-only-mode 1)
-      (boem-weather--display-in-child-frame buf)
+      (boem/weather--display-in-child-frame buf)
       ))
   )
 
 ;;; ----------------------------------------------------------------
 ;;; Commands / keymaps
 ;;; ----------------------------------------------------------------
-(defun boem-weather-quit () (interactive)
+(defun boem/weather-quit () (interactive)
        (when-let* ((buf (get-buffer boem-weather--buffer-name)))
          (dolist (win (get-buffer-window-list buf nil t))
            (when (frame-parameter (window-frame win) 'parent-frame)
@@ -452,20 +452,20 @@ Closes on any key press."
 
 (defvar weather-view-mode-map
   (let ((map (make-sparse-keymap)))
-    (define-key map (kbd "c") (lambda () (interactive) (boem-weather--show 'current)))
-    (define-key map (kbd "d") (lambda () (interactive) (boem-weather--show 'daily)))
-    (define-key map (kbd "h") (lambda () (interactive) (boem-weather--show 'hourly)))
-    (define-key map (kbd "q") #'boem-weather-quit)
+    (define-key map (kbd "c") (lambda () (interactive) (boem/weather--show 'current)))
+    (define-key map (kbd "d") (lambda () (interactive) (boem/weather--show 'daily)))
+    (define-key map (kbd "h") (lambda () (interactive) (boem/weather--show 'hourly)))
+    (define-key map (kbd "q") #'boem/weather-quit)
     map))
 
 (define-derived-mode weather-view-mode special-mode "Weather"
   "Major mode for displaying weather from boem-weather.com.")
 
 ;;; autoload
-(defun boem-weather ()
+(defun boem/weather ()
   "Show current weather in a child frame."
   (interactive)
-  (boem-weather--show 'current))
+  (boem/weather--show 'current))
 
 (provide 'boem-weather)
 ;;; boem-weather.el ends here

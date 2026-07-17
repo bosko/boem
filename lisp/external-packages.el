@@ -456,7 +456,7 @@
 (use-package wgrep
   :ensure t
   :defer t
-  :bind (("C-x C-q" . boem-change-to-writable-mode)))
+  :bind (("C-x C-q" . boem/change-to-writable-mode)))
 
 ;;; AI tools
 

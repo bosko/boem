@@ -30,13 +30,13 @@ parent directory created."
                   (file-name-directory abs))))
       (make-directory dir t))))
 
-(defun boem-get-buffer-project-folder (buffer)
+(defun boem/get-buffer-project-folder (buffer)
   "Returns folder for Git project"
   (let ((proj-folder (locate-dominating-file (buffer-file-name buffer) ".git")))
     (if proj-folder
         proj-folder)))
 
-(defun boem-pop-eshell-bottom ()
+(defun boem/pop-eshell-bottom ()
   "Opens eshell buffer on the bottom of the window"
   (interactive)
   (with-current-buffer (current-buffer)
@@ -49,7 +49,7 @@ parent directory created."
       (display-buffer-in-side-window esh-buf '((side . bottom)))
       (select-window (get-buffer-window esh-buf))
       (with-current-buffer "*bottom-eshell*"
-        (cd (or (boem-get-buffer-project-folder cur-buff) "."))
+        (cd (or (boem/get-buffer-project-folder cur-buff) "."))
         (eshell-emit-prompt)
         (eshell/clear-scrollback)
         (eshell-emit-prompt)))))
@@ -57,23 +57,23 @@ parent directory created."
 ;; Stop hl-line interfering with default face suggested by
 ;; customize-face (taken
 ;; from https://sachachua.com/blog/2024/09/highlight-the-current-line-while-still-being-able-to-easily-customize-describe-underlying-faces/)
-(defun boem-suggest-other-faces (func &rest args)
+(defun boem/suggest-other-faces (func &rest args)
   (if global-hl-line-mode
       (progn
         (global-hl-line-mode -1)
         (prog1 (apply func args)
           (global-hl-line-mode 1)))
     (apply func args)))
-(advice-add #'face-at-point :around #'boem-suggest-other-faces)
+(advice-add #'face-at-point :around #'boem/suggest-other-faces)
 
-(defun boem-current-buffer-remote-p ()
+(defun boem/current-buffer-remote-p ()
   (--any? (and it (file-remote-p it))
           (list
            (buffer-file-name)
            list-buffers-directory
            default-directory)))
 
-(defun boem-insert-line-above ()
+(defun boem/insert-line-above ()
   "Insert and indent line above current point."
   (interactive)
   (move-beginning-of-line nil)
@@ -81,14 +81,14 @@ parent directory created."
   (forward-line -1)
   (indent-according-to-mode))
 
-(defun boem-insert-line ()
+(defun boem/insert-line ()
   "Insert and indent line above current point."
   (interactive)
   (move-end-of-line nil)
   (newline)
   (indent-according-to-mode))
 
-(defun boem-kill-user-buffers ()
+(defun boem/kill-user-buffers ()
   "Kills all opened buffers except *scratch* and *Messages*"
   (interactive)
   (let ((not-to-kill-buffer-list '("*scratch*" "*Messages*")))
@@ -98,7 +98,7 @@ parent directory created."
            (not (member (buffer-name buff) not-to-kill-buffer-list)))
           (kill-buffer (buffer-name buff))))))
 
-(defun boem-comment-uncomment ()
+(defun boem/comment-uncomment ()
   (interactive)
   (save-excursion
     (if (not (region-active-p))
@@ -109,25 +109,25 @@ parent directory created."
     (call-interactively 'comment-or-uncomment-region)))
 
 ;; Add Imenu index to the menu bar in any mode that supports Imenu.
-(defun boem-try-to-add-imenu ()
+(defun boem/try-to-add-imenu ()
   (condition-case nil (imenu-add-to-menubar "Methods") (error nil)))
-(add-hook 'font-lock-mode-hook 'boem-try-to-add-imenu)
+(add-hook 'font-lock-mode-hook 'boem/try-to-add-imenu)
 
-(defun boem-switch-to-previous-buffer ()
+(defun boem-switch/to-previous-buffer ()
   "Switch to previously opened buffer.
 Repeated invocations toggle between the two most recently open buffers.
 Code from: http://emacsredux.com/blog/2013/04/28/switch-to-previous-buffer/"
   (interactive)
   (switch-to-buffer (other-buffer (current-buffer) 1)))
 
-(defun boem-reopen-file-as-sudo ()
+(defun boem/reopen-file-as-sudo ()
   (interactive)
   (when-let* ((p (point)))
     (when-let* ((file-name (buffer-file-name)))
       (find-alternate-file (concat "/sudo::" file-name)))
     (goto-char p)))
 
-(defun boem-restclient ()
+(defun boem/restclient ()
   (interactive)
   (let (($buf (generate-new-buffer "*Restclient*")))
     (switch-to-buffer $buf)
@@ -141,7 +141,7 @@ Code from: http://emacsredux.com/blog/2013/04/28/switch-to-previous-buffer/"
                         ("Encrypt". ?e))
   "Override this value by creating .boem-org-tags.el file in your home directory.")
 
-(defun boem-change-to-writable-mode ()
+(defun boem/change-to-writable-mode ()
   (interactive)
   (if (eq 'grep-mode (buffer-local-value 'major-mode (current-buffer)))
       (wgrep-change-to-wgrep-mode)
@@ -302,7 +302,7 @@ Code from: http://emacsredux.com/blog/2013/04/28/switch-to-previous-buffer/"
 ;; From Purcell's configuration
 (winner-mode +1)
 
-(defun toggle-delete-other-windows ()
+(defun boem/toggle-delete-other-windows ()
   "Delete other windows in frame if any, or restore previous window config."
   (interactive)
   (if (and winner-mode
@@ -310,7 +310,7 @@ Code from: http://emacsredux.com/blog/2013/04/28/switch-to-previous-buffer/"
       (winner-undo)
     (delete-other-windows)))
 
-(global-set-key (kbd "C-x 1") #'toggle-delete-other-windows)
+(global-set-key (kbd "C-x 1") #'boem/toggle-delete-other-windows)
 
 (provide 'init-basic)
 
