@@ -154,6 +154,15 @@ A trailing slash on RELATIVE-PATH marks the entry as a directory.")
 (require 'emacs-solo-container)
 (require 'emacs-solo-dired-mpv)
 (require 'emacs-solo-exec-path-from-shell)
+;; TODO: Do this in the emacs-solo-exec-path-from-shell
+
+;; For some reason function does not see path "/usr/local/bin" and does not add
+;; it to the PATH. This is quick fix and instead of explicitely adding it here I
+;; have to find a reason why function does not see this path.
+(add-hook
+ 'after-init-hook
+ (lambda () (setenv "PATH" (concat (getenv "PATH") ":/usr/local/bin"))))
+
 (require 'emacs-solo-highlight-keywords)
 (require 'emacs-solo-m3u)
 (require 'emacs-solo-mode-line)
