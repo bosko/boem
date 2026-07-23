@@ -1744,6 +1744,9 @@ and restart Flymake to apply the changes."
   (ruby-indent-level 2)
   (ruby-deep-indent-paren nil)
   (ruby-indent-tabs-mode nil)
+  ;; Do not indent params relative to method name
+  ;; but to the line beginning
+  (ruby-method-params-indent 0)
   :init
   (eval-after-load "hideshow"
     '(add-to-list
