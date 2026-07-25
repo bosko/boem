@@ -1511,7 +1511,7 @@ and restart Flymake to apply the changes."
                   (select-window win))))))
   :custom
   ;; Emacs-31
-  (speedbar-window-default-width 25)
+  (speedbar-window-default-width 35)
   ;; Emacs-31
   (speedbar-window-max-width 25)
   (speedbar-show-unknown-files t)

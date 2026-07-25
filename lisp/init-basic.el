@@ -285,10 +285,10 @@ Code from: http://emacsredux.com/blog/2013/04/28/switch-to-previous-buffer/"
           ;; Otherwise, auto-guess based on position of point, e.g., based on
           ;; if we are in the Staged or Unstaged section.
           (pcase (magit-diff--dwim)
-            ('unmerged (error "unmerged is not yet implemented"))
+            ('unmerged (error "Unmerged is not yet implemented"))
             ('unstaged nil)
             ('staged "--cached")
-            (`(stash . ,value) (error "stash is not yet implemented"))
+            (`(stash . ,value) (error "Stash is not yet implemented"))
             (`(commit . ,value) (format "%s^..%s" value value))
             ((and range (pred stringp)) range)
             (_ (magit-diff-read-range-or-commit "Range/Commit"))))))
