@@ -221,14 +221,10 @@
   ;; (keymap-set consult-narrow-map (concat consult-narrow-key " ?") #'consult-narrow-help)
   )
 
-;; Optionally add the `consult-flycheck' command.
-(use-package consult-flycheck
-  :bind (:map flycheck-command-map
-              ("!" . consult-flycheck)))
-
 (use-package consult-dash
   :ensure t
   :bind (("M-s d" . consult-dash))
+  :after (consult dash)
   :config
   ;; Use the symbol at point as initial search term
   (consult-customize consult-dash :initial (thing-at-point 'symbol)))
@@ -364,11 +360,11 @@
 
 (use-package ob-restclient
   :ensure t
-  :after (ob))
+  :after (restclient ob))
 
 (use-package ob-graphql
   :ensure t
-  :after (ob))
+  :after (ob graphql-mode))
 
 (use-package org-superstar
   :after (org)
@@ -446,6 +442,9 @@
 (use-package restclient
   :ensure t
   :commands (restclient-mode))
+
+(use-package graphql-mode
+  :ensure t)
 
 (use-package vlf
   :commands (vlf vlf-mode)
