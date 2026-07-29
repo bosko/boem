@@ -991,9 +991,6 @@ Ex: mpv file1 file2 file3 file4..."
   :init
   (fset #'jsonrpc--log-event #'ignore)
 
-  (setq-default eglot-workspace-configuration (quote
-                                               (:gopls (:hints (:parameterNames t)))))
-
   (defun boem/eglot-setup ()
     "Setup eglot mode with specific exclusions."
     (unless (memq major-mode '(emacs-lisp-mode lisp-mode))
@@ -1009,7 +1006,8 @@ Ex: mpv file1 file2 file3 file4..."
   (with-eval-after-load 'eglot
     (add-to-list
      'eglot-server-programs
-     '((ruby-mode ruby-ts-mode) "ruby-lsp")))
+     `((ruby-mode ruby-ts-mode) .
+       ("docker" "compose" "exec" "-T" "app" "bin/rubocop" "-c" ".rubocop.yml" "--lsp"))))
 
   (with-eval-after-load 'eglot
     (add-to-list
