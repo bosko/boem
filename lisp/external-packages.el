@@ -493,9 +493,13 @@
   :config
   (setq agent-shell-anthropic-authentication
         (agent-shell-anthropic-make-authentication
-         :api-key (lambda () (auth-source-pick-first-password :host "anthropic")))
+         ;; This requires following line in the .authinfo.gpg
+         ;; machine anthropic secret <oauth_key>
+         :oauth (lambda () (auth-source-pick-first-password :host "anthropic")))
         agent-shell-openai-authentication
         (agent-shell-openai-make-authentication
+         ;; This requires following line in the .authinfo.gpg
+         ;; machine api.openai.com login apikey password <api_key>
          :api-key (lambda () (auth-source-pick-first-password :host "api.openai.com")))
         agent-shell-google-authentication
         (agent-shell-google-make-authentication :login t)
