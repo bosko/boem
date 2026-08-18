@@ -1793,7 +1793,7 @@ and restart Flymake to apply the changes."
   (add-to-list
    'treesit-language-source-alist
    '(heex "https://github.com/phoenixframework/tree-sitter-heex" "main" "src"))
-  (add-hook 'elixir-ts-mode-hook
+  (add-hook 'heex-ts-mode-hook
             (lambda ()
               (add-hook 'before-save-hook #'eglot-format-buffer nil t))))
 
