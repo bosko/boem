@@ -471,12 +471,9 @@
   ("M-o w h" . mcp-hub)
   :config
   ;; Mistral offers an OpenAI compatible API
-  (gptel-make-openai "MistralLeChat"  ;Any name you want
-    :host "api.mistral.ai"
-    :endpoint "/v1/chat/completions"
-    :protocol "https"
-    :key 'gptel--get-api-key
-    :models '("mistral-small-latest" "codestral-latest" "devstral-medium-latest")))
+  (gptel-make-openai "OpenAI"  ;Any name you want
+    :host "api.openai.com"
+    :key (lambda () (gptel-api-key-from-auth-source "api.openai.com"))))
 
 (use-package mcp
   :ensure t
