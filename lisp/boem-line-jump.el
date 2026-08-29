@@ -135,21 +135,23 @@ If HIGHLIGHT-STRING is given it highlights it."
         (start-mark)
         (wins (boem/list-windows)))
     (dolist (win wins) (setq start-mark (boem/display-line-marks win start-mark)))
-    (minibuffer-with-setup-hook
-        (lambda ()
-          (add-hook
-           'post-command-hook
-           (lambda ()
-             (setq captured (minibuffer-contents-no-properties))
-             (dolist (win1 wins) (boem/highlight-marks win1 captured)))
-           nil t))
-      (read-from-minibuffer "Jump to line: "))
-    (let ((overlay (boem/find-overlay captured)))
-      (if (overlayp overlay)
-          (progn
-            (select-window (get-buffer-window (overlay-buffer overlay)))
-            (goto-char (overlay-start overlay))))))
-  (boem/clear-all-marks))
+    (unwind-protect
+        (progn
+          (minibuffer-with-setup-hook
+              (lambda ()
+                (add-hook
+                 'post-command-hook
+                 (lambda ()
+                   (setq captured (minibuffer-contents-no-properties))
+                   (dolist (win1 wins) (boem/highlight-marks win1 captured)))
+                 nil t))
+            (read-from-minibuffer "Jump to line: "))
+          (let ((overlay (boem/find-overlay captured)))
+            (if (overlayp overlay)
+                (progn
+                  (select-window (get-buffer-window (overlay-buffer overlay)))
+                  (goto-char (overlay-start overlay))))))
+      (boem/clear-all-marks))))
 
 (provide 'boem-line-jump)
 ;;; boem-line-jump.el ends here
