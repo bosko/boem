@@ -129,7 +129,7 @@
          (time-hour (substring time 11 13)))
     (if (string-equal cur-hour time-hour)
         (propertize (substring time 11 16) 'face 'font-lock-string-face)
-      (propertize (substring time 11 16) 'face 'bookmark-face)
+      (propertize (substring time 11 16) 'face 'dired-special)
         )
     )
   )
@@ -223,7 +223,7 @@
     (push "" result-lines)
     (dotimes (i 7)
       (push (format "%s  %s%s - %s%s  %s%s - %s  %s %s%2d %s  %2d%s  %s %s"
-                    (propertize (nth i dates) 'face 'bookmark-face)
+                    (propertize (nth i dates) 'face 'dired-special)
                     (boem/weather--wi "nf-weather-sunrise")
                     (substring (nth i sunrise) -5)
                     (boem/weather--wi "nf-weather-sunset")
