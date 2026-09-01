@@ -1425,7 +1425,6 @@ and restart Flymake to apply the changes."
                 (org-agenda-show-all-dates nil)
                 (org-deadline-warning-days 0)
                 (org-agenda-block-separator nil)
-                (org-agenda-entry-types '(:deadline))
                 (org-agenda-skip-function
                  '(org-agenda-skip-entry-if
                    'todo 'done))
