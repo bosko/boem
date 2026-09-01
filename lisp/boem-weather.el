@@ -28,7 +28,7 @@
   :group 'boem-weather)
 
 (defcustom boem-weather-time-zone "Europe/Belgrade"
-  "Time zone used for forecats."
+  "Time zone used for forecast."
   :type 'string
   :group 'boem-weather)
 
@@ -52,7 +52,7 @@
 (defconst boem-weather--daily-param
   '(
     ("daily" "weather_code,temperature_2m_max,temperature_2m_min,wind_speed_10m_max,wind_direction_10m_dominant,sunrise,sunset,precipitation_probability_max")
-    ("forecatst_days" 7)
+    ("forecast_days" 7)
     ))
 
 (defvar boem-weather--data nil)
