@@ -488,6 +488,7 @@
   :bind
   ("M-o w a" . agent-shell)
   :config
+  (setopt agent-shell-show-cost-indicator t)
   (setq agent-shell-anthropic-authentication
         (agent-shell-anthropic-make-authentication
          ;; This requires following line in the .authinfo.gpg
