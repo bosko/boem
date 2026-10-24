@@ -29,7 +29,7 @@ directory."
   :type 'string
   :group 'boem)
 
-(defcustom boem-tui-theme nil
+(defcustom boem-tui-theme "modus-operandi-deuteranopia"
   "Emacs theme to load when started in terminal."
   :type 'string
   :group 'boem)
