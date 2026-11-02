@@ -56,6 +56,7 @@
     ))
 
 (defvar boem-weather--data nil)
+(defvar boem-weather--parent nil)
 (defvar boem-weather--frame nil)
 
 ;;; ----------------------------------------------------------------
@@ -350,32 +351,39 @@
 The child frame has no decorations except a 2-pixel white border.
 Closes on any key press."
   (interactive)
-  (let* ((parent-frame (selected-frame))
-         (parent-width (frame-pixel-width parent-frame))
-         (parent-height (frame-pixel-height parent-frame))
-         pos-left pos-top)
-    ;; Calculate size of text in lines and columns
-    (with-current-buffer display-buffer
-      (goto-char (point-min))
-      (let* ((max-line-width 0)
-             (line-count 0))
-        (while (not (eobp))
-          (let ((len (length (string-trim-right (thing-at-point 'line t)))))
-            (setq max-line-width (max max-line-width len)))
-          (forward-line 1)
-          (setq line-count (1+ line-count)))
-        (let* ((char-width (frame-char-width parent-frame))
-               (char-height (frame-char-height parent-frame))
-               (frame-pixel-width (* max-line-width char-width))
-               (frame-pixel-height (* line-count char-height)))
-          (setq pos-left (/ (- parent-width frame-pixel-width) 2))
-          (setq pos-top (/ (- parent-height frame-pixel-height) 2))
-          (if (not (frame-live-p boem-weather--frame))
-            (setq boem-weather--frame
-                (make-frame `((parent-frame . ,parent-frame)
+  ;; Calculate size of text in lines and columns
+  (with-current-buffer display-buffer
+    (goto-char (point-min))
+    (let* ((max-line-width 0)
+           (line-count 0)
+           char-width char-height)
+      (while (not (eobp))
+        (let ((len (length (string-trim-right (thing-at-point 'line t)))))
+          (setq max-line-width (max max-line-width len)))
+        (forward-line 1)
+        (setq line-count (1+ line-count)))
+      ;; Fetch font metrics once, after content is known
+      (if (not boem-weather--parent)
+          (setq boem-weather--parent (selected-frame)))
+
+      (setq char-width (frame-char-width boem-weather--parent))
+        (setq char-height (frame-char-height boem-weather--parent))
+        (let* ((parent (frame-parent boem-weather--frame))
+               (p-width (if parent (frame-pixel-width parent) (frame-pixel-width boem-weather--parent)))
+               (p-height (if parent (frame-pixel-height parent) (frame-pixel-height boem-weather--parent)))
+               (fw (* (+ 1 max-line-width) char-width))
+               (fh (* line-count char-height))
+               (new-left (/ (- p-width fw) 2))
+               (new-top (/ (- p-height fh) 2)))
+
+          (if (frame-live-p boem-weather--frame)
+              (delete-frame boem-weather--frame))
+
+          (setq boem-weather--frame
+                (make-frame `((parent-frame . ,boem-weather--parent)
                               (minibuffer . nil)
-                              (left . ,pos-left)
-                              (top . ,pos-top)
+                              (left . ,new-left)
+                              (top . ,new-top)
                               (width . ,(+ 1 max-line-width))
                               (height . ,line-count)
                               (undecorated . t)
@@ -387,24 +395,17 @@ Closes on any key press."
                               (horizontal-scroll-bars . nil)
                               (menu-bar-lines . 0)
                               (tool-bar-lines . 0)
-                              (tab-bar-lines .0)
+                              (tab-bar-lines . 0)
                               (line-spacing . 0)
                               (visibility . nil)
                               (user-position . t)
                               (drag-internal-border . nil)
                               (border-color . "white")
                               (background-color . ,(face-background 'default nil t)))))
-            (progn
-              (fit-frame-to-buffer boem-weather--frame)
-              (let* ((parent (frame-parent boem-weather--frame))
-                     (char-width (frame-char-width parent-frame))
-                     (char-height (frame-char-height parent-frame))
-                     (left-pos (* (/ (- (frame-width parent) (frame-width boem-weather--frame)) 2) char-width))
-                     (top-pos (* (/ (- (frame-height parent) (frame-height boem-weather--frame)) 2) char-height)))
-                (set-frame-position boem-weather--frame left-pos top-pos)
-                )
-              ))
-          )
+            (set-frame-width boem-weather--frame (+ 1 max-line-width))
+            (set-frame-height boem-weather--frame line-count)
+            (set-frame-position boem-weather--frame new-left new-top))
+
         (with-selected-frame boem-weather--frame
           (switch-to-buffer display-buffer)
           (goto-char (point-min))
@@ -418,11 +419,12 @@ Closes on any key press."
                         (lambda ()
                           (interactive)
                           (when (frame-live-p boem-weather--frame)
-                            (delete-frame boem-weather--frame))
+                            (delete-frame boem-weather--frame)
+                            (setq boem-weather--frame nil))
                           (when (buffer-live-p display-buffer)
                             (kill-buffer display-buffer))))
             (use-local-map map))
-          (set-frame-parameter nil 'visibility t))))))
+          (set-frame-parameter nil 'visibility t)))))
 
 (defun boem/weather--show (compression)
   (let* ((buf (get-buffer-create boem-weather--buffer-name))
@@ -443,12 +445,14 @@ Closes on any key press."
 ;;; ----------------------------------------------------------------
 ;;; Commands / keymaps
 ;;; ----------------------------------------------------------------
-(defun boem/weather-quit () (interactive)
-       (when-let* ((buf (get-buffer boem-weather--buffer-name)))
-         (dolist (win (get-buffer-window-list buf nil t))
-           (when (frame-parameter (window-frame win) 'parent-frame)
-             (delete-frame (window-frame win))))
-         (kill-buffer buf)))
+(defun boem/weather-quit ()
+  (interactive)
+  (let* ((buf (get-buffer boem-weather--buffer-name)))
+    (kill-buffer buf))
+  (if boem-weather--frame
+      (progn
+        (delete-frame boem-weather--frame)
+        (setq boem-weather--frame nil))))
 
 (defvar weather-view-mode-map
   (let ((map (make-sparse-keymap)))
