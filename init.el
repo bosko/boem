@@ -172,6 +172,7 @@ A trailing slash on RELATIVE-PATH marks the entry as a directory.")
 (require 'emacs-solo-weather)
 (require 'external-packages)
 (require 'boem-weather)
+(require 'boem-radio-search)
 
 (provide 'init)
 

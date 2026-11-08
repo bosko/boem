@@ -26,6 +26,7 @@
    ("M-o l" . windmove-right)
    ("M-o L" . boem/jump-to-line)
    ("M-o r" . boem/restclient)
+   ("M-o w r" . boem/radio-search)
    ("M-o w w" . boem/weather)
    ("M-g r" . recentf)
    ("M-s g" . grep)
